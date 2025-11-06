@@ -11,3 +11,9 @@ build/
 # Logs
 npm-debug.log
 yarn-error.log
+node_modules/
+dist/
+build/
+.cache/
+.env
+.DS_Store
