@@ -4,7 +4,20 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-app.use(cors());
+import cors from "cors";
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://12kebaad.vercel.app",
+      "https://one2kebaad-backend.onrender.com"
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+  })
+);
+
 app.use(bodyParser.json({limit: '10mb'}));
 const MONGO = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/12kebaad';
 mongoose.connect(MONGO, { useNewUrlParser: true, useUnifiedTopology: true })
