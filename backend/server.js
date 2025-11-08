@@ -10,7 +10,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://12kebaad.vercel.app",
+      /\.vercel\.app$/,              //  allows ANY Vercel deployed URL
       "https://one2kebaad-backend.onrender.com"
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
