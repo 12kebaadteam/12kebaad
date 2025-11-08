@@ -8,13 +8,11 @@ const app = express();
 //  CORS config
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      /\.vercel\.app$/,              //  allows ANY Vercel deployed URL
-      "https://one2kebaad-backend.onrender.com"
-    ],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: (origin, callback) => {
+      callback(null, true);   //  allow all origins (temporary)
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   })
 );
 
