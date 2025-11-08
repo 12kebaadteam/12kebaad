@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-import cors from "cors";
 
+//  CORS config
 app.use(
   cors({
     origin: [
@@ -18,22 +18,32 @@ app.use(
   })
 );
 
-app.use(bodyParser.json({limit: '10mb'}));
-const MONGO = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/12kebaad';
-mongoose.connect(MONGO, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(()=> console.log('MongoDB connected'))
-  .catch(err => console.error('Mongo connect error', err.message));
-// models
+app.use(bodyParser.json({ limit: "10mb" }));
+
+//  MONGO connection
+const MONGO = process.env.MONGO_URI;
+mongoose
+  .connect(MONGO, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("Mongo connect error", err.message));
+
+//  Models
 const Course = require('./models/Course');
 const Institution = require('./models/Institution');
 const Submission = require('./models/StudentSubmission');
-// routes
+
+//  Routes
 const courseRoutes = require('./routes/courses');
 const instRoutes = require('./routes/institutions');
 const submissionRoutes = require('./routes/submissions');
+
 app.use('/api/courses', courseRoutes);
 app.use('/api/institutions', instRoutes);
 app.use('/api/submissions', submissionRoutes);
+
+//  Home route
 app.get('/', (req, res) => res.send({ ok: true, service: '12kebaad backend' }));
+
+//  PORT
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, ()=> console.log('Server running on port', PORT));
+app.listen(PORT, () => console.log(`Server running on port`, PORT));
