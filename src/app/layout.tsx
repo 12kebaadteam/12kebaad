@@ -7,6 +7,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "12kebaad | Career Guidance",
   description: "Modern, minimalistic guide for students completing 12th grade to choose their course and career.",
+  verification: {
+    google: "pLbOeBX0gDt96W34_QrmIs5Qapbz9GTXhGBP0dCk3PM",
+  },
 };
 
 export default function RootLayout({
