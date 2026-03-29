@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  name        String
+  contactInfo String
+  state       String
+  stream      String
+  createdAt   DateTime @default(now())
+}
+
+model Admin {
+  id           String @id @default(cuid())
+  username     String @unique
+  passwordHash String
+}
+
+model College {
+  id      String          @id @default(cuid())
+  name    String
+  state   String
+  ranking Int?
+  courses CollegeCourse[]
+}
+
+model Course {
+  id            String          @id @default(cuid())
+  title         String
+  stream        String
+  basicSubjects String?
+  useCase       String?
+  colleges      CollegeCourse[]
+}
+
+model CollegeCourse {
+  id           String  @id @default(cuid())
+  collegeId    String
+  courseId     String
+  fee          String?
+  timeInvolved String?
+  cutoff       String?
+  remarks      String?
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([collegeId, courseId])
+}

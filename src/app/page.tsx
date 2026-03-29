@@ -1,66 +1,35 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="animate-fade-in" style={{ textAlign: "center", paddingTop: "4rem" }}>
+      <h1 className="animate-slide-up delay-1" style={{ fontSize: "3.5rem", marginBottom: "1rem" }}>
+        Your Future, <span style={{ color: "var(--primary)" }}>Simplified</span>
+      </h1>
+      <p className="animate-slide-up delay-2" style={{ fontSize: "1.2rem", color: "var(--text-muted)", maxWidth: "600px", margin: "0 auto 2.5rem" }}>
+        Guidance for students who have completed 12th grade. Explore colleges, view detailed course info, and choose the career path that optimally matches your stream and aspirations.
+      </p>
+      
+      <div className="animate-slide-up delay-3" style={{ marginBottom: "4rem" }}>
+        <Link href="/form" className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1.1rem" }}>
+          Get Started Now
+        </Link>
+      </div>
+
+      <div className="grid-cards animate-slide-up delay-4">
+        <div className="glass-panel" style={{ textAlign: "left" }}>
+          <h3 style={{ color: "var(--primary)", marginBottom: "1rem" }}>Comprehensive Courses</h3>
+          <p style={{ color: "var(--text-muted)" }}>Browse through carefully curated list of courses filtered by stream and relevance.</p>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="glass-panel" style={{ textAlign: "left" }}>
+          <h3 style={{ color: "var(--accent)", marginBottom: "1rem" }}>Top Colleges</h3>
+          <p style={{ color: "var(--text-muted)" }}>Discover top institutions, sort by cost/time, and evaluate cutoffs easily.</p>
         </div>
-      </main>
+        <div className="glass-panel" style={{ textAlign: "left" }}>
+          <h3 style={{ color: "var(--primary)", marginBottom: "1rem" }}>Factual & Direct</h3>
+          <p style={{ color: "var(--text-muted)" }}>No noise. Just factual data points engineered for the best career choice.</p>
+        </div>
+      </div>
     </div>
   );
 }
