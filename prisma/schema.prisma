@@ -24,8 +24,9 @@ model Admin {
 
 model College {
   id      String          @id @default(cuid())
-  name    String
+  name    String          @unique
   state   String
+  address String?
   ranking Int?
   courses CollegeCourse[]
 }

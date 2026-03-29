@@ -39,7 +39,7 @@ export async function uploadCSV(formData: FormData) {
   const text = await file.text();
   const rows = text.split('\n').map(row => row.split(','));
   
-  // Format expected: collegeName, state, courseTitle, stream, fee, timeInvolved, remarks
+  // Format expected: collegeName, state, courseTitle, stream, fee, timeInvolved, remarks, detailedAddress
   for (let i = 1; i < rows.length; i++) {
     const cols = rows[i];
     if (cols.length < 2) continue; // Basic skip for completely empty lines
@@ -51,7 +51,8 @@ export async function uploadCSV(formData: FormData) {
       stream = '', 
       fee = '', 
       timeInvolved = '',
-      remarks = ''
+      remarks = '',
+      detailedAddress = ''
     ] = cols;
     
     const safeCollege = collegeName.trim() || 'Unknown College';
@@ -59,28 +60,45 @@ export async function uploadCSV(formData: FormData) {
     if (!safeCollege || !safeTitle) continue;
 
     const safeState = state.trim() || 'Not Specified';
+    const safeAddr = detailedAddress.trim() || null;
     const safeStream = stream.trim() ? stream.trim().toUpperCase() : 'UNKNOWN';
     const safeFee = fee.trim() || 'Not Specified';
     const safeTime = timeInvolved.trim() || 'Not Specified';
     const safeRemarks = remarks.trim() || null;
 
-    const college = await prisma.college.create({
-       data: { name: safeCollege, state: safeState }
+    const college = await prisma.college.upsert({
+       where: { name: safeCollege },
+       update: { state: safeState, address: safeAddr || undefined },
+       create: { name: safeCollege, state: safeState, address: safeAddr }
     });
     
-    const course = await prisma.course.create({
-       data: { title: safeTitle, stream: safeStream }
-    });
+    let course = await prisma.course.findFirst({ where: { title: safeTitle } });
+    if (!course) {
+       course = await prisma.course.create({
+          data: { title: safeTitle, stream: safeStream }
+       });
+    }
     
-    await prisma.collegeCourse.create({
-       data: {
-          collegeId: college.id,
-          courseId: course.id,
-          fee: safeFee,
-          timeInvolved: safeTime,
-          remarks: safeRemarks
-       }
+    const existingLink = await prisma.collegeCourse.findFirst({
+       where: { collegeId: college.id, courseId: course.id }
     });
+
+    if (existingLink) {
+       await prisma.collegeCourse.update({
+          where: { id: existingLink.id },
+          data: { fee: safeFee, timeInvolved: safeTime, remarks: safeRemarks }
+       });
+    } else {
+       await prisma.collegeCourse.create({
+          data: {
+             collegeId: college.id,
+             courseId: course.id,
+             fee: safeFee,
+             timeInvolved: safeTime,
+             remarks: safeRemarks
+          }
+       });
+    }
   }
   
   redirect('/admin')

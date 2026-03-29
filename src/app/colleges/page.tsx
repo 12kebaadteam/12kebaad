@@ -51,9 +51,15 @@ export default async function CollegesPage({
                 </span>
               )}
             </div>
-            <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", marginBottom: "1rem" }}>
+            <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", marginBottom: "0.2rem" }}>
               <strong style={{ color: "var(--text-main)" }}>State:</strong> {college.state}
             </p>
+            {college.address && (
+              <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", marginBottom: "1rem" }}>
+                <strong style={{ color: "var(--text-main)" }}>Address:</strong> {college.address}
+              </p>
+            )}
+            {!college.address && <div style={{ marginBottom: "1rem" }} />}
             <div style={{ marginTop: "1rem", borderTop: "1px solid var(--glass-border)", paddingTop: "1rem" }}>
               <strong style={{ fontSize: "0.9rem" }}>Popular Courses:</strong>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.5rem" }}>

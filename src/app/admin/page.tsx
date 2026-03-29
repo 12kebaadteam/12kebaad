@@ -148,7 +148,7 @@ export default async function AdminPage({
       <div className="glass-panel">
         <h2 style={{ color: "var(--accent)", marginBottom: "1rem" }}>Upload Dataset (CSV)</h2>
         <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem" }}>
-          Upload a CSV file to batch insert Colleges and Courses. Required columns: <code>collegeName, state, courseTitle, stream, fee, timeInvolved, remarks</code>. Empty columns will be assigned a default fallback value.
+          Upload a CSV file to batch insert Colleges and Courses. Required columns: <code>collegeName, state, courseTitle, stream, fee, timeInvolved, remarks, detailedAddress</code>. Empty columns will be assigned a default fallback value.
         </p>
         <form action={uploadCSV} style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
           <input type="file" name="csv" accept=".csv" className="form-control" style={{ flex: 1, minWidth: "250px" }} required />
