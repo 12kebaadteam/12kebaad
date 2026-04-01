@@ -3,16 +3,16 @@ import prisma from '../../../lib/prisma'
 
 export default async function FormPage() {
   // Dynamically fetch only states that actually have colleges in the database
-  const collegesWithStates = await prisma.college.findMany({
-    select: { state: true },
-    distinct: ['state'],
+  // Using groupBy instead of distinct to reliably get unique states
+  const groupedStates = await prisma.college.groupBy({
+    by: ['state'],
+    orderBy: { state: 'asc' },
   })
 
   // Filter out any blank states and sort them
-  const validStates = collegesWithStates
+  const validStates = groupedStates
     .map(c => c.state)
-    .filter(s => s && s !== 'Unknown')
-    .sort()
+    .filter((s): s is string => !!s && s !== 'Unknown')
 
   // Fallback state if database is entirely empty so the component still renders cleanly
   const states = validStates.length > 0 ? validStates : [

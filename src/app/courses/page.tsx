@@ -30,13 +30,13 @@ export default async function CoursesPage({
     <div className="animate-fade-in">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
         <h1 style={{ color: "var(--primary)" }}>Available Courses {stream ? `for ${stream}` : ''}</h1>
-        <form method="GET" style={{ display: "flex", gap: "1rem" }}>
+        <form method="GET" className="sort-bar-form">
           {stream && <input type="hidden" name="stream" value={stream} />}
-          <select name="sort" className="form-control" defaultValue={sort} style={{ width: "200px" }}>
+          <select name="sort" className="form-control sort-select" defaultValue={sort}>
             <option value="title_asc">Name (A-Z)</option>
             <option value="title_desc">Name (Z-A)</option>
           </select>
-          <button type="submit" className="btn-primary" style={{ padding: "0.5rem 1rem" }}>Sort</button>
+          <button type="submit" className="btn-primary" style={{ padding: "0.5rem 1.2rem", whiteSpace: "nowrap" }}>Sort</button>
         </form>
       </div>
 
@@ -45,7 +45,7 @@ export default async function CoursesPage({
       ) : (
         <div className="grid-cards">
           {courses.map((course) => (
-            <div key={course.id} className="glass-panel animate-slide-up">
+            <div key={course.id} className="glass-panel animate-slide-up" style={{ overflow: "hidden", wordBreak: "break-word" }}>
               <h3 style={{ marginBottom: "0.5rem" }}>{course.title}</h3>
               <p style={{ fontSize: "0.9rem", color: "var(--primary)", marginBottom: "1rem" }}>Stream: {course.stream}</p>
               
@@ -64,9 +64,9 @@ export default async function CoursesPage({
                 <strong style={{ fontSize: "0.9rem" }}>Colleges Offering ({course.colleges.length}):</strong>
                 <ul style={{ fontSize: "0.85rem", color: "var(--text-muted)", listStyleType: "none", marginTop: "0.5rem", display: "flex", flexDirection: "column", gap: "0.3rem" }}>
                   {course.colleges.slice(0, 3).map(cc => (
-                    <li key={cc.collegeId}>
+                    <li key={cc.collegeId} style={{ wordBreak: "break-word", overflow: "hidden" }}>
                       • {cc.college.name} {cc.fee && cc.fee !== 'Not Specified' ? `| Est. Fee: ${cc.fee}` : ''} {cc.timeInvolved && cc.timeInvolved !== 'Not Specified' ? `| Time: ${cc.timeInvolved}` : ''}
-                      {cc.remarks && <div style={{marginLeft: "1rem", fontSize: "0.8rem", color: "var(--accent)"}}>Remark: {cc.remarks}</div>}
+                      {cc.remarks && <div style={{marginLeft: "1rem", fontSize: "0.8rem", color: "var(--accent)", wordBreak: "break-word", whiteSpace: "normal", marginTop: "0.2rem"}}>Remark: {cc.remarks}</div>}
                     </li>
                   ))}
                   {course.colleges.length > 3 && <li>...and {course.colleges.length - 3} more</li>}
