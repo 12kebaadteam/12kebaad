@@ -1,96 +1,97 @@
 import prisma from '../../../lib/prisma'
+import { cookies } from 'next/headers'
+import ExpandableCollegeCard from '../../components/ExpandableCollegeCard'
 
 export default async function CollegesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ sort?: string }>
+  searchParams: Promise<{ sort?: string; state?: string; feeMax?: string }>
 }) {
-  const resolvedParams = await searchParams;
-  const sort = resolvedParams.sort || 'ranking_asc';
+  const resolvedParams = await searchParams
+  const c = await cookies()
 
-  let orderBy: any = {};
-  if (sort === 'ranking_asc') orderBy = { ranking: 'asc' };
-  else if (sort === 'ranking_desc') orderBy = { ranking: 'desc' };
-  else if (sort === 'name_asc') orderBy = { name: 'asc' };
-  else if (sort === 'state_asc') orderBy = { state: 'asc' };
+  const stateParam = resolvedParams.state || c.get('user_state')?.value || ''
+  const sort = resolvedParams.sort || 'ranking_asc'
+  const feeMax = resolvedParams.feeMax ? parseInt(resolvedParams.feeMax) : undefined
+
+  let orderBy: any = {}
+  if (sort === 'ranking_asc') orderBy = { ranking: 'asc' }
+  else if (sort === 'ranking_desc') orderBy = { ranking: 'desc' }
+  else if (sort === 'name_asc') orderBy = { name: 'asc' }
+  else if (sort === 'state_asc') orderBy = { state: 'asc' }
 
   const colleges = await prisma.college.findMany({
+    where: stateParam ? { state: stateParam } : undefined,
     orderBy,
     include: {
       courses: {
-        include: {
-          course: true
-        }
+        include: { course: true }
       }
     }
-  });
+  })
+
+  // Fee filter: keep colleges that have at least one course within fee range
+  const displayColleges = feeMax
+    ? colleges.filter(college =>
+        college.courses.some(cc => {
+          if (!cc.fee || cc.fee === 'Not Specified') return true
+          const n = parseInt(cc.fee.replace(/[^0-9]/g, ''))
+          return isNaN(n) || n <= feeMax
+        })
+      )
+    : colleges
+
+  const allStates = await prisma.college.groupBy({ by: ['state'], orderBy: { state: 'asc' } })
+  const stateList = allStates.map(s => s.state).filter((s): s is string => !!s && s !== 'Unknown')
 
   return (
     <div className="animate-fade-in">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
-        <h1 style={{ color: "var(--accent)" }}>Top Colleges</h1>
-        <form method="GET" className="sort-bar-form">
-          <select name="sort" className="form-control sort-select" defaultValue={sort}>
-            <option value="ranking_asc">Rank (Highest First)</option>
-            <option value="ranking_desc">Rank (Lowest First)</option>
-            <option value="name_asc">Name (A-Z)</option>
-            <option value="state_asc">State (A-Z)</option>
-          </select>
-          <button type="submit" className="btn-primary" style={{ padding: "0.5rem 1.2rem", whiteSpace: "nowrap" }}>Sort / Rank</button>
-        </form>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <div>
+          <h1 style={{ color: 'var(--accent)' }}>Top Colleges</h1>
+          {stateParam && (
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.3rem' }}>
+              Filtered by state: <strong style={{ color: 'var(--accent)' }}>{stateParam}</strong>
+              &nbsp;·&nbsp;<a href="/colleges" style={{ color: 'var(--primary)', fontSize: '0.85rem' }}>Show all states</a>
+            </p>
+          )}
+        </div>
       </div>
 
-      <div className="grid-cards">
-        {colleges.map((college) => (
-          <div key={college.id} className="glass-panel animate-slide-up" style={{ overflow: "hidden", wordBreak: "break-word" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
-              <h3 style={{ maxWidth: "70%" }}>{college.name}</h3>
-              {college.ranking && (
-                <span style={{ background: "var(--primary)", padding: "0.2rem 0.8rem", borderRadius: "99px", fontSize: "0.8rem", fontWeight: "bold" }}>
-                  Rank #{college.ranking}
-                </span>
-              )}
-            </div>
-            <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", marginBottom: "0.2rem" }}>
-              <strong style={{ color: "var(--text-main)" }}>State:</strong> {college.state}
-            </p>
-            {college.address && (
-              <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", marginBottom: "1rem" }}>
-                <strong style={{ color: "var(--text-main)" }}>Address:</strong> {college.address}
-              </p>
-            )}
-            {!college.address && <div style={{ marginBottom: "1rem" }} />}
-            <div style={{ marginTop: "1rem", borderTop: "1px solid var(--glass-border)", paddingTop: "1rem" }}>
-              <strong style={{ fontSize: "0.9rem" }}>Popular Courses:</strong>
-              <ul style={{ fontSize: "0.85rem", color: "var(--text-muted)", listStyleType: "none", marginTop: "0.5rem", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                {college.courses.slice(0, 4).map(cc => (
-                  <li key={cc.courseId} style={{ wordBreak: "break-word" }}>
-                    <span style={{ background: "rgba(255,255,255,0.1)", padding: "0.2rem 0.5rem", borderRadius: "4px", fontSize: "0.75rem", display: "inline-block", marginBottom: "0.2rem" }}>
-                      {cc.course.title}
-                    </span>
-                    {(cc as any).fee && (cc as any).fee !== 'Not Specified' && (
-                      <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginLeft: "0.4rem" }}>| Fee: {(cc as any).fee}</span>
-                    )}
-                    {(cc as any).timeInvolved && (cc as any).timeInvolved !== 'Not Specified' && (
-                      <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginLeft: "0.4rem" }}>| {(cc as any).timeInvolved}</span>
-                    )}
-                    {(cc as any).remarks && (
-                      <div style={{ marginLeft: "0.5rem", marginTop: "0.2rem", fontSize: "0.75rem", color: "var(--accent)", wordBreak: "break-word", whiteSpace: "normal" }}>
-                        ↳ {(cc as any).remarks}
-                      </div>
-                    )}
-                  </li>
-                ))}
-                {college.courses.length === 0 && <li style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>None listed</li>}
-                {college.courses.length > 4 && <li style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>...and {college.courses.length - 4} more</li>}
-              </ul>
-            </div>
-          </div>
-        ))}
-        {colleges.length === 0 && (
-          <p style={{ color: "var(--text-muted)" }}>No colleges available in the database.</p>
-        )}
-      </div>
+      {/* Filters bar */}
+      <form method="GET" className="filters-bar">
+        <select name="sort" className="form-control filter-input" defaultValue={sort}>
+          <option value="ranking_asc">Rank (Best First)</option>
+          <option value="ranking_desc">Rank (Lowest First)</option>
+          <option value="name_asc">Name A→Z</option>
+          <option value="state_asc">State A→Z</option>
+        </select>
+        <select name="state" className="form-control filter-input" defaultValue={stateParam}>
+          <option value="">All States</option>
+          {stateList.map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+        <select name="feeMax" className="form-control filter-input" defaultValue={resolvedParams.feeMax || ''}>
+          <option value="">Any Fee</option>
+          <option value="50000">Under ₹50,000</option>
+          <option value="100000">Under ₹1 Lakh</option>
+          <option value="200000">Under ₹2 Lakh</option>
+          <option value="500000">Under ₹5 Lakh</option>
+        </select>
+        <button type="submit" className="btn-primary filter-btn">Apply Filters</button>
+      </form>
+
+      {displayColleges.length === 0 ? (
+        <p style={{ color: 'var(--text-muted)', marginTop: '2rem' }}>
+          No colleges found for the selected filters.
+          {stateParam && <> <a href="/colleges" style={{ color: 'var(--primary)' }}>Clear filters</a>.</>}
+        </p>
+      ) : (
+        <div className="grid-cards">
+          {displayColleges.map((college) => (
+            <ExpandableCollegeCard key={college.id} college={college as any} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

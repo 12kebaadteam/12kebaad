@@ -11,6 +11,7 @@ model User {
   id          String   @id @default(cuid())
   name        String
   contactInfo String
+  mobile      String?
   state       String
   stream      String
   createdAt   DateTime @default(now())
@@ -28,6 +29,7 @@ model College {
   state   String
   address String?
   ranking Int?
+  recommendations  Recommendation[] 
   courses CollegeCourse[]
 }
 
@@ -53,4 +55,23 @@ model CollegeCourse {
   course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([collegeId, courseId])
+}
+model EntranceTest {
+  id           String  @id @default(cuid())
+  name         String  @unique
+  fullForm     String
+  suitability  String
+  eligibility  String
+  extraRemarks String?
+}
+
+model Recommendation {
+  id           String  @id @default(cuid())
+  collegeId    String
+  adminRank    Int
+  targetStream String?
+  reason       String?
+  college      College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([collegeId])
 }
