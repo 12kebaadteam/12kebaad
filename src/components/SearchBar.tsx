@@ -4,16 +4,20 @@ import { useRouter } from 'next/navigation'
 
 export default function SearchBar() {
   const [query, setQuery] = useState('')
-  const [open, setOpen] = useState(false)
+  const [focused, setFocused] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    function handleKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        inputRef.current?.focus()
+      }
     }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
   }, [])
 
   function handleSearch(e: React.FormEvent) {
@@ -21,23 +25,33 @@ export default function SearchBar() {
     if (!query.trim()) return
     router.push(`/search?q=${encodeURIComponent(query.trim())}`)
     setQuery('')
-    setOpen(false)
+    setFocused(false)
+    inputRef.current?.blur()
   }
 
   return (
-    <div ref={ref} style={{ position: 'relative' }}>
-      <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+    <div ref={ref} className="search-wrapper">
+      <form onSubmit={handleSearch} className={`search-form${focused ? ' search-form--active' : ''}`}>
+        <svg className="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
         <input
+          ref={inputRef}
           type="text"
           value={query}
-          onChange={e => { setQuery(e.target.value); setOpen(e.target.value.length > 0) }}
-          placeholder="Search courses, colleges, tests…"
-          className="form-control search-input"
-          style={{ width: open ? '220px' : '160px', transition: 'width 0.3s ease', padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
+          onChange={e => setQuery(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          placeholder="Search colleges, courses..."
+          className="search-field"
+          aria-label="Search"
         />
-        <button type="submit" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary)', fontSize: '1.1rem', padding: '0.2rem' }}>
-          🔍
-        </button>
+        {query && (
+          <button type="button" className="search-clear" onClick={() => { setQuery(''); inputRef.current?.focus() }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        )}
       </form>
     </div>
   )

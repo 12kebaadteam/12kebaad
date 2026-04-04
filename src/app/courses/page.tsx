@@ -105,7 +105,20 @@ export default async function CoursesPage({
       ) : (
         <div className="grid-cards">
           {displayCourses.map((course) => (
-            <ExpandableCourseCard key={course.id} course={course} />
+            <div key={course.id} className="glass-panel animate-slide-up" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <h3 style={{ fontSize: '1.2rem', color: 'var(--text-main)', marginBottom: '0.4rem' }}>{course.title}</h3>
+                <span className="stream-badge">{course.stream}</span>
+                {course.basicSubjects && (
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '0.8rem', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {course.basicSubjects}
+                  </p>
+                )}
+              </div>
+              <a href={`/course/${course.id}`} className="btn-primary" style={{ marginTop: '1.2rem', textDecoration: 'none', fontSize: '0.83rem', padding: '0.5rem 1rem' }}>
+                View Course Details →
+              </a>
+            </div>
           ))}
         </div>
       )}

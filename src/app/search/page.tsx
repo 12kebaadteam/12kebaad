@@ -1,5 +1,4 @@
 import prisma from '../../../lib/prisma'
-import Link from 'next/link'
 
 export default async function SearchPage({
   searchParams,
@@ -18,22 +17,83 @@ export default async function SearchPage({
     )
   }
 
-  const [colleges, courses, tests] = await Promise.all([
+  // Case-insensitive: mode: 'insensitive' works on PostgreSQL.
+  // For SQLite, contains is already case-insensitive by default for ASCII.
+  // We also do a JS-level filter as a fallback for both engines.
+  const lower = query.toLowerCase()
+
+  const [allColleges, allCourses, allTests, allProfCourses] = await Promise.all([
     prisma.college.findMany({
-      where: { OR: [{ name: { contains: query } }, { state: { contains: query } }] },
-      take: 6,
+      where: {
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { state: { contains: query, mode: 'insensitive' } },
+        ]
+      },
+      take: 20,
     }),
     prisma.course.findMany({
-      where: { OR: [{ title: { contains: query } }, { stream: { contains: query } }] },
-      take: 6,
+      where: {
+        OR: [
+          { title: { contains: query, mode: 'insensitive' } },
+          { stream: { contains: query, mode: 'insensitive' } },
+          { basicSubjects: { contains: query, mode: 'insensitive' } },
+          { useCase: { contains: query, mode: 'insensitive' } },
+        ]
+      },
+      take: 20,
     }),
     prisma.entranceTest.findMany({
-      where: { OR: [{ name: { contains: query } }, { fullForm: { contains: query } }, { suitability: { contains: query } }] },
-      take: 6,
+      where: {
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { fullForm: { contains: query, mode: 'insensitive' } },
+          { suitability: { contains: query, mode: 'insensitive' } },
+          { eligibility: { contains: query, mode: 'insensitive' } },
+        ]
+      },
+      take: 20,
+    }),
+    prisma.professionalCourse.findMany({
+      where: {
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { fullForm: { contains: query, mode: 'insensitive' } },
+          { opportunities: { contains: query, mode: 'insensitive' } },
+          { eligibility: { contains: query, mode: 'insensitive' } },
+        ]
+      },
+      take: 20,
     }),
   ])
 
-  const total = colleges.length + courses.length + tests.length
+  // JS-level fallback for SQLite which ignores 'mode'
+  const colleges = allColleges.filter(c =>
+    c.name.toLowerCase().includes(lower) || (c.state || '').toLowerCase().includes(lower)
+  )
+
+  const courses = allCourses.filter(c =>
+    c.title.toLowerCase().includes(lower) ||
+    c.stream.toLowerCase().includes(lower) ||
+    (c.basicSubjects || '').toLowerCase().includes(lower) ||
+    (c.useCase || '').toLowerCase().includes(lower)
+  )
+
+  const tests = allTests.filter(t =>
+    t.name.toLowerCase().includes(lower) ||
+    t.fullForm.toLowerCase().includes(lower) ||
+    t.suitability.toLowerCase().includes(lower) ||
+    t.eligibility.toLowerCase().includes(lower)
+  )
+
+  const profCourses = allProfCourses.filter(p =>
+    p.name.toLowerCase().includes(lower) ||
+    p.fullForm.toLowerCase().includes(lower) ||
+    p.opportunities.toLowerCase().includes(lower) ||
+    p.eligibility.toLowerCase().includes(lower)
+  )
+
+  const total = colleges.length + courses.length + tests.length + profCourses.length
 
   return (
     <div className="animate-fade-in">
@@ -47,11 +107,14 @@ export default async function SearchPage({
           <h2 style={{ color: 'var(--accent)', marginBottom: '1rem', fontSize: '1.1rem' }}>Colleges ({colleges.length})</h2>
           <div className="grid-cards">
             {colleges.map(c => (
-              <div key={c.id} className="glass-panel" style={{ padding: '1.2rem' }}>
-                <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.name}</h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{c.state}</p>
-                {c.address && <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.3rem' }}>{c.address}</p>}
-              </div>
+              <a key={c.id} href={`/college/${c.id}`} style={{ textDecoration: 'none' }}>
+                <div className="glass-panel search-result-card">
+                  <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.name}</h3>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{c.state}</p>
+                  {c.address && <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.3rem' }}>{c.address}</p>}
+                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
+                </div>
+              </a>
             ))}
           </div>
         </section>
@@ -62,10 +125,13 @@ export default async function SearchPage({
           <h2 style={{ color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem' }}>Courses ({courses.length})</h2>
           <div className="grid-cards">
             {courses.map(c => (
-              <div key={c.id} className="glass-panel" style={{ padding: '1.2rem' }}>
-                <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.title}</h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Stream: {c.stream}</p>
-              </div>
+              <a key={c.id} href={`/course/${c.id}`} style={{ textDecoration: 'none' }}>
+                <div className="glass-panel search-result-card">
+                  <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.title}</h3>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Stream: {c.stream}</p>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
+                </div>
+              </a>
             ))}
           </div>
         </section>
@@ -79,8 +145,26 @@ export default async function SearchPage({
               <div key={t.id} className="glass-panel" style={{ padding: '1.2rem' }}>
                 <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{t.name}</h3>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{t.fullForm}</p>
-                <p style={{ fontSize: '0.8rem', color: 'var(--primary)', marginTop: '0.3rem' }}>{t.suitability}</p>
+                <p style={{ fontSize: '0.8rem', color: 'var(--accent)', marginTop: '0.3rem' }}>{t.suitability}</p>
               </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {profCourses.length > 0 && (
+        <section style={{ marginBottom: '2.5rem' }}>
+          <h2 style={{ color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem' }}>Prof. Courses ({profCourses.length})</h2>
+          <div className="grid-cards">
+            {profCourses.map(p => (
+              <a key={p.id} href={`/professional-course/${p.id}`} style={{ textDecoration: 'none' }}>
+                <div className="glass-panel search-result-card">
+                  <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{p.name}</h3>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--accent)' }}>{p.fullForm}</p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.3rem' }}>{p.duration}</p>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
+                </div>
+              </a>
             ))}
           </div>
         </section>

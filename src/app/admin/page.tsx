@@ -1,11 +1,11 @@
 import { cookies } from 'next/headers'
-import { login, logout, uploadCSV, uploadTestsCSV, updateCourse, deleteCourse, addRecommendation, deleteRecommendation } from './actions'
+import { login, logout, uploadCSV, uploadTestsCSV, uploadProfessionalCSV, updateCourse, deleteCourse, addRecommendation, deleteRecommendation, deleteCollegesByState, deleteEntranceTest, deleteProfessionalCourse } from './actions'
 import prisma from '../../../lib/prisma'
 
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string; deleteError?: string; deleteSuccess?: string }>
 }) {
   const resolvedParams = await searchParams
   const c = await cookies()
@@ -33,20 +33,23 @@ export default async function AdminPage({
     )
   }
 
-  const [dbUsers, dbCourses, dbColleges, dbTests, dbRecs] = await Promise.all([
+  const [dbUsers, dbCourses, dbColleges, dbTests, dbRecs, dbProfCourses] = await Promise.all([
     prisma.user.count(),
     prisma.course.count(),
     prisma.college.count(),
     prisma.entranceTest.count(),
     prisma.recommendation.count(),
+    prisma.professionalCourse.count(),
   ])
 
-  const [recentUsers, allCourses, allColleges, allTests, allRecs] = await Promise.all([
+  const [recentUsers, allCourses, allColleges, allTests, allRecs, stateGroups, allProfCourses] = await Promise.all([
     prisma.user.findMany({ orderBy: { createdAt: 'desc' }, take: 10 }),
     prisma.course.findMany({ orderBy: { title: 'asc' } }),
     prisma.college.findMany({ orderBy: { name: 'asc' } }),
     prisma.entranceTest.findMany({ orderBy: { name: 'asc' } }),
     prisma.recommendation.findMany({ orderBy: { adminRank: 'asc' }, include: { college: true } }),
+    prisma.college.groupBy({ by: ['state'], orderBy: { state: 'asc' } }),
+    prisma.professionalCourse.findMany({ orderBy: { name: 'asc' } }),
   ])
 
   return (
@@ -65,7 +68,7 @@ export default async function AdminPage({
           { label: 'Courses in DB', value: dbCourses, color: 'var(--accent)' },
           { label: 'Colleges in DB', value: dbColleges, color: 'var(--primary)' },
           { label: 'Entrance Tests', value: dbTests, color: 'var(--accent)' },
-          { label: 'Recommendations', value: dbRecs, color: 'var(--primary)' },
+          { label: 'Prof. Courses', value: dbProfCourses, color: 'var(--primary)' },
         ].map(s => (
           <div key={s.label} className="glass-panel" style={{ borderTop: `4px solid ${s.color}`, padding: '1.5rem' }}>
             <h3 style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{s.label}</h3>
@@ -81,7 +84,7 @@ export default async function AdminPage({
           <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--glass-border)' }}>
-                {['Name', 'Contact', 'Stream', 'State', 'Registered'].map(h => (
+                {['Name', 'Contact', 'Mobile', 'Stream', 'State', 'Registered'].map(h => (
                   <th key={h} style={{ padding: '0.8rem', color: 'var(--text-muted)' }}>{h}</th>
                 ))}
               </tr>
@@ -91,6 +94,7 @@ export default async function AdminPage({
                 <tr key={u.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                   <td style={{ padding: '0.8rem' }}>{u.name}</td>
                   <td style={{ padding: '0.8rem' }}>{u.contactInfo}</td>
+                  <td style={{ padding: '0.8rem' }}>{(u as any).mobile || <span style={{color:'var(--text-muted)',fontSize:'0.78rem'}}>—</span>}</td>
                   <td style={{ padding: '0.8rem' }}>{u.stream}</td>
                   <td style={{ padding: '0.8rem' }}>{u.state}</td>
                   <td style={{ padding: '0.8rem', color: 'var(--accent)' }}>{new Date(u.createdAt).toLocaleDateString()}</td>
@@ -150,7 +154,7 @@ export default async function AdminPage({
           <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
             <thead style={{ position: 'sticky', top: 0, background: 'var(--bg-color)' }}>
               <tr style={{ borderBottom: '1px solid var(--glass-border)' }}>
-                {['Name', 'Full Form', 'Suitability', 'Eligibility', 'Remarks'].map(h => (
+                {['Name', 'Full Form', 'Suitability', 'Eligibility', 'Remarks', ''].map(h => (
                   <th key={h} style={{ padding: '0.7rem', color: 'var(--text-muted)' }}>{h}</th>
                 ))}
               </tr>
@@ -163,12 +167,64 @@ export default async function AdminPage({
                   <td style={{ padding: '0.7rem', color: 'var(--accent)' }}>{t.suitability}</td>
                   <td style={{ padding: '0.7rem', color: 'var(--text-muted)' }}>{t.eligibility}</td>
                   <td style={{ padding: '0.7rem', color: 'var(--text-muted)' }}>{t.extraRemarks || '—'}</td>
+                  <td style={{ padding: '0.7rem' }}>
+                    <form action={deleteEntranceTest}>
+                      <input type="hidden" name="id" value={t.id} />
+                      <button type="submit" style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '0.25rem 0.55rem', borderRadius: '99px', fontSize: '0.75rem', cursor: 'pointer' }}>Delete</button>
+                    </form>
+                  </td>
                 </tr>
               ))}
               {allTests.length === 0 && <tr><td colSpan={5} style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-muted)' }}>No entrance tests yet. Upload CSV below.</td></tr>}
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Professional Courses Table */}
+      <div className="glass-panel" style={{ marginBottom: '3rem' }}>
+        <h2 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>Professional Courses in Database</h2>
+        <div style={{ overflowX: 'auto', maxHeight: '300px' }}>
+          <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
+            <thead style={{ position: 'sticky', top: 0, background: 'var(--bg-color)' }}>
+              <tr style={{ borderBottom: '1px solid var(--glass-border)' }}>
+                {['Name', 'Full Form', 'Eligibility', 'Fees', 'Duration', ''].map(h => (
+                  <th key={h} style={{ padding: '0.7rem', color: 'var(--text-muted)' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {allProfCourses.map((p: any) => (
+                <tr key={p.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <td style={{ padding: '0.7rem', fontWeight: 600 }}>{p.name}</td>
+                  <td style={{ padding: '0.7rem', color: 'var(--text-muted)' }}>{p.fullForm}</td>
+                  <td style={{ padding: '0.7rem', color: 'var(--text-muted)' }}>{p.eligibility}</td>
+                  <td style={{ padding: '0.7rem', color: 'var(--primary)' }}>{p.fees}</td>
+                  <td style={{ padding: '0.7rem', color: 'var(--text-muted)' }}>{p.duration}</td>
+                  <td style={{ padding: '0.7rem' }}>
+                    <form action={deleteProfessionalCourse}>
+                      <input type="hidden" name="id" value={p.id} />
+                      <button type="submit" style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '0.25rem 0.55rem', borderRadius: '99px', fontSize: '0.75rem', cursor: 'pointer' }}>Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              ))}
+              {allProfCourses.length === 0 && <tr><td colSpan={6} style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-muted)' }}>No professional courses yet. Upload CSV below.</td></tr>}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Upload Professional Courses CSV */}
+      <div className="glass-panel" style={{ marginBottom: '3rem' }}>
+        <h2 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>Upload Professional Courses CSV</h2>
+        <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.88rem' }}>
+          Columns: <code>NAME, FULL FORM, ELIGIBILITY, ESTIMATED FEES, ESTIMATED TIME, CAREER OPPORTUNITIES, EXTRA REMARKS</code>
+        </p>
+        <form action={uploadProfessionalCSV} style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <input type="file" name="profCsv" accept=".csv" className="form-control" style={{ flex: 1, minWidth: '250px' }} required />
+          <button type="submit" className="btn-primary">Import Prof. Courses</button>
+        </form>
       </div>
 
       {/* Upload Colleges CSV */}
@@ -249,6 +305,46 @@ export default async function AdminPage({
         ) : (
           <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}>No recommendations yet. Add one above.</p>
         )}
+      </div>
+
+      {/* ── Delete by State ── */}
+      <div className="glass-panel" style={{ marginBottom: '3rem', borderLeft: '4px solid #ef4444' }}>
+        <h2 style={{ color: '#ef4444', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span>⚠️</span> Administrative Actions
+        </h2>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
+          To remove all data for a specific state, select it from the menu and confirm by typing the required text.
+        </p>
+
+        {resolvedParams.deleteError && (
+          <p style={{ color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '0.6rem 1rem', borderRadius: '8px', marginBottom: '1.2rem', fontSize: '0.88rem', border: '1px solid rgba(239,68,68,0.2)' }}>
+            ✕ Confirmation text did not match. No data was deleted.
+          </p>
+        )}
+        {resolvedParams.deleteSuccess && (
+          <p style={{ color: '#22c55e', background: 'rgba(34,197,94,0.1)', padding: '0.6rem 1rem', borderRadius: '8px', marginBottom: '1.2rem', fontSize: '0.88rem', border: '1px solid rgba(34,197,94,0.2)' }}>
+            ✓ State data deleted successfully.
+          </p>
+        )}
+
+        <form action={deleteCollegesByState} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.2rem', alignItems: 'flex-end' }}>
+          <div className="form-group">
+            <label>Select State to Delete</label>
+            <select name="state" className="form-control" required>
+              <option value="">Choose state…</option>
+              {stateGroups.map((sg: any) => (
+                <option key={sg.state} value={sg.state}>{sg.state}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Type <code>DELETE [state]</code> to confirm</label>
+            <input type="text" name="confirm" className="form-control" placeholder="e.g. DELETE Punjab" required />
+          </div>
+          <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', height: '48px', fontWeight: 700 }}>
+            Permanently Delete Data
+          </button>
+        </form>
       </div>
     </div>
   )

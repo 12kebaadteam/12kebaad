@@ -118,3 +118,56 @@ export async function deleteCourse(formData: FormData) {
   if (!id) return
   await prisma.course.delete({ where: { id } })
 }
+
+// ── Delete by State ───────────────────────────────────────────────────────────
+export async function deleteCollegesByState(formData: FormData) {
+  const c = await cookies()
+  if (c.get('admin_auth')?.value !== 'true') redirect('/admin')
+  const state = formData.get('state') as string
+  const confirm = formData.get('confirm') as string
+  if (!state || confirm !== `DELETE ${state}`) {
+    redirect('/admin?deleteError=1')
+  }
+  // Delete all colleges in state (cascades to collegeCourse via Prisma)
+  await prisma.college.deleteMany({ where: { state } })
+  redirect('/admin?deleteSuccess=1')
+}
+
+export async function deleteEntranceTest(formData: FormData) {
+  const c = await cookies()
+  if (c.get('admin_auth')?.value !== 'true') redirect('/admin')
+  const id = formData.get('id') as string
+  if (!id) return
+  await prisma.entranceTest.delete({ where: { id } })
+  redirect('/admin')
+}
+
+// ── Professional Courses CSV ──────────────────────────────────────────────────
+export async function uploadProfessionalCSV(formData: FormData) {
+  const file = formData.get('profCsv') as File
+  if (!file) return
+  const text = await file.text()
+  const rows = text.split('\n').map(row => row.split(','))
+  for (let i = 1; i < rows.length; i++) {
+    const cols = rows[i]
+    if (cols.length < 2) continue
+    const [name = '', fullForm = '', eligibility = '', fees = '', duration = '', opportunities = '', extraRemarks = ''] = cols
+    const safeName = name.trim()
+    if (!safeName) continue
+    await prisma.professionalCourse.upsert({
+      where: { name: safeName },
+      update: { fullForm: fullForm.trim(), eligibility: eligibility.trim(), fees: fees.trim(), duration: duration.trim(), opportunities: opportunities.trim(), extraRemarks: extraRemarks.trim() || null },
+      create: { name: safeName, fullForm: fullForm.trim(), eligibility: eligibility.trim(), fees: fees.trim(), duration: duration.trim(), opportunities: opportunities.trim(), extraRemarks: extraRemarks.trim() || null }
+    })
+  }
+  redirect('/admin')
+}
+
+export async function deleteProfessionalCourse(formData: FormData) {
+  const c = await cookies()
+  if (c.get('admin_auth')?.value !== 'true') redirect('/admin')
+  const id = formData.get('id') as string
+  if (!id) return
+  await prisma.professionalCourse.delete({ where: { id } })
+  redirect('/admin')
+}

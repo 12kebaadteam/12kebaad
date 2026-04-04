@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
 
 type Course = { id: string; title: string; stream: string }
 type CollegeCourse = { courseId: string; fee: string | null; timeInvolved: string | null; remarks: string | null; course: Course }
@@ -10,89 +11,50 @@ type College = {
 
 export default function ExpandableCollegeCard({ college }: { college: College }) {
   const [expanded, setExpanded] = useState(false)
-  const previewCourses = college.courses.slice(0, 3)
-  const extraCourses = college.courses.slice(3)
 
   return (
     <div className="glass-panel animate-slide-up expandable-card" style={{ overflow: 'hidden', wordBreak: 'break-word' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.8rem' }}>
-        <h3 style={{ maxWidth: '75%', fontSize: '1rem' }}>{college.name}</h3>
-        {college.ranking && (
-          <span className="rank-badge">#{college.ranking}</span>
-        )}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.6rem' }}>
+        <Link href={`/college/${college.id}`} style={{ textDecoration: 'none', flex: 1 }}>
+          <h3 style={{ fontSize: '1rem', color: 'var(--text-main)', maxWidth: '75%' }}>{college.name}</h3>
+        </Link>
+        {college.ranking && <span className="rank-badge">#{college.ranking}</span>}
       </div>
 
-      <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '0.2rem' }}>
-        <strong style={{ color: 'var(--text-main)' }}>📍</strong> {college.state}
+      <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>📍 {college.state}</p>
+
+      {/* Course count summary — details on click */}
+      <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '0.6rem' }}>
+        {college.courses.length} course{college.courses.length !== 1 ? 's' : ''} offered
       </p>
-      {college.address && (
-        <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '0.8rem' }}>{college.address}</p>
-      )}
 
-      <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '0.8rem', marginTop: '0.8rem' }}>
-        <strong style={{ fontSize: '0.88rem' }}>Courses ({college.courses.length}):</strong>
-        <ul className="college-list" style={{ marginTop: '0.5rem' }}>
-          {previewCourses.map(cc => (
-            <CourseEntry key={cc.courseId} cc={cc} />
-          ))}
-          {expanded && extraCourses.map(cc => (
-            <CourseEntry key={cc.courseId} cc={cc} />
-          ))}
-        </ul>
-        {college.courses.length === 0 && (
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.4rem' }}>No courses listed.</p>
-        )}
-      </div>
-
-      <button onClick={() => setExpanded(!expanded)} className="expand-btn">
-        {expanded
-          ? '▲ Show Less'
-          : extraCourses.length > 0
-            ? `▼ Show ${extraCourses.length} More Courses`
-            : '▼ Details'}
-      </button>
-
+      {/* Expand to show course names only */}
       {expanded && (
-        <div className="expanded-details">
-          <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '0.8rem', marginTop: '0.8rem' }}>
-            {college.address && (
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-                <strong style={{ color: 'var(--text-main)' }}>Full Address:</strong> {college.address}
-              </p>
-            )}
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-              <strong style={{ color: 'var(--text-main)' }}>State:</strong> {college.state}
-            </p>
-            {college.ranking && (
-              <p style={{ fontSize: '0.82rem', color: 'var(--accent)', marginTop: '0.4rem' }}>
-                🏆 National Rank #{college.ranking}
-              </p>
-            )}
-          </div>
+        <div className="expanded-details" style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '0.8rem', marginTop: '0.4rem' }}>
+          {college.address && (
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '0.6rem' }}>{college.address}</p>
+          )}
+          <strong style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Courses:</strong>
+          <ul className="college-list" style={{ marginTop: '0.4rem' }}>
+            {college.courses.map(cc => (
+              <li key={cc.courseId} style={{ fontSize: '0.82rem', paddingBottom: '0.25rem' }}>
+                <span style={{ color: 'var(--text-main)' }}>• {cc.course.title}</span>
+                <span style={{ color: 'var(--primary)', marginLeft: '0.4rem', fontSize: '0.75rem' }}>[{cc.course.stream}]</span>
+              </li>
+            ))}
+            {college.courses.length === 0 && <li style={{ color: 'var(--text-muted)' }}>None listed</li>}
+          </ul>
         </div>
       )}
-    </div>
-  )
-}
 
-function CourseEntry({ cc }: { cc: CollegeCourse }) {
-  return (
-    <li style={{ wordBreak: 'break-word', overflow: 'hidden', paddingBottom: '0.4rem', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-      <span style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--text-main)' }}>• {cc.course.title}</span>
-      <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginLeft: '0.4rem' }}>[{cc.course.stream}]</span>
-      <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', marginTop: '0.2rem', paddingLeft: '0.8rem' }}>
-        {cc.fee && cc.fee !== 'Not Specified' && (
-          <span style={{ fontSize: '0.75rem', color: 'var(--primary)' }}>💰 {cc.fee}</span>
-        )}
-        {cc.timeInvolved && cc.timeInvolved !== 'Not Specified' && (
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>⏱ {cc.timeInvolved}</span>
-        )}
+      <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.8rem', flexWrap: 'wrap' }}>
+        <button onClick={() => setExpanded(!expanded)} className="expand-btn">
+          {expanded ? '▲ Less' : '▼ Preview Courses'}
+        </button>
+        <Link href={`/college/${college.id}`} className="expand-btn" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+          Full Details →
+        </Link>
       </div>
-      {cc.remarks && (
-        <div style={{ paddingLeft: '0.8rem', marginTop: '0.2rem', fontSize: '0.75rem', color: 'var(--accent)', whiteSpace: 'normal' }}>
-          ↳ {cc.remarks}
-        </div>
-      )}
-    </li>
+    </div>
   )
 }

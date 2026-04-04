@@ -3,6 +3,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import SearchBar from "../components/SearchBar";
+import NavBar from "../components/NavBar";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,19 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <nav className="navbar">
-          <Link href="/" className="logo">12kebaad</Link>
-          <div className="nav-links">
-            <Link href="/" className="nav-link">Home</Link>
-            <Link href="/courses" className="nav-link">Courses</Link>
-            <Link href="/colleges" className="nav-link">Colleges</Link>
-            <Link href="/entrance-tests" className="nav-link">Entrance Tests</Link>
-            <Link href="/recommendations" className="nav-link">Recommendations</Link>
-            <Link href="/about" className="nav-link">About</Link>
-            <Link href="/admin" className="nav-link" style={{color: "var(--accent)"}}>Admin</Link>
-          </div>
-          <SearchBar />
-        </nav>
+        <NavBar />
         <main className="main-content">
           {children}
         </main>

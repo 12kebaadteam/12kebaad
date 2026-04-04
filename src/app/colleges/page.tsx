@@ -88,7 +88,18 @@ export default async function CollegesPage({
       ) : (
         <div className="grid-cards">
           {displayColleges.map((college) => (
-            <ExpandableCollegeCard key={college.id} college={college as any} />
+            <div key={college.id} className="glass-panel animate-slide-up" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                  <h3 style={{ fontSize: '1.2rem', color: 'var(--text-main)' }}>{college.name}</h3>
+                  {college.ranking && <span className="rank-badge">#{college.ranking}</span>}
+                </div>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}>📍 {college.state}</p>
+              </div>
+              <a href={`/college/${college.id}`} className="btn-primary" style={{ marginTop: '1.2rem', textDecoration: 'none', fontSize: '0.83rem', padding: '0.5rem 1rem' }}>
+                View College Details →
+              </a>
+            </div>
           ))}
         </div>
       )}

@@ -75,3 +75,14 @@ model Recommendation {
 
   @@index([collegeId])
 }
+
+model ProfessionalCourse {
+  id           String  @id @default(cuid())
+  name         String  @unique
+  fullForm     String
+  eligibility  String
+  fees         String
+  duration     String
+  opportunities String
+  extraRemarks String?
+}
