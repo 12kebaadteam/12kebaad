@@ -42,31 +42,6 @@ export default function AdminLogin({ error }: { error?: string }) {
           </p>
         )}
 
-        {/* Google Sign-In */}
-        <button 
-          onClick={handleGoogleSignIn}
-          className="btn-primary" 
-          style={{ 
-            width: '100%', 
-            marginBottom: '1.5rem', 
-            background: '#fff', 
-            color: '#000', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            gap: '0.5rem'
-          }}
-        >
-          <img src="https://authjs.dev/img/providers/google.svg" width="20" height="20" alt="Google" />
-          Sign in with Google
-        </button>
-
-        <div style={{ display: 'flex', alignItems: 'center', margin: '1rem 0', gap: '1rem' }}>
-          <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
-          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>OR</span>
-          <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
-        </div>
-
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
           <div className="form-group" style={{ marginBottom: '0' }}>
             <label>Username</label>

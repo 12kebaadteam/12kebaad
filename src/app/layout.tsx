@@ -6,6 +6,7 @@ import SearchBar from "../components/SearchBar";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import CookieConsent from "../components/CookieConsent";
+import Providers from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -24,12 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NavBar />
-        <main className="main-content">
-          {children}
-        </main>
-        <Footer />
-        <CookieConsent />
+        <Providers>
+          <NavBar />
+          <main className="main-content">
+            {children}
+          </main>
+          <Footer />
+          <CookieConsent />
+        </Providers>
 
         <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} strategy="afterInteractive" />
         <Script id="google-analytics" strategy="afterInteractive">

@@ -1,7 +1,12 @@
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../../../lib/auth"
 import { submitForm } from './actions'
 import prisma from '../../../lib/prisma'
+import LoginButton from '../../components/LoginButton'
 
 export default async function FormPage() {
+  const session = await getServerSession(authOptions)
+  
   const groupedStates = await prisma.college.groupBy({
     by: ['state'],
     orderBy: { state: 'asc' },
@@ -16,20 +21,39 @@ export default async function FormPage() {
   return (
     <div className="animate-fade-in" style={{ maxWidth: '600px', margin: '2rem auto' }}>
       <div className="glass-panel animate-slide-up">
-        <h2 style={{ color: 'var(--primary)', marginBottom: '0.5rem' }}>Tell us about yourself</h2>
-        <p style={{ color: 'var(--text-muted)', marginBottom: '2rem', fontSize: '0.9rem' }}>
-          We'll use this to recommend the best courses and colleges tailored for you.
-        </p>
+        {session ? (
+          <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(59,130,246,0.1)', borderRadius: '12px', border: '1px solid var(--primary)' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>
+              👋 Logged in as <strong>{session.user?.name}</strong> ({session.user?.email}). 
+              We've pre-filled your details below. Just tell us your state and stream!
+            </p>
+          </div>
+        ) : (
+          <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
+            <h2 style={{ color: 'var(--primary)', marginBottom: '0.5rem' }}>Tell us about yourself</h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+              We'll use this to recommend the best courses and colleges tailored for you.
+            </p>
+            <LoginButton />
+            <div style={{ display: 'flex', alignItems: 'center', margin: '1.5rem 0', gap: '1rem' }}>
+              <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>OR FILL MANUALLY</span>
+              <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
+            </div>
+          </div>
+        )}
+
+        {/* ... form content ... */}
 
         <form action={submitForm} style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem' }}>
           <div className="form-group">
             <label htmlFor="name">Full Name</label>
-            <input type="text" id="name" name="name" className="form-control" placeholder="Your full name" required />
+            <input type="text" id="name" name="name" className="form-control" placeholder="Your full name" defaultValue={session?.user?.name || ''} required />
           </div>
 
           <div className="form-group">
             <label htmlFor="contactInfo">Email Address</label>
-            <input type="text" id="contactInfo" name="contactInfo" className="form-control" placeholder="you@example.com" required />
+            <input type="text" id="contactInfo" name="contactInfo" className="form-control" placeholder="you@example.com" defaultValue={session?.user?.email || ''} required />
           </div>
 
           <div className="form-group">

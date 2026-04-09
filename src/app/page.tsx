@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LoginButton from "../components/LoginButton";
 
 export default function Home() {
   return (
@@ -13,10 +14,11 @@ export default function Home() {
         BUILT BY EXPERIENCED SENIORS &nbsp;•&nbsp; TRUSTED BY EVERYONE &nbsp;•&nbsp; HIGHLY ACCURATE DATA
       </p>
       
-      <div className="animate-slide-up delay-3" style={{ marginBottom: "4rem" }}>
+      <div className="animate-slide-up delay-3" style={{ marginBottom: "4rem", display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
         <Link href="/form" className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1.1rem" }}>
           Get Started Now
         </Link>
+        <LoginButton />
       </div>
 
       <div className="grid-cards animate-slide-up delay-4">

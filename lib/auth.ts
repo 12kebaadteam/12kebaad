@@ -44,7 +44,14 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        (token as any).role = (user as any).role
+        const admin1User = process.env.ADMIN1_USERNAME
+        const admin2User = process.env.ADMIN2_USERNAME
+        
+        if (user.email === admin1User || user.email === admin2User || (user as any).role === 'admin') {
+          (token as any).role = 'admin'
+        } else {
+          (token as any).role = 'user'
+        }
       }
       return token
     }
