@@ -1,6 +1,9 @@
-import { cookies } from 'next/headers'
-import { login, logout, uploadCSV, uploadTestsCSV, uploadProfessionalCSV, updateCourse, deleteCourse, addRecommendation, deleteRecommendation, deleteCollegesByState, deleteEntranceTest, deleteProfessionalCourse } from './actions'
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../../../lib/auth"
+import { uploadCSV, uploadTestsCSV, uploadProfessionalCSV, updateCourse, deleteCourse, addRecommendation, deleteRecommendation, deleteCollegesByState, deleteEntranceTest, deleteProfessionalCourse } from './actions'
 import prisma from '../../../lib/prisma'
+import AdminLogin from './AdminLogin'
+import LogoutButton from './LogoutButton'
 
 export default async function AdminPage({
   searchParams,
@@ -8,28 +11,11 @@ export default async function AdminPage({
   searchParams: Promise<{ error?: string; deleteError?: string; deleteSuccess?: string }>
 }) {
   const resolvedParams = await searchParams
-  const c = await cookies()
-  const auth = c.get('admin_auth')?.value
+  const session = await getServerSession(authOptions)
 
-  if (auth !== 'true') {
+  if (!session) {
     return (
-      <div className="animate-fade-in" style={{ maxWidth: '400px', margin: '4rem auto' }}>
-        <div className="glass-panel">
-          <h2 style={{ color: 'var(--accent)', marginBottom: '1.5rem' }}>Admin Secure Login</h2>
-          {resolvedParams.error && <p style={{ color: '#ef4444', marginBottom: '1rem', fontSize: '0.9rem', background: 'rgba(239,68,68,0.1)', padding: '0.5rem', borderRadius: '4px' }}>Invalid credentials</p>}
-          <form action={login} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-            <div className="form-group" style={{ marginBottom: '0' }}>
-              <label>Username</label>
-              <input type="text" name="username" className="form-control" placeholder="Default: admin" required />
-            </div>
-            <div className="form-group" style={{ marginBottom: '0' }}>
-              <label>Password</label>
-              <input type="password" name="password" className="form-control" placeholder="••••••••" required />
-            </div>
-            <button type="submit" className="btn-primary" style={{ marginTop: '0.5rem' }}>Authenticate</button>
-          </form>
-        </div>
-      </div>
+      <AdminLogin error={resolvedParams.error} />
     )
   }
 
@@ -56,9 +42,7 @@ export default async function AdminPage({
     <div className="animate-fade-in" style={{ maxWidth: '1000px', margin: '2rem auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <h1 style={{ color: 'var(--primary)' }}>Database Dashboard</h1>
-        <form action={logout}>
-          <button type="submit" className="btn-primary" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', color: 'var(--text-main)' }}>Secure Logout</button>
-        </form>
+        <LogoutButton />
       </div>
 
       {/* Stats */}
@@ -340,6 +324,10 @@ export default async function AdminPage({
           <div className="form-group">
             <label>Type <code>DELETE [state]</code> to confirm</label>
             <input type="text" name="confirm" className="form-control" placeholder="e.g. DELETE Punjab" required />
+          </div>
+          <div className="form-group">
+            <label>Verify Admin Password (2FA)</label>
+            <input type="password" name="verifyPassword" className="form-control" placeholder="Your password" required />
           </div>
           <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', height: '48px', fontWeight: 700 }}>
             Permanently Delete Data

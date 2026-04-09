@@ -4,6 +4,8 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import SearchBar from "../components/SearchBar";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
+import CookieConsent from "../components/CookieConsent";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,6 +28,8 @@ export default function RootLayout({
         <main className="main-content">
           {children}
         </main>
+        <Footer />
+        <CookieConsent />
 
         <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} strategy="afterInteractive" />
         <Script id="google-analytics" strategy="afterInteractive">

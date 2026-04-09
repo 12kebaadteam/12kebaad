@@ -4,8 +4,11 @@ export default function AboutPage() {
       <h1 className="animate-slide-up" style={{ color: "var(--primary)", marginBottom: "1rem" }}>About 12kebaad</h1>
       <div className="glass-panel animate-slide-up delay-1">
         <h2 style={{ marginBottom: "1rem" }}>Our Mission</h2>
+        <p style={{ color: "var(--text-muted)", marginBottom: "1rem", lineHeight: "1.8" }}>
+          <strong>12kebaad</strong> is a professional guidance platform, a proud <span style={{ color: "var(--accent)", fontWeight: "bold" }}>Product of MyPaperTrail</span>.
+        </p>
         <p style={{ color: "var(--text-muted)", marginBottom: "2rem", lineHeight: "1.8" }}>
-          12kebaad was created with a single vision: to help guide students who have completed their 12th grade to choose the optimal course and career path. The abundance of choices can often be overwhelming, and we aim to simplify the process using factual, direct, and well-organized data. We believe a better informed student makes better career decisions.
+          We were created with a single vision: to help guide students who have completed their 12th grade to choose the optimal course and career path. The abundance of choices can often be overwhelming, and we aim to simplify the process using factual, direct, and well-organized data. We believe a better informed student makes better career decisions.
         </p>
 
         <h2 style={{ marginBottom: "1rem", color: "var(--accent)" }}>The Founders</h2>

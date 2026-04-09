@@ -1,33 +1,21 @@
 'use server'
 
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../../../lib/auth"
 import prisma from '../../../lib/prisma'
 
-export async function login(formData: FormData) {
-  const user = formData.get('username')
-  const pass = formData.get('password')
-  const admin1User = process.env.ADMIN1_USERNAME || 'admin'
-  const admin1Pass = process.env.ADMIN1_PASSWORD || 'password'
-  const admin2User = process.env.ADMIN2_USERNAME || 'admin2'
-  const admin2Pass = process.env.ADMIN2_PASSWORD || 'password123'
-  if ((user === admin1User && pass === admin1Pass) || (user === admin2User && pass === admin2Pass)) {
-    const c = await cookies()
-    c.set('admin_auth', 'true', { maxAge: 60 * 60 * 24 })
+async function checkAdmin() {
+  const session = await getServerSession(authOptions)
+  if (!session) {
     redirect('/admin')
-  } else {
-    redirect('/admin?error=1')
   }
-}
-
-export async function logout() {
-  const c = await cookies()
-  c.delete('admin_auth')
-  redirect('/admin')
+  return session
 }
 
 // ── Colleges+Courses CSV ──────────────────────────────────────────────────────
 export async function uploadCSV(formData: FormData) {
+  await checkAdmin()
   const file = formData.get('csv') as File
   if (!file) return
   const text = await file.text()
@@ -60,6 +48,7 @@ export async function uploadCSV(formData: FormData) {
 
 // ── Entrance Tests CSV ────────────────────────────────────────────────────────
 export async function uploadTestsCSV(formData: FormData) {
+  await checkAdmin()
   const file = formData.get('testsCsv') as File
   if (!file) return
   const text = await file.text()
@@ -81,12 +70,12 @@ export async function uploadTestsCSV(formData: FormData) {
 
 // ── Recommendations ───────────────────────────────────────────────────────────
 export async function addRecommendation(formData: FormData) {
+  await checkAdmin()
   const collegeId = formData.get('collegeId') as string
   const adminRank = parseInt(formData.get('adminRank') as string)
   const targetStream = (formData.get('targetStream') as string) || null
   const reason = (formData.get('reason') as string) || null
   if (!collegeId || isNaN(adminRank)) return
-  // Use findFirst+update/create to handle nullable targetStream in unique constraint
   const existing = await prisma.recommendation.findFirst({
     where: { collegeId, targetStream }
   })
@@ -99,6 +88,7 @@ export async function addRecommendation(formData: FormData) {
 }
 
 export async function deleteRecommendation(formData: FormData) {
+  await checkAdmin()
   const id = formData.get('id') as string
   if (!id) return
   await prisma.recommendation.delete({ where: { id } })
@@ -106,6 +96,7 @@ export async function deleteRecommendation(formData: FormData) {
 }
 
 export async function updateCourse(formData: FormData) {
+  await checkAdmin()
   const id = formData.get('id') as string
   const title = formData.get('title') as string
   const stream = formData.get('stream') as string
@@ -114,28 +105,32 @@ export async function updateCourse(formData: FormData) {
 }
 
 export async function deleteCourse(formData: FormData) {
+  await checkAdmin()
   const id = formData.get('id') as string
   if (!id) return
   await prisma.course.delete({ where: { id } })
 }
 
-// ── Delete by State ───────────────────────────────────────────────────────────
+// ── Delete by State (with 2FA) ────────────────────────────────────────────────
 export async function deleteCollegesByState(formData: FormData) {
-  const c = await cookies()
-  if (c.get('admin_auth')?.value !== 'true') redirect('/admin')
+  await checkAdmin()
   const state = formData.get('state') as string
   const confirm = formData.get('confirm') as string
-  if (!state || confirm !== `DELETE ${state}`) {
+  const verifyPassword = formData.get('verifyPassword') as string
+
+  const admin1Pass = process.env.ADMIN1_PASSWORD
+  const admin2Pass = process.env.ADMIN2_PASSWORD
+
+  if (!state || confirm !== `DELETE ${state}` || (verifyPassword !== admin1Pass && verifyPassword !== admin2Pass)) {
     redirect('/admin?deleteError=1')
   }
-  // Delete all colleges in state (cascades to collegeCourse via Prisma)
+
   await prisma.college.deleteMany({ where: { state } })
   redirect('/admin?deleteSuccess=1')
 }
 
 export async function deleteEntranceTest(formData: FormData) {
-  const c = await cookies()
-  if (c.get('admin_auth')?.value !== 'true') redirect('/admin')
+  await checkAdmin()
   const id = formData.get('id') as string
   if (!id) return
   await prisma.entranceTest.delete({ where: { id } })
@@ -144,6 +139,7 @@ export async function deleteEntranceTest(formData: FormData) {
 
 // ── Professional Courses CSV ──────────────────────────────────────────────────
 export async function uploadProfessionalCSV(formData: FormData) {
+  await checkAdmin()
   const file = formData.get('profCsv') as File
   if (!file) return
   const text = await file.text()
@@ -164,8 +160,7 @@ export async function uploadProfessionalCSV(formData: FormData) {
 }
 
 export async function deleteProfessionalCourse(formData: FormData) {
-  const c = await cookies()
-  if (c.get('admin_auth')?.value !== 'true') redirect('/admin')
+  await checkAdmin()
   const id = formData.get('id') as string
   if (!id) return
   await prisma.professionalCourse.delete({ where: { id } })

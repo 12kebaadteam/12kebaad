@@ -12,7 +12,6 @@ const links = [
   { href: '/recommendations', label: 'Recommendations' },
   { href: '/about', label: 'About' },
   { href: '/update-profile', label: 'My Profile' },
-  { href: '/admin', label: 'Admin', accent: true },
 ]
 
 export default function NavBar() {
@@ -31,7 +30,6 @@ export default function NavBar() {
               key={link.href}
               href={link.href}
               className={`nav-link${pathname === link.href ? ' active' : ''}`}
-              style={link.accent ? { color: 'var(--accent)' } : undefined}
             >
               {link.label}
             </Link>

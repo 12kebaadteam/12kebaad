@@ -1,0 +1,44 @@
+import Link from "next/link";
+
+export default function Footer() {
+  return (
+    <footer className="glass-panel" style={{ marginTop: "4rem", borderRadius: "1.5rem 1.5rem 0 0", padding: "3rem 2rem", borderBottom: "none" }}>
+      <div className="grid-cards" style={{ gap: "2rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+        {/* Brand Column */}
+        <div>
+          <h3 style={{ color: "var(--primary)", marginBottom: "1rem" }}>12kebaad</h3>
+          <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: "1.6" }}>
+            The definitive career guidance platform for students. Helping you make informed choices for a brighter future.
+          </p>
+          <p style={{ marginTop: "1rem", fontSize: "0.85rem", color: "var(--text-muted)" }}>
+            © {new Date().getFullYear()} MyPaperTrail. All rights reserved.
+          </p>
+          <small style={{ color: "var(--accent)" }}>Product of MyPaperTrail</small>
+        </div>
+
+        {/* Shortcuts Column */}
+        <div>
+          <h4 style={{ color: "var(--text-main)", marginBottom: "1rem" }}>Shortcuts</h4>
+          <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+            <li><Link href="/" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Home</Link></li>
+            <li><Link href="/colleges" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Colleges</Link></li>
+            <li><Link href="/courses" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Courses</Link></li>
+            <li><Link href="/entrance-tests" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Entrance Tests</Link></li>
+            <li><Link href="/professional-courses" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Professional Courses</Link></li>
+          </ul>
+        </div>
+
+        {/* Legal Column */}
+        <div>
+          <h4 style={{ color: "var(--text-main)", marginBottom: "1rem" }}>Legal</h4>
+          <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+            <li><Link href="/terms" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Terms & Conditions</Link></li>
+            <li><Link href="/privacy" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Privacy Policy</Link></li>
+            <li><Link href="/about" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>About Us</Link></li>
+            <li><Link href="/admin" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.75rem", opacity: 0.5 }}>Admin Dashboard</Link></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  );
+}
