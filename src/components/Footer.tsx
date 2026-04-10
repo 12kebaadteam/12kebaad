@@ -28,6 +28,18 @@ export default function Footer() {
           </ul>
         </div>
 
+        {/* Career Guides Column */}
+        <div>
+          <h4 style={{ color: "var(--text-main)", marginBottom: "1rem" }}>Career Guides</h4>
+          <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+            <li><Link href="/courses-after-12th" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Courses After 12th</Link></li>
+            <li><Link href="/courses-after-12th-science" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Science Careers</Link></li>
+            <li><Link href="/courses-after-12th-commerce" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Commerce Careers</Link></li>
+            <li><Link href="/courses-after-12th-arts" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Arts Careers</Link></li>
+            <li><Link href="/high-salary-courses-after-12th" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>High Salary Paths</Link></li>
+          </ul>
+        </div>
+
         {/* Legal Column */}
         <div>
           <h4 style={{ color: "var(--text-main)", marginBottom: "1rem" }}>Legal</h4>

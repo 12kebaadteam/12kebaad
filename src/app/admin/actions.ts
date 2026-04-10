@@ -37,10 +37,12 @@ export async function uploadCSV(formData: FormData) {
       course = await prisma.course.create({ data: { title: safeTitle, stream: stream.trim().toUpperCase() || 'UNKNOWN' } })
     }
     const link = await prisma.collegeCourse.findFirst({ where: { collegeId: college.id, courseId: course.id } })
+    const sanitizedFee = fee.trim().replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/ Semester|\/ Year/gi, '').trim() || 'Not Specified'
+    
     if (link) {
-      await prisma.collegeCourse.update({ where: { id: link.id }, data: { fee: fee.trim() || 'Not Specified', timeInvolved: timeInvolved.trim() || 'Not Specified', remarks: remarks.trim() || null } })
+      await prisma.collegeCourse.update({ where: { id: link.id }, data: { fee: sanitizedFee, timeInvolved: timeInvolved.trim() || 'Not Specified', remarks: remarks.trim() || null } })
     } else {
-      await prisma.collegeCourse.create({ data: { collegeId: college.id, courseId: course.id, fee: fee.trim() || 'Not Specified', timeInvolved: timeInvolved.trim() || 'Not Specified', remarks: remarks.trim() || null } })
+      await prisma.collegeCourse.create({ data: { collegeId: college.id, courseId: course.id, fee: sanitizedFee, timeInvolved: timeInvolved.trim() || 'Not Specified', remarks: remarks.trim() || null } })
     }
   }
   redirect('/admin')
@@ -150,10 +152,11 @@ export async function uploadProfessionalCSV(formData: FormData) {
     const [name = '', fullForm = '', eligibility = '', fees = '', duration = '', opportunities = '', extraRemarks = ''] = cols
     const safeName = name.trim()
     if (!safeName) continue
+    const safeFee = fees.trim().replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/ Semester|\/ Year/gi, '').trim() || 'Not Specified'
     await prisma.professionalCourse.upsert({
       where: { name: safeName },
-      update: { fullForm: fullForm.trim(), eligibility: eligibility.trim(), fees: fees.trim(), duration: duration.trim(), opportunities: opportunities.trim(), extraRemarks: extraRemarks.trim() || null },
-      create: { name: safeName, fullForm: fullForm.trim(), eligibility: eligibility.trim(), fees: fees.trim(), duration: duration.trim(), opportunities: opportunities.trim(), extraRemarks: extraRemarks.trim() || null }
+      update: { fullForm: fullForm.trim(), eligibility: eligibility.trim(), fees: safeFee, duration: duration.trim(), opportunities: opportunities.trim(), extraRemarks: extraRemarks.trim() || null },
+      create: { name: safeName, fullForm: fullForm.trim(), eligibility: eligibility.trim(), fees: safeFee, duration: duration.trim(), opportunities: opportunities.trim(), extraRemarks: extraRemarks.trim() || null }
     })
   }
   redirect('/admin')

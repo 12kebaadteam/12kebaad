@@ -21,6 +21,19 @@ export default function Home() {
         <LoginButton />
       </div>
 
+      <div className="animate-slide-up delay-4" style={{ marginBottom: "3rem" }}>
+        <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", marginBottom: "1.2rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>
+          Pro Career Guides
+        </p>
+        <div className="glass-panel" style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap", padding: "1.5rem", borderRadius: "1rem", background: "rgba(255,255,255,0.03)" }}>
+          <Link href="/courses-after-12th" className="guide-link">Best Courses Overview</Link>
+          <Link href="/courses-after-12th-science" className="guide-link">Science Path</Link>
+          <Link href="/courses-after-12th-commerce" className="guide-link">Commerce Path</Link>
+          <Link href="/courses-after-12th-arts" className="guide-link">Arts Path</Link>
+          <Link href="/high-salary-courses-after-12th" className="guide-link" style={{ color: "var(--accent)" }}>High Salary Guide ★</Link>
+        </div>
+      </div>
+
       <div className="grid-cards animate-slide-up delay-4">
         <div className="glass-panel" style={{ textAlign: "left" }}>
           <h3 style={{ color: "var(--primary)", marginBottom: "1rem" }}>Comprehensive Courses</h3>

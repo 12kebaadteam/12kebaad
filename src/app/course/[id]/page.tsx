@@ -2,6 +2,18 @@ import { cookies } from 'next/headers'
 import prisma from '../../../../lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const course = await prisma.course.findUnique({ where: { id } })
+  if (!course) return { title: 'Course Not Found' }
+  return {
+    title: `${course.title} Course | Best Colleges, Scope & Fees - 12kebaad`,
+    description: `Complete guide for ${course.title} after 12th. Find the best colleges offering ${course.title}, eligibility criteria, and career prospects in the ${course.stream} stream.`,
+    keywords: [`${course.title} scope`, `${course.title} colleges`, `best courses after 12th ${course.stream}`, "career guidance"],
+  }
+}
 
 export default async function CourseDetailPage({
   params,
@@ -68,8 +80,7 @@ export default async function CourseDetailPage({
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {course.colleges.map(cc => {
-              const isSemester = cc.fee?.toLowerCase().includes('sem')
-              const isYearly = cc.fee?.toLowerCase().includes('year') || cc.fee?.toLowerCase().includes('p.a')
+              const sanitizedFee = cc.fee?.replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/ Semester|\/ Year/gi, '').trim()
               
               return (
                 <div key={cc.collegeId} style={{ padding: '1rem', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', border: '1px solid var(--glass-border)' }}>
@@ -86,12 +97,9 @@ export default async function CourseDetailPage({
                       {cc.college.ranking && (
                         <span className="rank-badge">#{cc.college.ranking}</span>
                       )}
-                      {cc.fee && cc.fee !== 'Not Specified' && (
+                      {sanitizedFee && sanitizedFee !== 'Not Specified' && (
                         <span style={{ fontSize: '0.82rem', color: 'var(--primary)', background: 'rgba(59,130,246,0.1)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>
-                          💰 {cc.fee} 
-                          <span style={{ fontWeight: 'normal', fontSize: '0.75rem', marginLeft: '0.3rem', opacity: 0.8 }}>
-                            ({isSemester ? 'Per Semester' : isYearly ? 'Per Year' : 'Full Course'})
-                          </span>
+                          💰 {sanitizedFee}
                         </span>
                       )}
                       {cc.timeInvolved && cc.timeInvolved !== 'Not Specified' && (

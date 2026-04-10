@@ -10,6 +10,11 @@ type Course = {
   colleges: CollegeCourse[]
 }
 
+const sanitizeFee = (fee: string | null) => {
+  if (!fee) return fee
+  return fee.replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/ Semester|\/ Year/gi, '').trim()
+}
+
 export default function ExpandableCourseCard({ course }: { course: Course }) {
   const [expanded, setExpanded] = useState(false)
   const preview = course.colleges.slice(0, 3)
@@ -36,7 +41,7 @@ export default function ExpandableCourseCard({ course }: { course: Course }) {
               <span style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--text-main)' }}>• {cc.college.name}</span>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '0.3rem' }}>({cc.college.state})</span>
               <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', marginTop: '0.2rem', paddingLeft: '0.8rem' }}>
-                {cc.fee && cc.fee !== 'Not Specified' && <span style={{ fontSize: '0.72rem', color: 'var(--primary)' }}>💰 {cc.fee}</span>}
+                {cc.fee && cc.fee !== 'Not Specified' && <span style={{ fontSize: '0.72rem', color: 'var(--primary)' }}>💰 {sanitizeFee(cc.fee)}</span>}
                 {cc.timeInvolved && cc.timeInvolved !== 'Not Specified' && <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>⏱ {cc.timeInvolved}</span>}
               </div>
               {cc.remarks && <div style={{ paddingLeft: '0.8rem', marginTop: '0.15rem', fontSize: '0.72rem', color: 'var(--accent)' }}>↳ {cc.remarks}</div>}

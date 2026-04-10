@@ -10,11 +10,20 @@ import Providers from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "12kebaad | Career Guidance",
-  description: "Modern, minimalistic guide for students completing 12th grade to choose their course and career.",
+  title: "12kebaad | Best Career Guidance & Courses After 12th in India",
+  description: "Explore the ultimate career guide for students after 12th grade. Find top colleges, entrance tests, and the best courses in Science, Commerce, and Arts with high salary potential.",
+  keywords: ["courses after 12th", "best career options after 12th", "courses after 12th science", "courses after 12th commerce", "courses after 12th arts", "high salary courses after 12th", "career guidance India"],
   verification: {
     google: "pLbOeBX0gDt96W34_QrmIs5Qapbz9GTXhGBP0dCk3PM",
   },
+  openGraph: {
+    title: "12kebaad | Expert Career Guidance After 12th",
+    description: "Your journey from boards to brilliance starts here. Discover your perfect degree and top colleges.",
+    type: "website",
+    locale: "en_IN",
+    url: "https://12kebaad.com",
+    siteName: "12kebaad",
+  }
 };
 
 export default function RootLayout({

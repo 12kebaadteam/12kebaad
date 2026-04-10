@@ -1,6 +1,19 @@
 import prisma from '../../../../lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { Metadata } from 'next'
+import CollegeSchema from '../../../components/CollegeSchema'
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const college = await prisma.college.findUnique({ where: { id } })
+  if (!college) return { title: 'College Not Found' }
+  return {
+    title: `${college.name} | Courses, Fees and Ranking - 12kebaad`,
+    description: `Details about ${college.name} in ${college.state}. Check fees, courses offered, and national ranking. Comprehensive guide for students after 12th.`,
+    keywords: [`${college.name} fees`, `${college.name} courses`, `top colleges in ${college.state}`, "career after 12th"],
+  }
+}
 
 export default async function CollegeDetailPage({
   params,
@@ -20,8 +33,14 @@ export default async function CollegeDetailPage({
 
   if (!college) notFound()
 
+  const sanitizeFee = (fee: string | null) => {
+    if (!fee) return fee
+    return fee.replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/ Semester|\/ Year/gi, '').trim()
+  }
+
   return (
     <div className="animate-fade-in" style={{ maxWidth: '860px', margin: '0 auto' }}>
+      <CollegeSchema college={college} />
       {/* Back button */}
       <Link href="/colleges" className="back-link">← Back to all colleges</Link>
 
@@ -68,7 +87,7 @@ export default async function CollegeDetailPage({
                   </div>
                   <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
                     {cc.fee && cc.fee !== 'Not Specified' && (
-                      <span style={{ fontSize: '0.82rem', color: 'var(--primary)', background: 'rgba(59,130,246,0.1)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>💰 {cc.fee}</span>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--primary)', background: 'rgba(59,130,246,0.1)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>💰 {sanitizeFee(cc.fee)}</span>
                     )}
                     {cc.timeInvolved && cc.timeInvolved !== 'Not Specified' && (
                       <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>⏱ {cc.timeInvolved}</span>
