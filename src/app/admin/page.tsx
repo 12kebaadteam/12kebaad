@@ -445,6 +445,7 @@ export default async function AdminPage({
       )}
 
       {/* ── DANGER TAB ── */}
+      {activeTab === 'danger' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div className="glass-panel" style={{ borderLeft: '4px solid #ef4444' }}>
             <h2 style={{ color: '#ef4444', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
