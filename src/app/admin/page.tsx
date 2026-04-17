@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../../../lib/auth"
-import { uploadCSV, uploadTestsCSV, uploadProfessionalCSV, updateCourse, deleteCourse, addRecommendation, deleteRecommendation, deleteCollegesByState, deleteEntranceTest, deleteProfessionalCourse, answerQuestion, deleteQuestion } from './actions'
+import { uploadCSV, uploadTestsCSV, uploadProfessionalCSV, updateCourse, deleteCourse, addRecommendation, deleteRecommendation, deleteCollegesByState, deleteEntranceTest, deleteProfessionalCourse, answerQuestion, deleteQuestion, deleteAllProfessionalCourses, deleteAllEntranceTests } from './actions'
 import prisma from '../../../lib/prisma'
 import AdminLogin from './AdminLogin'
 import LogoutButton from './LogoutButton'
@@ -445,48 +445,70 @@ export default async function AdminPage({
       )}
 
       {/* ── DANGER TAB ── */}
-      {activeTab === 'danger' && (
-        <div className="glass-panel" style={{ marginBottom: '3rem', borderLeft: '4px solid #ef4444' }}>
-          <h2 style={{ color: '#ef4444', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span>⚠️</span> Administrative Actions
-          </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
-            To remove all data for a specific state, select it from the menu and confirm by typing the required text.
-          </p>
-
-          {resolvedParams.deleteError && (
-            <p style={{ color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '0.6rem 1rem', borderRadius: '8px', marginBottom: '1.2rem', fontSize: '0.88rem', border: '1px solid rgba(239,68,68,0.2)' }}>
-              ✕ Confirmation text did not match. No data was deleted.
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className="glass-panel" style={{ borderLeft: '4px solid #ef4444' }}>
+            <h2 style={{ color: '#ef4444', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span>⚠️</span> Administrative Actions
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
+              To remove all data for a specific state, select it from the menu and confirm by typing the required text.
             </p>
-          )}
-          {resolvedParams.deleteSuccess && (
-            <p style={{ color: '#22c55e', background: 'rgba(34,197,94,0.1)', padding: '0.6rem 1rem', borderRadius: '8px', marginBottom: '1.2rem', fontSize: '0.88rem', border: '1px solid rgba(34,197,94,0.2)' }}>
-              ✓ State data deleted successfully.
-            </p>
-          )}
 
-          <form action={deleteCollegesByState} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.2rem', alignItems: 'flex-end' }}>
-            <div className="form-group">
-              <label>Select State to Delete</label>
-              <select name="state" className="form-control" required>
-                <option value="">Choose state…</option>
-                {stateGroups.map((sg: any) => (
-                  <option key={sg.state} value={sg.state}>{sg.state}</option>
-                ))}
-              </select>
+            {resolvedParams.deleteError && (
+              <p style={{ color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '0.6rem 1rem', borderRadius: '8px', marginBottom: '1.2rem', fontSize: '0.88rem', border: '1px solid rgba(239,68,68,0.2)' }}>
+                ✕ Confirmation text did not match. No data was deleted.
+              </p>
+            )}
+            {resolvedParams.deleteSuccess && (
+              <p style={{ color: '#22c55e', background: 'rgba(34,197,94,0.1)', padding: '0.6rem 1rem', borderRadius: '8px', marginBottom: '1.2rem', fontSize: '0.88rem', border: '1px solid rgba(34,197,94,0.2)' }}>
+                ✓ State data deleted successfully.
+              </p>
+            )}
+
+            <form action={deleteCollegesByState} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.2rem', alignItems: 'flex-end' }}>
+              <div className="form-group">
+                <label>Select State to Delete</label>
+                <select name="state" className="form-control" required>
+                  <option value="">Choose state…</option>
+                  {stateGroups.map((sg: any) => (
+                    <option key={sg.state} value={sg.state}>{sg.state}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Type <code>DELETE [state]</code> to confirm</label>
+                <input type="text" name="confirm" className="form-control" placeholder="e.g. DELETE Punjab" required />
+              </div>
+              <div className="form-group">
+                <label>Verify Admin Password (2FA)</label>
+                <input type="password" name="verifyPassword" className="form-control" placeholder="Your password" required />
+              </div>
+              <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', height: '48px', fontWeight: 700 }}>
+                Permanently Delete Data
+              </button>
+            </form>
+          </div>
+
+          <div className="grid-cards" style={{ gap: '1.5rem' }}>
+            <div className="glass-panel" style={{ borderLeft: '4px solid #ef4444' }}>
+              <h3 style={{ color: '#ef4444', marginBottom: '0.5rem' }}>Nuke Prof. Courses</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '1.2rem' }}>Immediately delete all data in the Professional Courses table.</p>
+              <form action={deleteAllProfessionalCourses}>
+                <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', width: '100%' }} onClick={(e) => !confirm('QUITE SURE? This wipes ALL Professional Courses!') && e.preventDefault()}>
+                  DELETE ALL PROF. COURSES
+                </button>
+              </form>
             </div>
-            <div className="form-group">
-              <label>Type <code>DELETE [state]</code> to confirm</label>
-              <input type="text" name="confirm" className="form-control" placeholder="e.g. DELETE Punjab" required />
+            <div className="glass-panel" style={{ borderLeft: '4px solid #ef4444' }}>
+              <h3 style={{ color: '#ef4444', marginBottom: '0.5rem' }}>Nuke Entrance Tests</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '1.2rem' }}>Immediately delete all data in the Entrance Tests table.</p>
+              <form action={deleteAllEntranceTests}>
+                <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', width: '100%' }} onClick={(e) => !confirm('QUITE SURE? This wipes ALL Entrance Tests!') && e.preventDefault()}>
+                  DELETE ALL ENTRANCE TESTS
+                </button>
+              </form>
             </div>
-            <div className="form-group">
-              <label>Verify Admin Password (2FA)</label>
-              <input type="password" name="verifyPassword" className="form-control" placeholder="Your password" required />
-            </div>
-            <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', height: '48px', fontWeight: 700 }}>
-              Permanently Delete Data
-            </button>
-          </form>
+          </div>
         </div>
       )}
     </div>

@@ -209,3 +209,15 @@ export async function deleteQuestion(formData: FormData) {
   await prisma.question.delete({ where: { id } })
   redirect('/admin?tab=questions')
 }
+
+export async function deleteAllProfessionalCourses() {
+  await checkAdmin()
+  await prisma.professionalCourse.deleteMany({})
+  redirect('/admin?tab=prof')
+}
+
+export async function deleteAllEntranceTests() {
+  await checkAdmin()
+  await prisma.entranceTest.deleteMany({})
+  redirect('/admin?tab=tests')
+}

@@ -411,9 +411,14 @@ select.form-control {
   .filter-input { min-width: calc(50% - 0.5rem); max-width: 100%; flex: 1 1 calc(50% - 0.5rem); font-size: 0.8rem; }
   .filter-btn { width: 100%; margin-top: 0.2rem; }
 
-  h1 { font-size: 1.35rem; }
-  h2 { font-size: 1.1rem; }
-  h3 { font-size: 0.95rem; }
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.6rem; }
+  h3 { font-size: 1.25rem; }
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 1.8rem; }
+  .hero-title { font-size: 2rem !important; }
 }
 
 @media (max-width: 480px) {
@@ -449,4 +454,19 @@ select.form-control {
   background: rgba(59, 130, 246, 0.1);
   border-color: rgba(59, 130, 246, 0.2);
   transform: translateY(-2px);
+}
+.hero-title {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+@media (max-width: 1024px) {
+  .hero-title { font-size: 3.2rem; }
+}
+
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.5rem; }
 }

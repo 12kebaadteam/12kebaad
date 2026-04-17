@@ -27,14 +27,20 @@ export default async function Home() {
     }
   }
 
+  const nameToDisplay = session?.user?.name?.split(' ')[0] || (userId ? (await prisma.user.findUnique({ where: { id: userId } }))?.name.split(' ')[0] : "");
+
   return (
     <div className="animate-fade-in" style={{ textAlign: "center", paddingTop: "4rem" }}>
-      <h1 className="animate-slide-up delay-1" style={{ fontSize: "3.5rem", marginBottom: "1rem", lineHeight: "1.2" }}>
-        {personalizedTitle.split(session?.user?.name?.split(' ')[0] || "")[0]}
-        <span style={{ color: "var(--primary)" }}>{session?.user?.name?.split(' ')[0] || (userId ? "" : "Simplified")}</span>
-        {personalizedTitle.split(session?.user?.name?.split(' ')[0] || "")[1]}
-        {(!session?.user?.name && userId) && <span style={{ color: "var(--primary)" }}>{personalizedTitle}</span>}
-        {(!session?.user?.name && !userId) && <>Your Future, <span style={{ color: "var(--primary)" }}>Simplified</span></>}
+      <h1 className="hero-title animate-slide-up delay-1">
+        {nameToDisplay ? (
+          <>
+            {personalizedTitle.split(nameToDisplay)[0]}
+            <span style={{ color: "var(--primary)" }}>{nameToDisplay}</span>
+            {personalizedTitle.split(nameToDisplay)[1]}
+          </>
+        ) : (
+          <>Your Future, <span style={{ color: "var(--primary)" }}>Simplified</span></>
+        )}
       </h1>
       <p className="animate-slide-up delay-2" style={{ fontSize: "1.2rem", color: "var(--text-muted)", maxWidth: "600px", margin: "0 auto 0.5rem" }}>
         {personalizedSub}
