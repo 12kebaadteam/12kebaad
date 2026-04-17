@@ -4,7 +4,13 @@ import { submitForm } from './actions'
 import prisma from '../../../lib/prisma'
 import LoginButton from '../../components/LoginButton'
 
-export default async function FormPage() {
+export default async function FormPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl?: string }>
+}) {
+  const resolvedParams = await searchParams
+  const callbackUrl = resolvedParams.callbackUrl
   const session = await getServerSession(authOptions)
   
   const groupedStates = await prisma.college.groupBy({
@@ -20,6 +26,13 @@ export default async function FormPage() {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: '600px', margin: '2rem auto' }}>
+      {callbackUrl && !session && (
+        <div className="glass-panel animate-slide-up" style={{ marginBottom: '1.5rem', borderLeft: '4px solid var(--primary)', padding: '1rem' }}>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>
+            <strong>Sign in required:</strong> Please tell us about yourself or sign in with Google to explore the website's features.
+          </p>
+        </div>
+      )}
       <div className="glass-panel animate-slide-up">
         {session ? (
           <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(59,130,246,0.1)', borderRadius: '12px', border: '1px solid var(--primary)' }}>
@@ -46,6 +59,7 @@ export default async function FormPage() {
         {/* ... form content ... */}
 
         <form action={submitForm} style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem' }}>
+          <input type="hidden" name="callbackUrl" value={callbackUrl || ''} />
           <div className="form-group">
             <label htmlFor="name">Full Name</label>
             <input type="text" id="name" name="name" className="form-control" placeholder="Your full name" defaultValue={session?.user?.name || ''} required />

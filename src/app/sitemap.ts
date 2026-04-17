@@ -1,70 +1,70 @@
 import { MetadataRoute } from 'next'
+import prisma from '../../lib/prisma'
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  // We use your Vercel app link by default. 
-  // If you ever buy a .com domain, just change NEXT_PUBLIC_BASE_URL in Vercel to update Google!
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://12kebaad.vercel.app'
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://12kebaad.in'
+
+  // Fetch dynamic IDs for all resources
+  const colleges = await prisma.college.findMany({ select: { id: true } })
+  const courses = await prisma.course.findMany({ select: { id: true } })
+  const profCourses = await prisma.professionalCourse.findMany({ select: { id: true } })
+  const entranceTests = await prisma.entranceTest.findMany({ select: { id: true } })
+
+  const mainRoutes = [
+    '',
+    '/courses',
+    '/colleges',
+    '/form',
+    '/about',
+    '/courses-after-12th',
+    '/courses-after-12th-science',
+    '/courses-after-12th-commerce',
+    '/courses-after-12th-arts',
+    '/high-salary-courses-after-12th',
+    '/entrance-tests',
+    '/professional-courses',
+    '/recommendations',
+    '/questions',
+  ].map(route => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: route === '' ? 1 : 0.8,
+  }))
+
+  const collegeRoutes = colleges.map(c => ({
+    url: `${baseUrl}/college/${c.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  const courseRoutes = courses.map(c => ({
+    url: `${baseUrl}/course/${c.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  const profCourseRoutes = profCourses.map(c => ({
+    url: `${baseUrl}/professional-course/${c.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  const testRoutes = entranceTests.map(t => ({
+    url: `${baseUrl}/entrance-test/${t.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
 
   return [
-    {
-      url: `${baseUrl}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/courses`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/colleges`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/form`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/courses-after-12th`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/courses-after-12th-science`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/courses-after-12th-commerce`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/courses-after-12th-arts`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/high-salary-courses-after-12th`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
+    ...mainRoutes,
+    ...collegeRoutes,
+    ...courseRoutes,
+    ...profCourseRoutes,
+    ...testRoutes,
   ]
 }

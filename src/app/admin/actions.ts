@@ -13,15 +13,37 @@ async function checkAdmin() {
   return session
 }
 
+// ── CSV helpers ───────────────────────────────────────────────────────────────
+/** Parse a CSV line properly, handling quoted fields with commas */
+function parseCSVLine(line: string): string[] {
+  const result: string[] = []
+  let current = ''
+  let inQuotes = false
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i]
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') { current += '"'; i++ }
+      else inQuotes = !inQuotes
+    } else if (ch === ',' && !inQuotes) {
+      result.push(current.trim())
+      current = ''
+    } else {
+      current += ch
+    }
+  }
+  result.push(current.trim())
+  return result
+}
+
 // ── Colleges+Courses CSV ──────────────────────────────────────────────────────
 export async function uploadCSV(formData: FormData) {
   await checkAdmin()
   const file = formData.get('csv') as File
   if (!file) return
   const text = await file.text()
-  const rows = text.split('\n').map(row => row.split(','))
+  const rows = text.split('\n')
   for (let i = 1; i < rows.length; i++) {
-    const cols = rows[i]
+    const cols = parseCSVLine(rows[i])
     if (cols.length < 2) continue
     const [collegeName = '', state = '', courseTitle = '', stream = '', fee = '', timeInvolved = '', remarks = '', detailedAddress = ''] = cols
     const safeCollege = collegeName.trim() || 'Unknown College'
@@ -37,8 +59,7 @@ export async function uploadCSV(formData: FormData) {
       course = await prisma.course.create({ data: { title: safeTitle, stream: stream.trim().toUpperCase() || 'UNKNOWN' } })
     }
     const link = await prisma.collegeCourse.findFirst({ where: { collegeId: college.id, courseId: course.id } })
-    const sanitizedFee = fee.trim().replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/ Semester|\/ Year/gi, '').trim() || 'Not Specified'
-    
+    const sanitizedFee = fee.trim().replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/\s*Semester|\/\s*Year/gi, '').trim() || 'Not Specified'
     if (link) {
       await prisma.collegeCourse.update({ where: { id: link.id }, data: { fee: sanitizedFee, timeInvolved: timeInvolved.trim() || 'Not Specified', remarks: remarks.trim() || null } })
     } else {
@@ -54,9 +75,9 @@ export async function uploadTestsCSV(formData: FormData) {
   const file = formData.get('testsCsv') as File
   if (!file) return
   const text = await file.text()
-  const rows = text.split('\n').map(row => row.split(','))
+  const rows = text.split('\n')
   for (let i = 1; i < rows.length; i++) {
-    const cols = rows[i]
+    const cols = parseCSVLine(rows[i])
     if (cols.length < 2) continue
     const [name = '', fullForm = '', suitability = '', eligibility = '', extraRemarks = ''] = cols
     const safeName = name.trim()
@@ -78,9 +99,7 @@ export async function addRecommendation(formData: FormData) {
   const targetStream = (formData.get('targetStream') as string) || null
   const reason = (formData.get('reason') as string) || null
   if (!collegeId || isNaN(adminRank)) return
-  const existing = await prisma.recommendation.findFirst({
-    where: { collegeId, targetStream }
-  })
+  const existing = await prisma.recommendation.findFirst({ where: { collegeId, targetStream } })
   if (existing) {
     await prisma.recommendation.update({ where: { id: existing.id }, data: { adminRank, reason } })
   } else {
@@ -145,14 +164,14 @@ export async function uploadProfessionalCSV(formData: FormData) {
   const file = formData.get('profCsv') as File
   if (!file) return
   const text = await file.text()
-  const rows = text.split('\n').map(row => row.split(','))
+  const rows = text.split('\n')
   for (let i = 1; i < rows.length; i++) {
-    const cols = rows[i]
+    const cols = parseCSVLine(rows[i])
     if (cols.length < 2) continue
     const [name = '', fullForm = '', eligibility = '', fees = '', duration = '', opportunities = '', extraRemarks = ''] = cols
     const safeName = name.trim()
     if (!safeName) continue
-    const safeFee = fees.trim().replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/ Semester|\/ Year/gi, '').trim() || 'Not Specified'
+    const safeFee = fees.trim().replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/\s*Semester|\/\s*Year/gi, '').trim() || 'Not Specified'
     await prisma.professionalCourse.upsert({
       where: { name: safeName },
       update: { fullForm: fullForm.trim(), eligibility: eligibility.trim(), fees: safeFee, duration: duration.trim(), opportunities: opportunities.trim(), extraRemarks: extraRemarks.trim() || null },
@@ -168,4 +187,25 @@ export async function deleteProfessionalCourse(formData: FormData) {
   if (!id) return
   await prisma.professionalCourse.delete({ where: { id } })
   redirect('/admin')
+}
+
+// ── Q&A Actions ───────────────────────────────────────────────────────────────
+export async function answerQuestion(formData: FormData) {
+  await checkAdmin()
+  const id = formData.get('id') as string
+  const answer = (formData.get('answer') as string)?.trim()
+  if (!id || !answer) return
+  await prisma.question.update({
+    where: { id },
+    data: { answer, isAnswered: true, answeredAt: new Date() }
+  })
+  redirect('/admin?tab=questions')
+}
+
+export async function deleteQuestion(formData: FormData) {
+  await checkAdmin()
+  const id = formData.get('id') as string
+  if (!id) return
+  await prisma.question.delete({ where: { id } })
+  redirect('/admin?tab=questions')
 }

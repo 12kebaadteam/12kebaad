@@ -12,11 +12,11 @@ export default async function RecommendationsPage() {
     include: { college: true },
   })
 
-  // Filter by user's state and stream if available
+  // Filter by user's stream if available
   const filtered = recommendations.filter(r => {
-    const stateMatch = !userState || r.college.state === userState
+    // We now show recommendations from ALL states (PAN India)
     const streamMatch = !userStream || !r.targetStream || r.targetStream === userStream
-    return stateMatch && streamMatch
+    return streamMatch
   })
 
   const hasUserContext = userState || userStream
@@ -43,7 +43,7 @@ export default async function RecommendationsPage() {
         <div className="glass-panel" style={{ textAlign: 'center', padding: '3rem', marginTop: '2rem' }}>
           <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>
             {hasUserContext
-              ? 'No recommendations for your state/stream yet. Admin is working on it!'
+              ? 'No recommendations found for your stream yet. Admin is working on adding more PAN India suggestions!'
               : 'No recommendations added yet.'}
           </p>
           {hasUserContext && (

@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
 
 type EntranceTest = {
   id: string
@@ -35,13 +36,18 @@ export default function ExpandableTestCard({ test }: { test: EntranceTest }) {
         </p>
       )}
 
-      <button onClick={() => setExpanded(!expanded)} className="expand-btn">
-        {expanded ? '▲ Show Less' : '▼ Full Details'}
-      </button>
+      <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.8rem', flexWrap: 'wrap' }}>
+        <button onClick={() => setExpanded(!expanded)} className="expand-btn">
+          {expanded ? '▲ Less' : '▼ Preview'}
+        </button>
+        <Link href={`/entrance-test/${test.id}`} className="expand-btn" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+          Full Details →
+        </Link>
+      </div>
 
       {expanded && (
         <div className="expanded-details">
-          <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '0.8rem', marginTop: '0.8rem' }}>
+          <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '0.8rem', marginTop: '0.4rem' }}>
             <p style={{ fontSize: '0.88rem', marginBottom: '0.6rem' }}>
               <strong style={{ color: 'var(--text-main)' }}>Full Name:</strong>{' '}
               <span style={{ color: 'var(--text-muted)' }}>{test.fullForm}</span>

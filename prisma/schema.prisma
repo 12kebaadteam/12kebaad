@@ -8,13 +8,26 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  name        String
-  contactInfo String
-  mobile      String?
-  state       String
-  stream      String
-  createdAt   DateTime @default(now())
+  id             String     @id @default(cuid())
+  name           String
+  contactInfo    String
+  mobile         String?
+  state          String
+  stream         String
+  streamChanges  Int        @default(0)
+  createdAt      DateTime   @default(now())
+  questions      Question[]
+}
+
+model Question {
+  id          String    @id @default(cuid())
+  userId      String
+  question    String
+  answer      String?
+  isAnswered  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  answeredAt  DateTime?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Admin {

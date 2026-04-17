@@ -6,7 +6,10 @@ export default function Footer() {
       <div className="grid-cards" style={{ gap: "2rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
         {/* Brand Column */}
         <div>
-          <h3 style={{ color: "var(--primary)", marginBottom: "1rem" }}>12kebaad</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
+            <img src="/logo.png" alt="12kebaad Logo" style={{ height: '36px', borderRadius: '6px' }} />
+            <h3 style={{ color: "var(--primary)", margin: 0 }}>12kebaad</h3>
+          </div>
           <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: "1.6" }}>
             The definitive career guidance platform for students. Helping you make informed choices for a brighter future.
           </p>

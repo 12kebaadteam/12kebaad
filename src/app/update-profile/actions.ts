@@ -14,10 +14,27 @@ export async function updateProfile(formData: FormData) {
   // Update DB if user is identified
   if (userId) {
     try {
-      await prisma.user.update({
-        where: { id: userId },
-        data: { state, stream }
-      })
+      const user = await prisma.user.findUnique({ where: { id: userId } })
+      if (user) {
+        // If stream is different, increment the change count
+        if (stream && user.stream !== stream) {
+          if (user.streamChanges >= 5) {
+            // Usually we'd return an error but for now let's just not update if they hit limit
+            // or redirect with an error param
+            redirect('/update-profile?error=LimitReached')
+          }
+          
+          await prisma.user.update({
+            where: { id: userId },
+            data: { state, stream, streamChanges: { increment: 1 } }
+          })
+        } else {
+          await prisma.user.update({
+            where: { id: userId },
+            data: { state }
+          })
+        }
+      }
     } catch (e) {
       console.error("Failed to update user in DB:", e)
     }

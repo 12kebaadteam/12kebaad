@@ -1,23 +1,58 @@
 import Link from "next/link";
 import LoginButton from "../components/LoginButton";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../lib/auth";
+import { cookies } from "next/headers";
+import prisma from "../../lib/prisma";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  const c = await cookies();
+  const userId = c.get('user_id')?.value;
+  
+  let personalizedTitle = "Your Future, Simplified";
+  let personalizedSub = "Guidance for students who have completed 12th grade. Explore colleges, view detailed course info, and choose the career path that optimally matches your stream and aspirations.";
+  let isReturning = false;
+
+  if (session?.user?.name) {
+    personalizedTitle = `Welcome back, ${session.user.name.split(' ')[0]}!`;
+    personalizedSub = "Let's continue exploring the best courses and colleges personalized for you.";
+    isReturning = true;
+  } else if (userId) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (user) {
+      personalizedTitle = `Let’s start exploring, ${user.name.split(' ')[0]}!`;
+      personalizedSub = `We've curated courses personalized for your ${user.stream.toLowerCase()} background in ${user.state || 'India'}.`;
+      isReturning = true;
+    }
+  }
+
   return (
     <div className="animate-fade-in" style={{ textAlign: "center", paddingTop: "4rem" }}>
-      <h1 className="animate-slide-up delay-1" style={{ fontSize: "3.5rem", marginBottom: "1rem" }}>
-        Your Future, <span style={{ color: "var(--primary)" }}>Simplified</span>
+      <h1 className="animate-slide-up delay-1" style={{ fontSize: "3.5rem", marginBottom: "1rem", lineHeight: "1.2" }}>
+        {personalizedTitle.split(session?.user?.name?.split(' ')[0] || "")[0]}
+        <span style={{ color: "var(--primary)" }}>{session?.user?.name?.split(' ')[0] || (userId ? "" : "Simplified")}</span>
+        {personalizedTitle.split(session?.user?.name?.split(' ')[0] || "")[1]}
+        {(!session?.user?.name && userId) && <span style={{ color: "var(--primary)" }}>{personalizedTitle}</span>}
+        {(!session?.user?.name && !userId) && <>Your Future, <span style={{ color: "var(--primary)" }}>Simplified</span></>}
       </h1>
       <p className="animate-slide-up delay-2" style={{ fontSize: "1.2rem", color: "var(--text-muted)", maxWidth: "600px", margin: "0 auto 0.5rem" }}>
-        Guidance for students who have completed 12th grade. Explore colleges, view detailed course info, and choose the career path that optimally matches your stream and aspirations.
+        {personalizedSub}
       </p>
       <p className="animate-slide-up delay-2" style={{ fontSize: "0.85rem", color: "var(--accent)", marginBottom: "2.5rem", letterSpacing: "0.5px", fontWeight: "600", opacity: 0.8 }}>
         BUILT BY EXPERIENCED SENIORS &nbsp;•&nbsp; TRUSTED BY EVERYONE &nbsp;•&nbsp; HIGHLY ACCURATE DATA
       </p>
       
       <div className="animate-slide-up delay-3" style={{ marginBottom: "4rem", display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-        <Link href="/form" className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1.1rem" }}>
-          Get Started Now
-        </Link>
+        {!isReturning ? (
+          <Link href="/form" className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1.1rem" }}>
+            Get Started Now
+          </Link>
+        ) : (
+          <Link href="/courses" className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1.1rem" }}>
+            Continue Exploring
+          </Link>
+        )}
         <LoginButton />
       </div>
 
