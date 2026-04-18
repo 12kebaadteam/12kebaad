@@ -27,7 +27,8 @@ export default async function Home() {
     }
   }
 
-  const nameToDisplay = session?.user?.name?.split(' ')[0] || (userId ? (await prisma.user.findUnique({ where: { id: userId } }))?.name.split(' ')[0] : "");
+  const dbUser = userId ? await prisma.user.findUnique({ where: { id: userId } }) : null;
+  const nameToDisplay = session?.user?.name?.split(' ')[0] || dbUser?.name?.split(' ')[0] || "";
 
   return (
     <div className="animate-fade-in" style={{ textAlign: "center", paddingTop: "4rem" }}>

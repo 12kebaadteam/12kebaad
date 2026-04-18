@@ -41,27 +41,47 @@ export default async function AdminPage({
     )
   }
 
-  const [dbUsers, dbCourses, dbColleges, dbTests, dbRecs, dbProfCourses, dbQuestions] = await Promise.all([
-    prisma.user.count(),
-    prisma.course.count(),
-    prisma.college.count(),
-    prisma.entranceTest.count(),
-    prisma.recommendation.count(),
-    prisma.professionalCourse.count(),
-    prisma.question.count({ where: { isAnswered: false } }),
-  ])
+  let data;
+  try {
+    const [dbUsers, dbCourses, dbColleges, dbTests, dbRecs, dbProfCourses, dbQuestions] = await Promise.all([
+      prisma.user.count(),
+      prisma.course.count(),
+      prisma.college.count(),
+      prisma.entranceTest.count(),
+      prisma.recommendation.count(),
+      prisma.professionalCourse.count(),
+      prisma.question.count({ where: { isAnswered: false } }),
+    ])
 
-  const [allUsers, allCourses, allColleges, allTests, allRecs, stateGroups, allProfCourses, pendingQuestions, answeredQuestions] = await Promise.all([
-    prisma.user.findMany({ orderBy: { createdAt: 'desc' } }),
-    prisma.course.findMany({ orderBy: { title: 'asc' } }),
-    prisma.college.findMany({ orderBy: { name: 'asc' } }),
-    prisma.entranceTest.findMany({ orderBy: { name: 'asc' } }),
-    prisma.recommendation.findMany({ orderBy: { adminRank: 'asc' }, include: { college: true } }),
-    prisma.college.groupBy({ by: ['state'], orderBy: { state: 'asc' } }),
-    prisma.professionalCourse.findMany({ orderBy: { name: 'asc' } }),
-    prisma.question.findMany({ where: { isAnswered: false }, orderBy: { createdAt: 'asc' }, include: { user: { select: { name: true } } } }),
-    prisma.question.findMany({ where: { isAnswered: true }, orderBy: { answeredAt: 'desc' }, take: 20, include: { user: { select: { name: true } } } }),
-  ])
+    const [allUsers, allCourses, allColleges, allTests, allRecs, stateGroups, allProfCourses, pendingQuestions, answeredQuestions] = await Promise.all([
+      prisma.user.findMany({ orderBy: { createdAt: 'desc' } }),
+      prisma.course.findMany({ orderBy: { title: 'asc' } }),
+      prisma.college.findMany({ orderBy: { name: 'asc' } }),
+      prisma.entranceTest.findMany({ orderBy: { name: 'asc' } }),
+      prisma.recommendation.findMany({ orderBy: { adminRank: 'asc' }, include: { college: true } }),
+      prisma.college.groupBy({ by: ['state'], orderBy: { state: 'asc' } }),
+      prisma.professionalCourse.findMany({ orderBy: { name: 'asc' } }),
+      prisma.question.findMany({ where: { isAnswered: false }, orderBy: { createdAt: 'asc' }, include: { user: { select: { name: true } } } }),
+      prisma.question.findMany({ where: { isAnswered: true }, orderBy: { answeredAt: 'desc' }, take: 20, include: { user: { select: { name: true } } } }),
+    ])
+
+    data = { dbUsers, dbCourses, dbColleges, dbTests, dbRecs, dbProfCourses, dbQuestions, allUsers, allCourses, allColleges, allTests, allRecs, stateGroups, allProfCourses, pendingQuestions, answeredQuestions }
+  } catch (e: any) {
+    return (
+      <div className="glass-panel" style={{ margin: '4rem auto', maxWidth: '600px', borderLeft: '4px solid #ef4444' }}>
+        <h2 style={{ color: '#ef4444', marginBottom: '1rem' }}>⚠️ Database Out of Sync</h2>
+        <p style={{ color: 'var(--text-main)', marginBottom: '1rem' }}>The website is trying to access data that doesn't exist in your live database yet.</p>
+        <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '8px', fontSize: '0.8rem', fontFamily: 'monospace', color: '#ef4444', overflowX: 'auto' }}>
+          {e.message || "Unknown Database Error"}
+        </div>
+        <p style={{ marginTop: '1.5rem', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+          <strong>How to fix:</strong> Run <code>npx prisma db push</code> in your terminal or check your Vercel connection.
+        </p>
+      </div>
+    )
+  }
+
+  const { dbUsers, dbCourses, dbColleges, dbTests, dbRecs, dbProfCourses, dbQuestions, allUsers, allCourses, allColleges, allTests, allRecs, stateGroups, allProfCourses, pendingQuestions, answeredQuestions } = data;
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
@@ -495,7 +515,7 @@ export default async function AdminPage({
               <h3 style={{ color: '#ef4444', marginBottom: '0.5rem' }}>Nuke Prof. Courses</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '1.2rem' }}>Immediately delete all data in the Professional Courses table.</p>
               <form action={deleteAllProfessionalCourses}>
-                <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', width: '100%' }} onClick={(e) => !confirm('QUITE SURE? This wipes ALL Professional Courses!') && e.preventDefault()}>
+                <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', width: '100%' }}>
                   DELETE ALL PROF. COURSES
                 </button>
               </form>
@@ -504,7 +524,7 @@ export default async function AdminPage({
               <h3 style={{ color: '#ef4444', marginBottom: '0.5rem' }}>Nuke Entrance Tests</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '1.2rem' }}>Immediately delete all data in the Entrance Tests table.</p>
               <form action={deleteAllEntranceTests}>
-                <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', width: '100%' }} onClick={(e) => !confirm('QUITE SURE? This wipes ALL Entrance Tests!') && e.preventDefault()}>
+                <button type="submit" className="btn-primary" style={{ background: '#ef4444', border: 'none', width: '100%' }}>
                   DELETE ALL ENTRANCE TESTS
                 </button>
               </form>
