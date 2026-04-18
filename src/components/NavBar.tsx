@@ -25,7 +25,6 @@ export default function NavBar() {
     <nav className="navbar">
       <div className="navbar-top">
         <Link href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
-          <img src="/logo.png" alt="12kebaad Logo" style={{ height: '32px', borderRadius: '4px' }} />
           <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--text-main)', letterSpacing: '0.5px' }}>12kebaad</span>
         </Link>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
