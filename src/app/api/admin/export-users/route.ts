@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '../../../../../lib/auth'
-import prisma from '../../../../../lib/prisma'
+import { authOptions } from "@/lib/auth"
+import prisma from "@/lib/prisma"
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -10,16 +10,17 @@ export async function GET(req: NextRequest) {
   }
 
   const users = await prisma.user.findMany({
+    include: { preferences: true },
     orderBy: { createdAt: 'desc' },
   })
 
   const headers = ['Name', 'Email', 'Mobile', 'State', 'Stream', 'Registered']
   const rows = users.map(u => [
     `"${(u.name || '').replace(/"/g, '""')}"`,
-    `"${(u.contactInfo || '').replace(/"/g, '""')}"`,
+    `"${(u.email || '').replace(/"/g, '""')}"`,
     `"${(u.mobile || '').replace(/"/g, '""')}"`,
-    `"${(u.state || '').replace(/"/g, '""')}"`,
-    `"${(u.stream || '').replace(/"/g, '""')}"`,
+    `"${(u.preferences?.location || 'Not Specified').replace(/"/g, '""')}"`,
+    `"${(u.preferences?.stream || 'Not Specified').replace(/"/g, '""')}"`,
     `"${new Date(u.createdAt).toLocaleDateString('en-IN')}"`,
   ].join(','))
 

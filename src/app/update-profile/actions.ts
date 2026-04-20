@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from '../../../lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -49,4 +49,22 @@ export async function updateProfile(formData: FormData) {
   if (stream) params.set('stream', stream)
   if (state) params.set('state', state)
   redirect(`/courses${params.toString() ? `?${params.toString()}` : ''}`)
+}
+export async function deleteAccount() {
+  const c = await cookies();
+  const userId = c.get('user_id')?.value;
+
+  if (userId) {
+    try {
+      await prisma.user.delete({ where: { id: userId } });
+    } catch (e) {
+      console.error("Delete error:", e);
+    }
+  }
+
+  c.delete('user_id');
+  c.delete('user_state');
+  c.delete('user_stream');
+  
+  redirect('/');
 }

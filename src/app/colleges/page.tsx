@@ -1,4 +1,4 @@
-import prisma from '../../../lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import ExpandableCollegeCard from '../../components/ExpandableCollegeCard'
 

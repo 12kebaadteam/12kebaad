@@ -7,14 +7,9 @@ import SearchBar from './SearchBar'
 
 const links = [
   { href: '/', label: 'Home' },
-  { href: '/courses', label: 'Courses' },
-  { href: '/professional-courses', label: 'Prof. Courses' },
-  { href: '/colleges', label: 'Colleges' },
-  { href: '/entrance-tests', label: 'Entrance Tests' },
-  { href: '/questions', label: 'Q&A' },
-  { href: '/recommendations', label: 'Recommendations' },
-  { href: '/about', label: 'About' },
-  { href: '/update-profile', label: 'My Profile' },
+  { href: '/predictor', label: 'Career Predictor' },
+  { href: '/results', label: 'My Matches' },
+  { href: '/about', label: 'About Us' },
 ]
 
 export default function NavBar() {

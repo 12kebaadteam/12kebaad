@@ -1,32 +1,36 @@
 export default function TermsPage() {
   return (
-    <div className="animate-fade-in" style={{ maxWidth: "800px", margin: "2rem auto", padding: "0 1.5rem" }}>
-      <h1 style={{ color: "var(--primary)", marginBottom: "2rem" }}>Terms & Conditions</h1>
-      <div className="glass-panel" style={{ lineHeight: "1.7", color: "var(--text-main)" }}>
-        <section style={{ marginBottom: "2rem" }}>
-          <h2>1. Acceptance of Terms</h2>
-          <p>By accesssing this website, you agree to be bound by these Terms and Conditions. 12kebaad provides guidance based on available data, but choices remain the sole responsibility of the user.</p>
-        </section>
+    <main className="main-content" style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>
+      <h1 style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>Terms & Conditions</h1>
+      <div className="glass-panel" style={{ padding: '3rem', lineHeight: '1.8', color: 'rgba(255,255,255,0.8)' }}>
+        <p>Welcome to 12kebaad.in. This platform is owned and operated by Mypapertrail. By accessing or using this website, you agree to comply with and be bound by the following Terms and Conditions. If you do not agree, please do not use the platform.</p>
         
-        <section style={{ marginBottom: "2rem" }}>
-          <h2>2. Use of Information</h2>
-          <p>The information provided on 12kebaad is for guidance purposes only. We strive for accuracy but do not guarantee it. Users should verify details with the respective educational institutions directly.</p>
-        </section>
+        <h3 style={{ color: '#fff', marginTop: '2rem' }}>1. ABOUT THE PLATFORM</h3>
+        <p>12kebaad is an educational guidance platform operated by Mypapertrail, designed to help students explore career options after Class 12. The platform provides information on courses, colleges, and career paths for decision-making purposes only.</p>
 
-        <section style={{ marginBottom: "2rem" }}>
-          <h2>3. Intellectual Property</h2>
-          <p>All content on 12kebaad, including text, logos, and data organization, is the property of MyPaperTrail unless otherwise stated. Trademarks used are the property of their respective owners.</p>
-        </section>
+        <h3 style={{ color: '#fff', marginTop: '2rem' }}>2. USE OF THE WEBSITE</h3>
+        <p>You agree to use the website only for lawful purposes. You must not:</p>
+        <ul>
+          <li>Engage in fraudulent or harmful activities</li>
+          <li>Attempt unauthorized access to systems or data</li>
+          <li>Copy or misuse content without permission</li>
+        </ul>
 
-        <section style={{ marginBottom: "2rem" }}>
-          <h2>4. User Conduct</h2>
-          <p>Users are expected to provide accurate information when using our recommendation tools. Misuse of the platform or attempt to scrape data is strictly prohibited.</p>
-        </section>
+        <h3 style={{ color: '#fff', marginTop: '2rem' }}>3. NO GUARANTEE OF OUTCOMES</h3>
+        <p>Mypapertrail does not guarantee: Admission into any institution, Job placements or salary outcomes, or absolute accuracy of third-party data. All decisions are made at the user’s own discretion.</p>
 
-        <footer style={{ marginTop: "3rem", borderTop: "1px solid var(--glass-border)", paddingTop: "1rem", color: "var(--text-muted)", fontSize: "0.9rem" }}>
-          Last updated: April 2026
-        </footer>
+        <h3 style={{ color: '#fff', marginTop: '2rem' }}>4. CONTENT DISCLAIMER</h3>
+        <p>Information such as fees, cutoffs, placements, and rankings may change. Users must verify details from official sources before making decisions.</p>
+
+        <h3 style={{ color: '#fff', marginTop: '2rem' }}>5. USER ACCOUNTS</h3>
+        <p>You are responsible for maintaining account confidentiality and providing accurate information.</p>
+
+        <h3 style={{ color: '#fff', marginTop: '2rem' }}>7. LEAD GENERATION CONSENT</h3>
+        <p>By submitting your details, you consent to being contacted via phone, email, or messaging, and your data being shared with relevant educational institutions or partners.</p>
+
+        <h3 style={{ color: '#fff', marginTop: '2rem' }}>11. GOVERNING LAW</h3>
+        <p>These Terms are governed by the laws of India.</p>
       </div>
-    </div>
+    </main>
   );
 }

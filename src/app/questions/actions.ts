@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from '../../../lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -16,7 +16,7 @@ export async function submitQuestion(formData: FormData) {
   }
 
   await prisma.question.create({
-    data: { userId: userId!, question }
+    data: { userId: userId!, text: question, category: 'General' }
   })
 
   redirect('/questions?submitted=1')

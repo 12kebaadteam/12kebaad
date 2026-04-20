@@ -1,4 +1,4 @@
-import prisma from '../../../lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import { submitQuestion } from './actions'
 
@@ -17,7 +17,7 @@ export default async function QuestionsPage({
     orderBy: { answeredAt: 'desc' },
     select: {
       id: true,
-      question: true,
+      text: true,
       answer: true,
       answeredAt: true,
     },
@@ -28,7 +28,7 @@ export default async function QuestionsPage({
     ? await prisma.question.findMany({
         where: { userId },
         orderBy: { createdAt: 'desc' },
-        select: { id: true, question: true, answer: true, isAnswered: true, createdAt: true, answeredAt: true },
+        select: { id: true, text: true, answer: true, isAnswered: true, createdAt: true, answeredAt: true },
       })
     : []
 
@@ -85,7 +85,7 @@ export default async function QuestionsPage({
             {myQuestions.map(q => (
               <div key={q.id} className="glass-panel" style={{ padding: '1.2rem' }}>
                 <p style={{ fontWeight: 600, marginBottom: q.isAnswered ? '0.8rem' : '0.3rem' }}>
-                  🙋 {q.question}
+                  🙋 {q.text}
                 </p>
                 {q.isAnswered ? (
                   <div style={{ background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.2)', borderRadius: '10px', padding: '0.9rem 1.1rem' }}>
@@ -120,7 +120,7 @@ export default async function QuestionsPage({
             {answeredQuestions.map((q, i) => (
               <div key={q.id} className="glass-panel animate-slide-up" style={{ padding: '1.4rem', animationDelay: `${i * 0.04}s` }}>
                 <p style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '0.8rem', fontSize: '0.97rem' }}>
-                  Q: {q.question}
+                  Q: {q.text}
                 </p>
                 <div style={{ background: 'rgba(59,130,246,0.07)', border: '1px solid rgba(59,130,246,0.15)', borderRadius: '10px', padding: '0.9rem 1.1rem' }}>
                   <p style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700, marginBottom: '0.3rem' }}>A: Team 12kebaad</p>

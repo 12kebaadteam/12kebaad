@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../../../lib/auth"
+import { authOptions } from "@/lib/auth"
 import { submitForm } from './actions'
-import prisma from '../../../lib/prisma'
+import { prisma } from '@/lib/prisma'
 import LoginButton from '../../components/LoginButton'
 
 export default async function FormPage({

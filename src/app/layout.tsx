@@ -10,8 +10,8 @@ import Providers from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "12kebaad | Best Career Guidance & Courses After 12th in India",
-  description: "Explore the ultimate career guide for students after 12th grade. Find top colleges, entrance tests, and the best courses in Science, Commerce, and Arts with high salary potential.",
+  title: "12kebaad | AI Career Predictor & Decision Engine for Class 12",
+  description: "Stop searching, start deciding. 12kebaad uses a specialized decision engine to predict your top 3 careers and 5 perfect colleges in under 60 seconds.",
   keywords: [
     "courses after 12th", "best career options after 12th", "courses after 12th science", 
     "courses after 12th commerce", "courses after 12th arts", "high salary courses after 12th", 
@@ -25,15 +25,21 @@ export const metadata: Metadata = {
     "higher education roadmap", "subject choice help India", "PCM career options", 
     "PCB career options", "commerce with maths jobs", "humanities scope in India",
     "vocational training programs", "online courses after 12th", "national level entrance tests",
-    "state level entrance exams", "top 10 courses after 12th", "12kebaad career portal"
+    "state level entrance exams", "top 10 courses after 12th", "12kebaad career portal",
+    "career predictor after 12th", "personalized career plan", "college matching engine",
+    "best jobs for PCM students", "best salary PCB courses", "careers in design after 12th",
+    "gaming and animation courses India", "aviation and pilot training guide", "data science after 12th",
+    "BCA vs BTech choice help", "legal careers after 12th", "CLAT preparation help",
+    "journalism courses India", "sports management degrees", "entrepreneurship for students",
+    "liberal arts colleges India", "study abroad after 12th guide", "career decision engine"
   ],
   metadataBase: new URL("https://12kebaad.in"),
   verification: {
     google: "pLbOeBX0gDt96W34_QrmIs5Qapbz9GTXhGBP0dCk3PM",
   },
   openGraph: {
-    title: "12kebaad | Expert Career Guidance After 12th",
-    description: "Your journey from boards to brilliance starts here. Discover your perfect degree and top colleges.",
+    title: "12kebaad | Predict Your Future After Class 12",
+    description: "Get a personalized career roadmap and top colleges based on your marks and interests in 1 minute.",
     type: "website",
     locale: "en_IN",
     url: "https://12kebaad.in",

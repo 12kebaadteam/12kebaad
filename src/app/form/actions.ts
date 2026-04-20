@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from '../../../lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 
@@ -11,9 +11,27 @@ export async function submitForm(formData: FormData) {
   const state = (formData.get('state') as string) || ''   // '' = All States
   const stream = formData.get('stream') as string
 
-  // Save to DB — mobile may be null for new users (old users already have null by default)
-  const user = await prisma.user.create({
-    data: { name, contactInfo, mobile, state, stream }
+  // Save to DB — using upsert to avoid unique constraint errors if email exists
+  const user = await prisma.user.upsert({
+    where: { email: contactInfo },
+    update: { 
+      name, 
+      mobile,
+      preferences: {
+        upsert: {
+          create: { stream, marks: 0, interests: [], location: state },
+          update: { stream, location: state }
+        }
+      }
+    },
+    create: { 
+      name, 
+      email: contactInfo, 
+      mobile,
+      preferences: {
+        create: { stream, marks: 0, interests: [], location: state }
+      }
+    }
   })
 
   const c = await cookies()

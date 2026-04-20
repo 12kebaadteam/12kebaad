@@ -8,48 +8,99 @@ datasource db {
 }
 
 model User {
-  id             String     @id @default(cuid())
-  name           String
-  contactInfo    String
-  mobile         String?
-  state          String
-  stream         String
-  streamChanges  Int        @default(0)
-  createdAt      DateTime   @default(now())
-  questions      Question[]
+  id                 String              @id @default(cuid())
+  name               String?
+  mobile             String?
+  email              String?             @unique
+  otp                String?
+  otpExpires         DateTime?
+  preferences        UserPreference?
+  leads              Lead[]
+  state              String?
+  stream             String?
+  streamChanges      Int                 @default(0)
+  recommendationLogs RecommendationLog[]
+  questions          Question[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @default(now()) @updatedAt
+
+  @@index([email, mobile])
 }
 
-model Question {
-  id          String    @id @default(cuid())
-  userId      String
-  question    String
-  answer      String?
-  isAnswered  Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  answeredAt  DateTime?
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+model UserPreference {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stream    String   // PCM, PCB, Commerce, Arts
+  marks     Float    // Percentage
+  interests String[] // e.g. ["Business", "Tech", "Design"]
+  budget    Int?     // Max fee
+  location  String?  // Preferred city/state
 }
 
-model Admin {
-  id           String @id @default(cuid())
-  username     String @unique
-  passwordHash String
+model Career {
+  id                 String              @id @default(cuid())
+  name               String              @unique
+  stream             String              
+  description        String
+  salaryRangeMin     Int
+  salaryRangeMax     Int
+  difficulty         Int                 // 1-10 scale
+  demand             Int                 // 1-10 score
+  growth             Int                 // 1-10 score
+  skills             CareerSkill[]
+  roadmaps           Roadmap[]
+  collegeCareers     CollegeCareer[]
+  recommendationLogs RecommendationLog[]
+  createdAt          DateTime            @default(now())
+}
+
+model CareerSkill {
+  id         String @id @default(cuid())
+  careerId   String
+  career     Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  skillName  String
+  importance Int    // 1-10
+  
+  @@unique([careerId, skillName])
+}
+
+model Roadmap {
+  id            String  @id @default(cuid())
+  careerId      String
+  career     Career  @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  stepNumber    Int
+  title         String
+  description   String
+  timelineStage String  // e.g., "1st Year", "Post-Graduation"
+
+  @@unique([careerId, stepNumber])
 }
 
 model College {
-  id      String          @id @default(cuid())
-  name    String          @unique
-  state   String
-  address String?
-  ranking Int?
-  recommendations  Recommendation[] 
-  courses CollegeCourse[]
+  id             String          @id @default(cuid())
+  name           String          @unique
+  state          String          @default("Not Specified")
+  address        String?
+  ranking        Int?
+  location       String          @default("Unknown")
+  fees           Int             @default(0)
+  placements     Int             @default(0)
+  cutoff         Float?
+  realityScore   Int             @default(5)
+  pros           String[]
+  cons           String[]
+  courses        CollegeCourse[]
+  recommendations Recommendation[]
+  collegeCareers CollegeCareer[]
+  createdAt      DateTime        @default(now())
 }
 
 model Course {
   id            String          @id @default(cuid())
-  title         String
-  stream        String
+  title         String          @unique
+  stream        String          // SCIENCE, COMMERCE, ARTS
+  description   String?
   basicSubjects String?
   useCase       String?
   colleges      CollegeCourse[]
@@ -59,34 +110,22 @@ model CollegeCourse {
   id           String  @id @default(cuid())
   collegeId    String
   courseId     String
-  fee          String?
+  fee          String  @default("Not Specified")
   timeInvolved String?
-  cutoff       String?
   remarks      String?
-
-  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
-  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  college      College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  course       Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([collegeId, courseId])
-}
-model EntranceTest {
-  id           String  @id @default(cuid())
-  name         String  @unique
-  fullForm     String
-  suitability  String
-  eligibility  String
-  extraRemarks String?
 }
 
 model Recommendation {
   id           String  @id @default(cuid())
   collegeId    String
-  adminRank    Int
-  targetStream String?
-  reason       String?
   college      College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
-
-  @@index([collegeId])
+  adminRank    Int     @default(0)
+  targetStream String?
+  reason       String? 
 }
 
 model ProfessionalCourse {
@@ -97,5 +136,61 @@ model ProfessionalCourse {
   fees         String
   duration     String
   opportunities String
+  extraRemarks String?
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  text        String
+  category    String   @default("General")
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userEmail   String?
+  isAnswered  Boolean  @default(false)
+  answer      String?
+  createdAt   DateTime @default(now())
+  answeredAt  DateTime?
+}
+
+model CollegeCareer {
+  id        String  @id @default(cuid())
+  collegeId String
+  careerId  String
+  college   College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  career    Career  @relation(fields: [careerId], references: [id], onDelete: Cascade)
+
+  @@unique([collegeId, careerId])
+}
+
+model Lead {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetType String   // "CAREER_MENTORSHIP", "COLLEGE_APPLY"
+  targetId   String   // ID of Career or College
+  status     String   @default("PENDING") // PENDING, CONTACTED, CLOSED
+  createdAt  DateTime @default(now())
+}
+
+model RecommendationLog {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  careerId       String
+  career         Career   @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  matchScore     Float
+  matchBreakdown Json     // e.g., { interestMatch: 40, marksMatch: 20, budgetMatch: 15, demand: 15, difficulty: 10 }
+  aiSummary      String?  // LLM generated explanation reason
+  createdAt      DateTime @default(now())
+
+  @@index([userId, careerId])
+}
+
+model EntranceTest {
+  id           String  @id @default(cuid())
+  name         String  @unique
+  fullForm     String
+  suitability  String
+  eligibility  String
   extraRemarks String?
 }

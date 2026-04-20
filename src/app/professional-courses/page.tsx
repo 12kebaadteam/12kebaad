@@ -1,4 +1,4 @@
-import prisma from '../../../lib/prisma'
+import { prisma } from '@/lib/prisma'
 import ExpandableProfCourseCard from '../../components/ExpandableProfCourseCard'
 
 export default async function ProfessionalCoursesPage() {

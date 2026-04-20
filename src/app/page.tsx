@@ -1,95 +1,91 @@
+"use client";
+
+import { motion } from "framer-motion";
 import Link from "next/link";
-import LoginButton from "../components/LoginButton";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../lib/auth";
-import { cookies } from "next/headers";
-import prisma from "../../lib/prisma";
+import { Sparkles, Compass, Target, Map, ArrowRight } from "lucide-react";
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
-  const c = await cookies();
-  const userId = c.get('user_id')?.value;
-  
-  let personalizedTitle = "Your Future, Simplified";
-  let personalizedSub = "Guidance for students who have completed 12th grade. Explore colleges, view detailed course info, and choose the career path that optimally matches your stream and aspirations.";
-  let isReturning = false;
+import FlowingNodes from "@/components/FlowingNodes";
+import AmbientBackground from "@/components/AmbientBackground";
 
-  if (session?.user?.name) {
-    personalizedTitle = `Welcome back, ${session.user.name.split(' ')[0]}!`;
-    personalizedSub = "Let's continue exploring the best courses and colleges personalized for you.";
-    isReturning = true;
-  } else if (userId) {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (user) {
-      personalizedTitle = `Let’s start exploring, ${user.name.split(' ')[0]}!`;
-      personalizedSub = `We've curated courses personalized for your ${user.stream.toLowerCase()} background in ${user.state || 'India'}.`;
-      isReturning = true;
-    }
-  }
-
-  const dbUser = userId ? await prisma.user.findUnique({ where: { id: userId } }) : null;
-  const nameToDisplay = session?.user?.name?.split(' ')[0] || dbUser?.name?.split(' ')[0] || "";
-
+export default function HomePage() {
   return (
-    <div className="animate-fade-in" style={{ textAlign: "center", paddingTop: "4rem" }}>
-      <h1 className="hero-title animate-slide-up delay-1">
-        {nameToDisplay ? (
-          <>
-            {personalizedTitle.split(nameToDisplay)[0]}
-            <span style={{ color: "var(--primary)" }}>{nameToDisplay}</span>
-            {personalizedTitle.split(nameToDisplay)[1]}
-          </>
-        ) : (
-          <>Your Future, <span style={{ color: "var(--primary)" }}>Simplified</span></>
-        )}
-      </h1>
-      <p className="animate-slide-up delay-2" style={{ fontSize: "1.2rem", color: "var(--text-muted)", maxWidth: "600px", margin: "0 auto 0.5rem" }}>
-        {personalizedSub}
-      </p>
-      <p className="animate-slide-up delay-2" style={{ fontSize: "0.85rem", color: "var(--accent)", marginBottom: "2.5rem", letterSpacing: "0.5px", fontWeight: "600", opacity: 0.8 }}>
-        BUILT BY EXPERIENCED SENIORS &nbsp;•&nbsp; TRUSTED BY EVERYONE &nbsp;•&nbsp; HIGHLY ACCURATE DATA
-      </p>
-      
-      <div className="animate-slide-up delay-3" style={{ marginBottom: "4rem", display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-        {!isReturning ? (
-          <Link href="/form" className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1.1rem" }}>
-            Get Started Now
-          </Link>
-        ) : (
-          <Link href="/courses" className="btn-primary" style={{ padding: "1rem 2.5rem", fontSize: "1.1rem" }}>
-            Continue Exploring
-          </Link>
-        )}
-        <LoginButton />
-      </div>
+    <main className="main-content full-screen-layout" style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh' }}>
+      <AmbientBackground />
+      <FlowingNodes />
 
-      <div className="animate-slide-up delay-4" style={{ marginBottom: "3rem" }}>
-        <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", marginBottom: "1.2rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>
-          Pro Career Guides
+      {/* Hero Section */}
+      <section style={{ textAlign: 'center', padding: '10rem 0', minHeight: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
+        
+        {/* Floating Icons for Visual Interest */}
+        <div className="hide-mobile" style={{ position: 'absolute', top: '15%', left: '10%', opacity: 0.3 }}>
+           <Compass size={80} color="var(--primary)" />
+        </div>
+        <div className="hide-mobile" style={{ position: 'absolute', bottom: '20%', right: '12%', opacity: 0.3 }}>
+           <Target size={100} color="var(--accent)" />
+        </div>
+
+        <div 
+          style={{ 
+            display: 'inline-flex', alignItems: 'center', gap: '0.6rem', 
+            background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)',
+            padding: '0.5rem 1.25rem', borderRadius: '99px', color: 'var(--primary)',
+            fontSize: '0.85rem', fontWeight: '700', marginBottom: '2.5rem', margin: '0 auto'
+          }}
+        >
+          <Sparkles size={16} /> 12kebaad Decision Engine V2.0
+        </div>
+        
+        <h1 className="hero-title" style={{ maxWidth: '1000px', margin: '0 auto 2rem auto', fontSize: '5rem', fontWeight: '900', lineHeight: 1 }}>
+          Confused after 12th? Get your <span style={{ color: 'var(--primary)' }}>career plan</span> in 60s.
+        </h1>
+        <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', maxWidth: '650px', margin: '0 auto 3rem auto', lineHeight: '1.6' }}>
+          Stop browsing thousands of colleges. We analyze your interests and marks to show you 5 paths that actually matter.
         </p>
-        <div className="glass-panel" style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap", padding: "1.5rem", borderRadius: "1rem", background: "rgba(255,255,255,0.03)" }}>
-          <Link href="/courses-after-12th" className="guide-link">Best Courses Overview</Link>
-          <Link href="/courses-after-12th-science" className="guide-link">Science Path</Link>
-          <Link href="/courses-after-12th-commerce" className="guide-link">Commerce Path</Link>
-          <Link href="/courses-after-12th-arts" className="guide-link">Arts Path</Link>
-          <Link href="/high-salary-courses-after-12th" className="guide-link" style={{ color: "var(--accent)" }}>High Salary Guide ★</Link>
+        <div style={{ display: 'flex', gap: '1.2rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link href="/predictor" className="btn-primary" style={{ padding: '1.2rem 3rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+            Start Career Predictor <ArrowRight size={20} />
+          </Link>
+          <Link href="/courses-after-12th" className="btn-secondary" style={{ padding: '1.2rem 2.5rem', fontSize: '1.1rem' }}>
+            Browse Streams
+          </Link>
         </div>
-      </div>
+      </section>
 
-      <div className="grid-cards animate-slide-up delay-4">
-        <div className="glass-panel" style={{ textAlign: "left" }}>
-          <h3 style={{ color: "var(--primary)", marginBottom: "1rem" }}>Comprehensive Courses</h3>
-          <p style={{ color: "var(--text-muted)" }}>Browse through carefully curated list of courses filtered by stream and relevance.</p>
+      {/* Philosophy Section */}
+      <section style={{ padding: '4rem 0' }}>
+        <div className="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+          <div className="glass-panel">
+            <Compass color="var(--primary)" style={{ marginBottom: '1.25rem' }} />
+            <h3 style={{ marginBottom: '0.75rem' }}>Personalized Paths</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>We don't show filters. We show answers based on your marks and personality.</p>
+          </div>
+          <div className="glass-panel">
+            <Target color="var(--accent)" style={{ marginBottom: '1.25rem' }} />
+            <h3 style={{ marginBottom: '0.75rem' }}>Reality Scores</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Honest pros and cons for every college. No paid rankings, just truth.</p>
+          </div>
+          <div className="glass-panel">
+            <Map color="#10b981" style={{ marginBottom: '1.25rem' }} />
+            <h3 style={{ marginBottom: '0.75rem' }}>Full Roadmaps</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>From Class 12 to your first ₹10LPA job. Every step mapped out.</p>
+          </div>
         </div>
-        <div className="glass-panel" style={{ textAlign: "left" }}>
-          <h3 style={{ color: "var(--accent)", marginBottom: "1rem" }}>Top Colleges</h3>
-          <p style={{ color: "var(--text-muted)" }}>Discover top institutions, sort by cost/time, and evaluate cutoffs easily.</p>
+      </section>
+
+      {/* Stream Quick Links */}
+      <section style={{ padding: '6rem 0' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>Pick your stream to explore</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+          {['Science', 'Commerce', 'Arts'].map(s => (
+            <Link key={s} href={`/courses-after-12th-${s.toLowerCase()}`} style={{ textDecoration: 'none' }}>
+              <div className="glass-panel" style={{ textAlign: 'center', padding: '3rem 2rem', transition: 'all 0.3s' }}>
+                <h3 style={{ marginBottom: '0.5rem' }}>{s}</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Explore high-salary {s} careers</p>
+              </div>
+            </Link>
+          ))}
         </div>
-        <div className="glass-panel" style={{ textAlign: "left" }}>
-          <h3 style={{ color: "var(--primary)", marginBottom: "1rem" }}>Factual & Direct</h3>
-          <p style={{ color: "var(--text-muted)" }}>No noise. Just factual data points engineered for the best career choice.</p>
-        </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
