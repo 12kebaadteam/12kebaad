@@ -647,7 +647,6 @@ select.form-control {
     width: 200px;
   }
   .admin-main {
-    margin-left: 200px !important;
     padding: 2rem;
   }
 }

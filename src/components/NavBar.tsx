@@ -9,6 +9,7 @@ const links = [
   { href: '/', label: 'Home' },
   { href: '/predictor', label: 'Career Predictor' },
   { href: '/results', label: 'My Matches' },
+  { href: '/questions', label: 'Q&A' },
   { href: '/about', label: 'About Us' },
 ]
 

@@ -26,6 +26,7 @@ export default function Footer() {
             <li><Link href="/" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Home</Link></li>
             <li><Link href="/predictor" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Career Predictor</Link></li>
             <li><Link href="/results" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>My Recommendations</Link></li>
+            <li><Link href="/questions" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Community Q&A</Link></li>
           </ul>
         </div>
 
@@ -35,7 +36,6 @@ export default function Footer() {
           <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             <li><Link href="/courses-after-12th" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Stream Guides</Link></li>
             <li><Link href="/about" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Our Methodology</Link></li>
-            <li><Link href="/sitemap.xml" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Sitemap XML</Link></li>
           </ul>
         </div>
 
