@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
     const data: any = {
       text,
-      userId: session?.user?.id || null,
+      userId: (session?.user as any)?.id || null,
       status: "PENDING"
     };
 
