@@ -14,8 +14,7 @@ const steps = [
   { id: "marks", title: "Marks Overview", subtitle: "Your 12th percentage?" },
   { id: "interests", title: "Deep Interests", subtitle: "Pick 2 to 6 topics" },
   { id: "budget", title: "Annual Budget", subtitle: "Fee affordability?" },
-  { id: "location", title: "Your Location", subtitle: "Where to study?" },
-  { id: "profile", title: "Final Step", subtitle: "How can we reach you?" }
+  { id: "location", title: "Your Location", subtitle: "Where to study?" }
 ];
 
 const GoogleLogo = () => (
@@ -45,7 +44,7 @@ export default function PredictorPage() {
   const [otpSent, setOtpSent] = useState(false);
   const [emailForOtp, setEmailForOtp] = useState("");
   const [otpCode, setOtpCode] = useState("");
-  const [authView, setAuthView] = useState<'intro' | 'otp'>('intro');
+  const [authView, setAuthView] = useState<'intro' | 'manual-details' | 'otp'>('intro');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -151,54 +150,28 @@ export default function PredictorPage() {
                    <p style={{ color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '1rem' }}>Personalized plan in 60 seconds.</p>
                    
                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '380px', margin: '0 auto' }}>
-                      {authView === 'intro' ? (
-                        <>
-                          {!session ? (
-                            <>
-                              <button onClick={() => signIn('google')} className="btn-primary google-btn-glow shimmer-button" style={{ padding: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', background: '#fff', color: '#000', borderRadius: '16px' }}>
-                                <GoogleLogo /> Sign in with Google
-                              </button>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', margin: '0.2rem 0' }}>
-                                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
-                                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>OR</span>
-                                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
-                              </div>
-                              <button onClick={() => setAuthView('otp')} className="btn-secondary shimmer-button" style={{ padding: '1.1rem', borderRadius: '16px', color: 'var(--primary)', borderColor: 'var(--primary)' }}>
-                                <LogIn size={18} /> Continue with Email (OTP)
-                              </button>
-                            </>
-                          ) : (
-                            <div style={{ padding: '1.2rem', borderRadius: '16px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', marginBottom: '1rem' }}>
-                               Signed in as <br/><strong>{session.user?.email}</strong>
-                            </div>
-                          )}
-                          {session && (
-                            <button onClick={() => setCurrentStep(0)} className="btn-secondary" style={{ padding: '1.2rem', borderRadius: '16px' }}>
-                              Enter System
-                            </button>
-                          )}
-                        </>
+                       ) : authView === 'manual-details' ? (
+                        <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>We need a few details before the OTP.</p>
+                           <input type="text" placeholder="Full Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="form-control" style={{ padding: '1rem', borderRadius: '12px' }} />
+                           <input type="email" placeholder="Email Address" value={emailForOtp} onChange={(e) => setEmailForOtp(e.target.value)} className="form-control" style={{ padding: '1rem', borderRadius: '12px' }} />
+                           <input type="tel" placeholder="Mobile Number" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="form-control" style={{ padding: '1rem', borderRadius: '12px' }} />
+                           <button className="btn-primary" style={{ width: '100%', padding: '1.1rem' }} onClick={async () => {
+                             if (!emailForOtp || !formData.name) return;
+                             const res = await fetch('/api/auth/send-otp', { method: 'POST', body: JSON.stringify({ email: emailForOtp }) });
+                             if (res.ok) setAuthView('otp');
+                           }}>Get OTP Code</button>
+                           <button onClick={() => setAuthView('intro')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Back</button>
+                        </div>
                       ) : (
                         <div style={{ textAlign: 'left' }}>
-                           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>{!otpSent ? "We'll send a code to your inbox." : "Check your email for the 6-digit code."}</p>
-                           {!otpSent ? (
-                             <>
-                               <input type="email" placeholder="your@email.com" value={emailForOtp} onChange={(e) => setEmailForOtp(e.target.value)} className="form-control" style={{ marginBottom: '1rem', padding: '1.2rem', borderRadius: '12px' }} />
-                               <button className="btn-primary" style={{ width: '100%', padding: '1.1rem' }} onClick={async () => {
-                                 const res = await fetch('/api/auth/send-otp', { method: 'POST', body: JSON.stringify({ email: emailForOtp }) });
-                                 if (res.ok) setOtpSent(true);
-                               }}>Send OTP Code</button>
-                             </>
-                           ) : (
-                             <>
-                               <input type="text" placeholder="######" value={otpCode} onChange={(e) => setOtpCode(e.target.value)} className="form-control" style={{ marginBottom: '1rem', padding: '1.2rem', textAlign: 'center', letterSpacing: '0.5em', fontSize: '1.4rem' }} />
-                               <button className="btn-primary" style={{ width: '100%', padding: '1.1rem' }} onClick={async () => {
-                                  const res = await signIn('credentials', { email: emailForOtp, otp: otpCode, redirect: false });
-                                  if (res?.ok) setCurrentStep(0);
-                               }}>Verify OTP</button>
-                             </>
-                           )}
-                           <button onClick={() => setAuthView('intro')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '1.5rem', cursor: 'pointer' }}>Back</button>
+                           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Check your email for the 6-digit code sent to {emailForOtp}</p>
+                           <input type="text" placeholder="######" value={otpCode} onChange={(e) => setOtpCode(e.target.value)} className="form-control" style={{ marginBottom: '1rem', padding: '1.2rem', textAlign: 'center', letterSpacing: '0.5em', fontSize: '1.4rem' }} autoFocus />
+                           <button className="btn-primary" style={{ width: '100%', padding: '1.1rem' }} onClick={async () => {
+                              const res = await signIn('credentials', { email: emailForOtp, otp: otpCode, redirect: false });
+                              if (res?.ok) setCurrentStep(0);
+                           }}>Verify & Start</button>
+                           <button onClick={() => setAuthView('manual-details')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '1.5rem', cursor: 'pointer' }}>Back to details</button>
                         </div>
                       )}
                    </div>

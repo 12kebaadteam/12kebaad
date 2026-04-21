@@ -35,9 +35,12 @@ export default async function FormPage({
       )}
       <div className="glass-panel animate-slide-up">
         {session ? (
-          <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(59,130,246,0.1)', borderRadius: '12px', border: '1px solid var(--primary)' }}>
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>
-              👋 Logged in as <strong>{session.user?.name}</strong> ({session.user?.email}). 
+          <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(59,130,246,0.1)', borderRadius: '12px', border: '1px solid var(--primary)', wordBreak: 'break-word' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: '1.5' }}>
+              👋 Logged in as <strong>{session.user?.name}</strong><br/>
+              <span style={{opacity: 0.8, fontSize: '0.8rem'}}>{session.user?.email}</span>
+            </p>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.8rem' }}>
               We've pre-filled your details below. Just tell us your state and stream!
             </p>
           </div>

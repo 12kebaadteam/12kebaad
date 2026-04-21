@@ -36,8 +36,8 @@ body {
 /* ── Glass Panel ──────────────────────────────────────────────────── */
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 1.8rem;
@@ -410,6 +410,21 @@ select.form-control {
     padding-right: 4%;
   }
 
+  /* Reduce Button Sizes on Mobile */
+  .btn-primary, .btn-secondary {
+    padding: 0.6rem 1.2rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .hero-title {
+    font-size: 2.2rem !important;
+    line-height: 1.1;
+  }
+
+  .glass-panel {
+    padding: 1.1rem !important;
+  }
+
   .grid-cards { grid-template-columns: 1fr; gap: 1rem; }
   .glass-panel { padding: 1.2rem; border-radius: 14px; }
 
@@ -606,7 +621,8 @@ select.form-control {
   padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
-  position: fixed;
+  position: sticky;
+  top: 0;
   height: 100vh;
   z-index: 100;
   background: #020617;
@@ -614,11 +630,9 @@ select.form-control {
 }
 
 .admin-main {
-  margin-left: 260px !important;
   flex: 1;
-  padding: 4rem 6rem;
-  max-width: 1600px;
-  margin: 0 auto;
+  padding: 3rem;
+  width: 100%;
   min-height: 100vh;
 }
 

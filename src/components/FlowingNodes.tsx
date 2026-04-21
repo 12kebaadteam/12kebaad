@@ -14,24 +14,24 @@ export default function FlowingNodes() {
   return (
     <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', opacity: 0.15, zIndex: -1 }}>
       <svg width="100%" height="100%" style={{ position: 'absolute' }} preserveAspectRatio="xMidYMid slice">
-        {/* Animated Connecting Lines */}
+        {/* Animated Connecting Lines - Optimized */}
         <motion.path
           d="M 120 400 Q 300 200 480 200 T 840 500 T 1100 300"
           fill="none"
-          stroke="rgba(59, 130, 246, 0.2)"
+          stroke="rgba(59, 130, 246, 0.15)"
           strokeWidth="2"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
         />
         <motion.path
           d="M 120 400 Q 300 200 480 200 T 840 500 T 1100 300"
           fill="none"
           stroke="var(--primary)"
-          strokeWidth="3"
-          strokeDasharray="10 20"
+          strokeWidth="2"
+          strokeDasharray="10 30"
           animate={{ strokeDashoffset: -100 }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
         />
       </svg>
 
@@ -40,15 +40,15 @@ export default function FlowingNodes() {
         return (
           <motion.div
             key={i}
-            initial={{ opacity: 0, scale: 0.5 }}
+            initial={{ opacity: 0, scale: 0.8 }}
             animate={{ 
               opacity: 1, 
               scale: 1,
-              y: [0, -20, 0] 
+              y: [0, -10, 0] 
             }}
             transition={{ 
-              delay: i * 0.5,
-              y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+              delay: i * 0.2,
+              y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
             }}
             style={{
               position: 'absolute',
