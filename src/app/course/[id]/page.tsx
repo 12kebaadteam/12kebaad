@@ -32,6 +32,11 @@ export default async function CourseDetailPage({
         include: { college: true },
         where: stateParam ? { college: { state: stateParam } } : undefined,
         orderBy: { college: { ranking: 'asc' } },
+      },
+      comments: {
+        where: { status: 'APPROVED' },
+        include: { user: true },
+        orderBy: { createdAt: 'desc' }
       }
     }
   })
@@ -150,7 +155,7 @@ export default async function CourseDetailPage({
 
       {course.comments && course.comments.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {course.comments.map(c => (
+          {course.comments.map((c: any) => (
             <div key={c.id} className="glass-panel" style={{ padding: '1.2rem', background: 'rgba(255,255,255,0.02)' }}>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem', display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{c.user?.name || 'Anonymous User'}</span>
