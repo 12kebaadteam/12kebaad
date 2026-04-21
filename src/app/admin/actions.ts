@@ -199,7 +199,7 @@ export async function answerQuestion(formData: FormData) {
     where: { id },
     data: { answer, isAnswered: true, answeredAt: new Date() }
   })
-  redirect('/admin?tab=questions')
+  redirect('/admin/questions')
 }
 
 export async function deleteQuestion(formData: FormData) {
@@ -207,7 +207,26 @@ export async function deleteQuestion(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
   await prisma.question.delete({ where: { id } })
-  redirect('/admin?tab=questions')
+  redirect('/admin/questions')
+}
+
+export async function approveComment(formData: FormData) {
+  await checkAdmin()
+  const id = formData.get('id') as string
+  if (!id) return
+  await prisma.comment.update({
+    where: { id },
+    data: { status: "APPROVED" }
+  })
+  redirect('/admin/comments')
+}
+
+export async function deleteComment(formData: FormData) {
+  await checkAdmin()
+  const id = formData.get('id') as string
+  if (!id) return
+  await prisma.comment.delete({ where: { id } })
+  redirect('/admin/comments')
 }
 
 export async function deleteAllProfessionalCourses() {

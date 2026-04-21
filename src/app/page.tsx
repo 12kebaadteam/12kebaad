@@ -79,13 +79,43 @@ export default function HomePage() {
           {['Science', 'Commerce', 'Arts'].map(s => (
             <Link key={s} href={`/courses-after-12th-${s.toLowerCase()}`} style={{ textDecoration: 'none' }}>
               <div className="glass-panel" style={{ textAlign: 'center', padding: '3rem 2rem', transition: 'all 0.3s' }}>
-                <h3 style={{ marginBottom: '0.5rem' }}>{s}</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Explore high-salary {s} careers</p>
+                <h3 style={{ marginBottom: '0.5rem', color: '#ffffff' }}>{s}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem' }}>Explore high-salary {s} careers</p>
               </div>
             </Link>
           ))}
         </div>
       </section>
+
+      {/* Personalized Welcome Popup */}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1, duration: 0.5 }}
+        style={{
+          position: 'fixed',
+          bottom: '2rem',
+          left: '2rem',
+          background: 'rgba(59, 130, 246, 0.15)',
+          border: '1px solid rgba(59, 130, 246, 0.4)',
+          backdropFilter: 'blur(10px)',
+          padding: '1rem 1.5rem',
+          borderRadius: '12px',
+          color: 'var(--text-main)',
+          zIndex: 50,
+          boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+          display: 'flex',
+          gap: '1rem',
+          alignItems: 'center'
+        }}
+        className="hide-mobile"
+      >
+        <span style={{ fontSize: '1.5rem' }}>👋</span>
+        <div>
+          <p style={{ fontWeight: 600, fontSize: '0.95rem', margin: 0, color: 'var(--primary)' }}>Welcome to 12kebaad!</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0, marginTop: '2px' }}>Ready to find your dream career?</p>
+        </div>
+      </motion.div>
     </main>
   );
 }

@@ -21,6 +21,8 @@ model User {
   streamChanges      Int                 @default(0)
   recommendationLogs RecommendationLog[]
   questions          Question[]
+  comments           Comment[]
+  feedbacks          Feedback[]
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @default(now()) @updatedAt
 
@@ -52,6 +54,8 @@ model Career {
   roadmaps           Roadmap[]
   collegeCareers     CollegeCareer[]
   recommendationLogs RecommendationLog[]
+  comments           Comment[]
+  feedbacks          Feedback[]
   createdAt          DateTime            @default(now())
 }
 
@@ -104,6 +108,7 @@ model Course {
   basicSubjects String?
   useCase       String?
   colleges      CollegeCourse[]
+  comments      Comment[]
 }
 
 model CollegeCourse {
@@ -160,6 +165,30 @@ model CollegeCareer {
   career    Career  @relation(fields: [careerId], references: [id], onDelete: Cascade)
 
   @@unique([collegeId, careerId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  text      String
+  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  courseId  String?
+  course    Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  careerId  String?
+  career    Career?  @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Feedback {
+  id         String   @id @default(cuid())
+  isPositive Boolean
+  reason     String?
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  careerId   String?
+  career     Career?  @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
 }
 
 model Lead {

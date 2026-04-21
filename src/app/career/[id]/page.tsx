@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { ChevronLeft, GraduationCap, Map, Target, TrendingUp, UserCheck } from "lucide-react";
+import CommentBox from '@/components/CommentBox';
 
 export default async function CareerPage({ params }: { params: { id: string } }) {
   const { id } = await params;
@@ -10,7 +11,12 @@ export default async function CareerPage({ params }: { params: { id: string } })
     include: {
       skills: { orderBy: { importance: 'desc' } },
       roadmaps: { orderBy: { stepNumber: 'asc' } },
-      collegeCareers: { include: { college: true } }
+      collegeCareers: { include: { college: true } },
+      comments: {
+        where: { status: 'APPROVED' },
+        include: { user: true },
+        orderBy: { createdAt: 'desc' }
+      }
     }
   });
 
@@ -104,6 +110,32 @@ export default async function CareerPage({ params }: { params: { id: string } })
 
         </div>
       </div>
+
+      {/* Discussion Section */}
+      <section style={{ marginTop: '5rem', marginBottom: '2rem' }}>
+        <h2 style={{ color: 'var(--primary)', marginBottom: '1.5rem', fontSize: '1.3rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.8rem' }}>
+          Discussions & Insights
+        </h2>
+
+        {career.comments && career.comments.length > 0 ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {career.comments.map((c: any) => (
+              <div key={c.id} className="glass-panel" style={{ padding: '1.2rem', background: 'rgba(255,255,255,0.02)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{c.user?.name || 'Anonymous User'}</span>
+                  <span>{c.createdAt.toLocaleDateString()}</span>
+                </div>
+                <p style={{ fontSize: '0.95rem', lineHeight: '1.5' }}>{c.text}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No comments yet. Be the first to share your thoughts!</p>
+        )}
+
+        <CommentBox targetId={career.id} type="career" />
+      </section>
+
     </main>
   );
 }

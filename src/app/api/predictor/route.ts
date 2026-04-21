@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
 
     // 1. Fetch relevant careers
     const careers = await prisma.career.findMany({
-      where: { stream },
+      where: { stream: { in: [stream, 'ANY', 'Any'] } },
       include: { skills: true }
     });
 

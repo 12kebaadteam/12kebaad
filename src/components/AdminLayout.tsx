@@ -22,24 +22,19 @@ const menuItems = [
   { name: "Roadmaps", href: "/admin/roadmaps", icon: Map },
   { name: "CSV Upload", href: "/admin/uploads", icon: UploadCloud },
   { name: "Users & Leads", href: "/admin/users", icon: Users },
+  { name: "Q&A Manager", href: "/admin/questions", icon: UploadCloud },
+  { name: "Comments", href: "/admin/comments", icon: Map },
+  { name: "Feedback", href: "/admin/feedback", icon: Briefcase },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#020617' }}>
+    <div className="admin-layout-container">
       {/* Sidebar */}
-      <aside style={{ 
-        width: '260px', 
-        borderRight: '1px solid rgba(255,255,255,0.05)', 
-        padding: '2rem 1.5rem',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'fixed',
-        height: '100vh'
-      }}>
-        <div style={{ marginBottom: '3rem', padding: '0 0.5rem' }}>
+      <aside className="admin-sidebar">
+        <div style={{ marginBottom: '1rem', padding: '0 0.5rem' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--primary)', letterSpacing: '-0.02em' }}>12kebaad Admin</h2>
         </div>
 
@@ -94,13 +89,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content Area */}
-      <main style={{ 
-        marginLeft: '260px', 
-        flex: 1, 
-        padding: '4rem 6rem', /* Increased padding for spaciousness */
-        maxWidth: '1600px', /* Allow content to breathe */
-        margin: '0 auto' /* Center the main content column */
-      }}>
+      <main className="admin-main">
         {children}
       </main>
     </div>

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import CommentBox from '@/components/CommentBox'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
@@ -142,7 +143,30 @@ export default async function CourseDetailPage({
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      {/* Discussion Section */}
+      <h2 style={{ color: 'var(--primary)', marginTop: '3rem', marginBottom: '1.5rem', fontSize: '1.3rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.8rem' }}>
+        Discussions & Insights
+      </h2>
+
+      {course.comments && course.comments.length > 0 ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {course.comments.map(c => (
+            <div key={c.id} className="glass-panel" style={{ padding: '1.2rem', background: 'rgba(255,255,255,0.02)' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem', display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{c.user?.name || 'Anonymous User'}</span>
+                <span>{c.createdAt.toLocaleDateString()}</span>
+              </div>
+              <p style={{ fontSize: '0.95rem', lineHeight: '1.5' }}>{c.text}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No comments yet. Be the first to share your thoughts!</p>
+      )}
+
+      <CommentBox targetId={course.id} type="course" />
+
+      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '3rem' }}>
         <Link href="/courses" className="btn-secondary">← All Courses</Link>
         <Link href="/update-profile" className="btn-secondary">Change State / Stream</Link>
       </div>

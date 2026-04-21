@@ -30,8 +30,9 @@ const GoogleLogo = () => (
 const interestGroups = [
   { category: "Management & Business", options: ["Business", "Management", "Finance", "Accounting", "Marketing"] },
   { category: "Technology & Design", options: ["IT & Coding", "AI & Data", "Design", "Fashion", "Architecture"] },
-  { category: "Social & Arts", options: ["Law", "Psychology", "Arts", "Media", "Teaching"] },
-  { category: "Science & Health", options: ["Medicine", "Basic Science", "Pharma", "Nursing"] }
+  { category: "Social & Arts", options: ["Law", "Psychology", "Arts", "Media", "Teaching", "Public Policy", "Economics"] },
+  { category: "Science & Health", options: ["Medicine", "Basic Science", "Pharma", "Nursing", "Agriculture", "Nutrition"] },
+  { category: "Specialized Vocations", options: ["Aviation", "Hotel Management", "Sports", "Defense", "Culinary Arts"] }
 ];
 
 export default function PredictorPage() {
@@ -171,9 +172,11 @@ export default function PredictorPage() {
                                Signed in as <br/><strong>{session.user?.email}</strong>
                             </div>
                           )}
-                          <button onClick={() => setCurrentStep(0)} className="btn-secondary" style={{ padding: '1.2rem', borderRadius: '16px' }}>
-                            {session ? "Enter System" : "Continue without Account"}
-                          </button>
+                          {session && (
+                            <button onClick={() => setCurrentStep(0)} className="btn-secondary" style={{ padding: '1.2rem', borderRadius: '16px' }}>
+                              Enter System
+                            </button>
+                          )}
                         </>
                       ) : (
                         <div style={{ textAlign: 'left' }}>

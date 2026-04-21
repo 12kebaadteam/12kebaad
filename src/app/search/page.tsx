@@ -22,7 +22,7 @@ export default async function SearchPage({
   // We also do a JS-level filter as a fallback for both engines.
   const lower = query.toLowerCase()
 
-  const [allColleges, allCourses, allTests, allProfCourses] = await Promise.all([
+  const [allColleges, allCourses, allTests, allProfCourses, allCareers] = await Promise.all([
     prisma.college.findMany({
       where: {
         OR: [
@@ -65,6 +65,15 @@ export default async function SearchPage({
       },
       take: 20,
     }),
+    prisma.career.findMany({
+      where: {
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { description: { contains: query, mode: 'insensitive' } },
+        ]
+      },
+      take: 20,
+    }),
   ])
 
   // JS-level fallback for SQLite which ignores 'mode'
@@ -93,7 +102,12 @@ export default async function SearchPage({
     p.eligibility.toLowerCase().includes(lower)
   )
 
-  const total = colleges.length + courses.length + tests.length + profCourses.length
+  const careers = allCareers.filter(c =>
+    c.name.toLowerCase().includes(lower) ||
+    c.description.toLowerCase().includes(lower)
+  )
+
+  const total = colleges.length + courses.length + tests.length + profCourses.length + careers.length
 
   return (
     <div className="animate-fade-in">
@@ -128,6 +142,23 @@ export default async function SearchPage({
               <a key={c.id} href={`/course/${c.id}`} style={{ textDecoration: 'none' }}>
                 <div className="glass-panel search-result-card">
                   <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.title}</h3>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Stream: {c.stream}</p>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {careers.length > 0 && (
+        <section style={{ marginBottom: '2.5rem' }}>
+          <h2 style={{ color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem' }}>Careers ({careers.length})</h2>
+          <div className="grid-cards">
+            {careers.map(c => (
+              <a key={c.id} href={`/career/${c.id}`} style={{ textDecoration: 'none' }}>
+                <div className="glass-panel search-result-card">
+                  <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.name}</h3>
                   <p style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Stream: {c.stream}</p>
                   <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
                 </div>

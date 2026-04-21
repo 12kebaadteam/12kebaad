@@ -48,17 +48,12 @@ export default async function FormPage({
               We'll use this to recommend the best courses and colleges tailored for you.
             </p>
             <LoginButton />
-            <div style={{ display: 'flex', alignItems: 'center', margin: '1.5rem 0', gap: '1rem' }}>
-              <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>OR FILL MANUALLY</span>
-              <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
-            </div>
+            <LoginButton />
           </div>
         )}
 
-        {/* ... form content ... */}
-
-        <form action={submitForm} style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem' }}>
+        {session && (
+          <form action={submitForm} style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem' }}>
           <input type="hidden" name="callbackUrl" value={callbackUrl || ''} />
           <div className="form-group">
             <label htmlFor="name">Full Name</label>
@@ -109,6 +104,7 @@ export default async function FormPage({
             Find My Path →
           </button>
         </form>
+        )}
       </div>
     </div>
   )

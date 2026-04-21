@@ -35,6 +35,7 @@ export default function Footer() {
           <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             <li><Link href="/courses-after-12th" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Stream Guides</Link></li>
             <li><Link href="/about" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Our Methodology</Link></li>
+            <li><Link href="/sitemap.xml" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.9rem" }}>Sitemap XML</Link></li>
           </ul>
         </div>
 

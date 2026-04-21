@@ -60,9 +60,29 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   pages: {
-    signIn: "/admin", // Redirect to admin page where we have the login form
+    signIn: "/form", // General user login screen
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google") {
+        try {
+          const existingUser = await prisma.user.findUnique({
+            where: { email: user.email! }
+          });
+          if (!existingUser) {
+            await prisma.user.create({
+              data: {
+                email: user.email!,
+                name: user.name || "Google User"
+              }
+            });
+          }
+        } catch (e) {
+          console.error("Error creating Google user:", e);
+        }
+      }
+      return true;
+    },
     async session({ session, token }) {
       if (token.role) {
         (session as any).user.role = token.role

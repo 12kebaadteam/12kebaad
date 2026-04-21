@@ -1,14 +1,30 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key_for_build_only');
+const resend = new Resend(process.env.RESEND_API_KEY || 're_RrJdWRBJ_KfSkfTwDShaWgW25vsjqwa8n');
 
 export async function sendOTP(email: string, otp: string) {
   try {
     await resend.emails.send({
-      from: '12kebaad <onboarding@resend.dev>', // Update with verified domain in production
+      from: '12kebaad <verification@verification.12kebaad.in>',
       to: email,
-      subject: 'Your 12kebaad Verification Code',
-      html: `<p>Your verification code is <strong>${otp}</strong>. It expires in 10 minutes.</p>`,
+      subject: 'Welcome to 12kebaad.in - Your Verification OTP',
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+          <p>Hello,</p>
+          <br/>
+          <p>Thank you for using 12kebaad.in – your guide after Class 12 🎓</p>
+          <br/>
+          <p>To complete your verification, please use the One-Time Password (OTP) below:</p>
+          <br/>
+          <h3 style="color: #3b82f6;"><strong>OTP: ${otp}</strong></h3>
+          <br/>
+          <p>This OTP is valid for the next 10 minutes. Please do not share it with anyone for security reasons.</p>
+          <br/>
+          <p>If you did not request this, you can safely ignore this email.</p>
+          <br/>
+          <p>Best regards,<br/>Team 12kebaad.in</p>
+        </div>
+      `,
     });
     return true;
   } catch (error) {
@@ -24,7 +40,7 @@ export async function sendRecommendations(email: string, recommendations: any[])
 
   try {
     await resend.emails.send({
-      from: '12kebaad <onboarding@resend.dev>',
+      from: '12kebaad <verification@verification.12kebaad.in>',
       to: email,
       subject: 'Your Top 5 Career Recommendations',
       html: `
