@@ -150,7 +150,34 @@ export default function PredictorPage() {
                    <p style={{ color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '1rem' }}>Personalized plan in 60 seconds.</p>
                    
                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '380px', margin: '0 auto' }}>
-                       ) : authView === 'manual-details' ? (
+                      {authView === 'intro' ? (
+                        <>
+                          {!session ? (
+                            <>
+                              <button onClick={() => signIn('google')} className="btn-primary google-btn-glow shimmer-button" style={{ padding: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', background: '#fff', color: '#000', borderRadius: '16px' }}>
+                                <GoogleLogo /> Sign in with Google
+                              </button>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', margin: '0.2rem 0' }}>
+                                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
+                                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>OR</span>
+                                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
+                              </div>
+                              <button onClick={() => setAuthView('manual-details')} className="btn-secondary shimmer-button" style={{ padding: '1.1rem', borderRadius: '16px', color: 'var(--primary)', borderColor: 'var(--primary)' }}>
+                                <LogIn size={18} /> Continue with Email (OTP)
+                              </button>
+                            </>
+                          ) : (
+                            <div style={{ padding: '1.2rem', borderRadius: '16px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', marginBottom: '1rem' }}>
+                               Signed in as <br/><strong>{session.user?.email}</strong>
+                            </div>
+                          )}
+                          {session && (
+                            <button onClick={() => setCurrentStep(0)} className="btn-secondary" style={{ padding: '1.2rem', borderRadius: '16px' }}>
+                              Enter System
+                            </button>
+                          )}
+                        </>
+                      ) : authView === 'manual-details' ? (
                         <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>We need a few details before the OTP.</p>
                            <input type="text" placeholder="Full Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="form-control" style={{ padding: '1rem', borderRadius: '12px' }} />
