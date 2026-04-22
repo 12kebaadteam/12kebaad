@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendApiKey = process.env.RESEND_API_KEY || 're_dummy_fallback_key';
+const resend = new Resend(resendApiKey);
 
 export async function sendOTP(email: string, otp: string) {
   try {
