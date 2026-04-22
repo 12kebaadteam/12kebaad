@@ -51,15 +51,18 @@ export default function NavBar() {
       </div>
       <div className="nav-scroll-wrapper">
         <div className="nav-links">
-          {links.map(link => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`nav-link${pathname === link.href ? ' active' : ''}`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map(link => {
+            if (!session && (link.href === '/questions' || link.href === '/results')) return null;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`nav-link${pathname === link.href ? ' active' : ''}`}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </div>
       </div>
     </nav>

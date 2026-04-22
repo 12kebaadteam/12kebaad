@@ -2,11 +2,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-export default async function AdminRootLayout({ children }: { children: React.ReactNode }) {
+export default async function PredictorLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
 
-  if (!session || (session as any).user?.role !== "admin") {
-    redirect("/admin-login");
+  if (!session) {
+    redirect("/form?callbackUrl=/predictor");
   }
 
   return <>{children}</>;

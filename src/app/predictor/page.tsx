@@ -36,7 +36,7 @@ const interestGroups = [
 
 export default function PredictorPage() {
   const { data: session } = useSession();
-  const [currentStep, setCurrentStep] = useState(-1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     stream: "", marks: 75, interests: [] as string[], budget: 200000, location: "",
     name: "", email: "", phone: ""
@@ -134,77 +134,6 @@ export default function PredictorPage() {
         )}
 
         <AnimatePresence mode="wait">
-          {currentStep === -1 ? (
-             <motion.div
-               key="intro"
-               initial={{ opacity: 0, scale: 0.98 }}
-               animate={{ opacity: 1, scale: 1 }}
-               exit={{ opacity: 0, scale: 1.02 }}
-               style={{ textAlign: 'center', position: 'relative' }}
-             >
-                <div style={{ position: 'relative', zIndex: 10 }}>
-                   <div style={{ background: 'rgba(59,130,246,0.1)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto', color: 'var(--primary)' }}>
-                      <Sparkles size={32} />
-                   </div>
-                   <h2 style={{ fontSize: '2.2rem', fontWeight: '800', marginBottom: '0.5rem', letterSpacing: '-0.03em' }}>Decision Engine</h2>
-                   <p style={{ color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '1rem' }}>Personalized plan in 60 seconds.</p>
-                   
-                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '380px', margin: '0 auto' }}>
-                      {authView === 'intro' ? (
-                        <>
-                          {!session ? (
-                            <>
-                              <button onClick={() => signIn('google')} className="btn-primary google-btn-glow shimmer-button" style={{ padding: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', background: '#fff', color: '#000', borderRadius: '16px' }}>
-                                <GoogleLogo /> Sign in with Google
-                              </button>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', margin: '0.2rem 0' }}>
-                                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
-                                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>OR</span>
-                                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
-                              </div>
-                              <button onClick={() => setAuthView('manual-details')} className="btn-secondary shimmer-button" style={{ padding: '1.1rem', borderRadius: '16px', color: 'var(--primary)', borderColor: 'var(--primary)' }}>
-                                <LogIn size={18} /> Continue with Email (OTP)
-                              </button>
-                            </>
-                          ) : (
-                            <div style={{ padding: '1.2rem', borderRadius: '16px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', marginBottom: '1rem' }}>
-                               Signed in as <br/><strong>{session.user?.email}</strong>
-                            </div>
-                          )}
-                          {session && (
-                            <button onClick={() => setCurrentStep(0)} className="btn-secondary" style={{ padding: '1.2rem', borderRadius: '16px' }}>
-                              Enter System
-                            </button>
-                          )}
-                        </>
-                      ) : authView === 'manual-details' ? (
-                        <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>We need a few details before the OTP.</p>
-                           <input type="text" placeholder="Full Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="form-control" style={{ padding: '1rem', borderRadius: '12px' }} />
-                           <input type="email" placeholder="Email Address" value={emailForOtp} onChange={(e) => setEmailForOtp(e.target.value)} className="form-control" style={{ padding: '1rem', borderRadius: '12px' }} />
-                           <input type="tel" placeholder="Mobile Number" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="form-control" style={{ padding: '1rem', borderRadius: '12px' }} />
-                           <button className="btn-primary" style={{ width: '100%', padding: '1.1rem' }} onClick={async () => {
-                             if (!emailForOtp || !formData.name) return;
-                             const res = await fetch('/api/auth/send-otp', { method: 'POST', body: JSON.stringify({ email: emailForOtp }) });
-                             if (res.ok) setAuthView('otp');
-                           }}>Get OTP Code</button>
-                           <button onClick={() => setAuthView('intro')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Back</button>
-                        </div>
-                      ) : (
-                        <div style={{ textAlign: 'left' }}>
-                           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Check your email for the 6-digit code sent to {emailForOtp}</p>
-                           <input type="text" placeholder="######" value={otpCode} onChange={(e) => setOtpCode(e.target.value)} className="form-control" style={{ marginBottom: '1rem', padding: '1.2rem', textAlign: 'center', letterSpacing: '0.5em', fontSize: '1.4rem' }} autoFocus />
-                           <button className="btn-primary" style={{ width: '100%', padding: '1.1rem' }} onClick={async () => {
-                              const res = await signIn('credentials', { email: emailForOtp, otp: otpCode, redirect: false });
-                              if (res?.ok) setCurrentStep(0);
-                           }}>Verify & Start</button>
-                           <button onClick={() => setAuthView('manual-details')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '1.5rem', cursor: 'pointer' }}>Back to details</button>
-                        </div>
-                      )}
-                   </div>
-                </div>
-             </motion.div>
-          ) : (
             <motion.div
               key={currentStep}
               initial={{ opacity: 0, x: 20 }}
@@ -274,7 +203,6 @@ export default function PredictorPage() {
                 )}
               </div>
             </motion.div>
-          )}
         </AnimatePresence>
 
         {/* Navigation */}
