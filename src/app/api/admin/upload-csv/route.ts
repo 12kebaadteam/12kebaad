@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     if (!file) return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
     const text = await file.text();
-    const records = parse(text, { columns: true, skip_empty_lines: true }) as any[];
+    const records = parse(text, { columns: true, skip_empty_lines: true, bom: true }) as any[];
 
     const errors: any[] = [];
     let count = 0;

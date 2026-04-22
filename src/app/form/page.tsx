@@ -51,7 +51,6 @@ export default async function FormPage({
               We'll use this to recommend the best courses and colleges tailored for you.
             </p>
             <LoginButton />
-            <LoginButton />
           </div>
         )}
 

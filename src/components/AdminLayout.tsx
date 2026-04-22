@@ -1,17 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
-  LayoutDashboard, 
-  Map, 
-  Building2, 
-  Briefcase, 
-  UploadCloud, 
-  Users, 
-  Download, 
-  Settings,
-  LogOut
+  LayoutDashboard, Map, Building2, Briefcase, 
+  UploadCloud, Users, Settings, LogOut, Menu, X
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
@@ -29,16 +23,25 @@ const menuItems = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="admin-layout-container">
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#09090b', color: '#f8fafc', width: '100vw', overflowX: 'hidden' }}>
+      {/* Mobile Top Bar */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: '#09090b', borderBottom: '1px solid rgba(255,255,255,0.05)', position: 'fixed', top: 0, width: '100%', zIndex: 50 }} className="admin-mobile-header">
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--primary)' }}>12kebaad Admin</h2>
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ background: 'none', border: 'none', color: '#fff' }}>
+          {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
       {/* Sidebar */}
-      <aside className="admin-sidebar">
-        <div style={{ marginBottom: '1rem', padding: '0 0.5rem' }}>
+      <aside className={`admin-sidebar-minimal ${sidebarOpen ? 'open' : ''}`}>
+        <div style={{ marginBottom: '2rem', padding: '0 0.5rem' }} className="admin-desktop-logo">
           <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--primary)', letterSpacing: '-0.02em' }}>12kebaad Admin</h2>
         </div>
 
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', flex: 1 }}>
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
@@ -46,17 +49,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setSidebarOpen(false)}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '10px',
-                  textDecoration: 'none',
-                  fontSize: '0.9rem',
-                  color: active ? '#fff' : 'var(--text-muted)',
-                  background: active ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-                  border: active ? '1px solid rgba(59, 130, 246, 0.2)' : '1px solid transparent',
+                  display: 'flex', alignItems: 'center', gap: '0.8rem',
+                  padding: '0.7rem 1rem', borderRadius: '8px', textDecoration: 'none',
+                  fontSize: '0.9rem', color: active ? '#fff' : '#94a3b8',
+                  background: active ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+                  fontWeight: active ? '600' : '400',
                   transition: 'all 0.2s'
                 }}
               >
@@ -67,20 +66,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <button 
             onClick={() => signOut()}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              padding: '0.75rem 1rem',
-              borderRadius: '10px',
-              color: '#ef4444',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '0.9rem'
+              display: 'flex', alignItems: 'center', gap: '0.8rem',
+              padding: '0.7rem 1rem', borderRadius: '8px', color: '#ef4444',
+              background: 'transparent', border: 'none', cursor: 'pointer',
+              fontSize: '0.9rem', width: '100%', textAlign: 'left'
             }}
           >
             <LogOut size={18} /> Logout
@@ -89,9 +82,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content Area */}
-      <main className="admin-main">
-        {children}
+      <main className="admin-main-minimal">
+        <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+          {children}
+        </div>
       </main>
+
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div 
+          onClick={() => setSidebarOpen(false)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 40, backdropFilter: 'blur(2px)' }} 
+          className="admin-backdrop"
+        />
+      )}
     </div>
   );
 }

@@ -11,6 +11,11 @@ export default async function QuestionsPage({
   const c = await cookies()
   const userId = c.get('user_id')?.value
 
+  if (!userId) {
+    import('next/navigation').then(m => m.redirect('/form?callbackUrl=/questions'));
+    return null;
+  }
+
   // Fetch all answered questions (visible to everyone, no personal info)
   const answeredQuestions = await prisma.question.findMany({
     where: { isAnswered: true },

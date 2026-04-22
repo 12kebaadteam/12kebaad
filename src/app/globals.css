@@ -614,70 +614,49 @@ select.form-control {
   box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
 }
 
-/* ── Admin Layout ─────────────────────────────────────────────────── */
-.admin-sidebar {
+/* ── Admin Layout Minimalist ────────────────────────────────────────── */
+.admin-sidebar-minimal {
   width: 260px;
+  background: #09090b;
   border-right: 1px solid rgba(255,255,255,0.05);
-  padding: 2rem 1.5rem;
+  padding: 1.5rem 1.2rem;
   display: flex;
   flex-direction: column;
   position: sticky;
   top: 0;
   height: 100vh;
   z-index: 100;
-  background: #020617;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
 }
 
-.admin-main {
+.admin-main-minimal {
   flex: 1;
-  padding: 3rem;
+  padding: 2.5rem;
   width: 100%;
   min-height: 100vh;
 }
 
-.admin-layout-container {
-  display: flex;
-  min-height: 100vh;
-  background: #020617;
+.admin-mobile-header {
+  display: none !important;
 }
 
 @media (max-width: 1024px) {
-  .admin-sidebar {
-    width: 200px;
+  .admin-sidebar-minimal {
+    position: fixed;
+    transform: translateX(-100%);
+    z-index: 60;
   }
-  .admin-main {
-    padding: 2rem;
+  .admin-sidebar-minimal.open {
+    transform: translateX(0);
   }
-}
-
-@media (max-width: 768px) {
-  .admin-layout-container {
-    flex-direction: column;
+  .admin-main-minimal {
+    padding: 6rem 1.5rem 2rem 1.5rem; /* Space for mobile header */
   }
-  .admin-sidebar {
-    position: relative;
-    width: 100% !important;
-    height: auto;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 1rem;
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+  .admin-mobile-header {
+    display: flex !important;
   }
-  .admin-sidebar nav {
-    flex-direction: row !important;
-    gap: 0.5rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    flex: 1;
-  }
-  .admin-sidebar nav a {
-    white-space: nowrap;
-    padding: 0.5rem 0.75rem !important;
-  }
-  .admin-main {
-    margin-left: 0 !important;
-    padding: 1rem !important;
+  .admin-desktop-logo {
+    display: none;
   }
 }
