@@ -47,7 +47,7 @@ export default function QuizIntroPage() {
           Ready to find your path? Here's how to get the most accurate results from our decision engine.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem', textAlign: 'left' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '4rem', textAlign: 'left' }}>
           {tips.map((tip, index) => (
             <div key={index} className="glass-panel" style={{ padding: '2rem' }}>
               <div style={{ color: 'var(--accent)', marginBottom: '1rem' }}>

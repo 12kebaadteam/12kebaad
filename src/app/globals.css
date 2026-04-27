@@ -53,7 +53,7 @@ body {
 
 /* ── Layout ──────────────────────────────────────────────────────── */
 .main-content {
-  padding-top: var(--navbar-height);
+  padding-top: calc(var(--navbar-height) + 2rem);
   min-height: 100vh;
   max-width: 100%;
   margin: 0 auto;
@@ -272,6 +272,9 @@ body {
   cursor: pointer;
   padding: 0.5rem;
   display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
 }
 
 .mobile-menu-overlay {
@@ -369,17 +372,34 @@ body {
   background: var(--border);
 }
 
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.05);
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    MOBILE RESPONSIVE  (≤768px)
    ═══════════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   :root {
-    --navbar-height: 60px;
+    --navbar-height: 64px;
   }
 
   .hide-mobile { display: none !important; }
   .nav-desktop-links { display: none !important; }
-  .hamburger-btn { display: flex !important; align-items: center; }
+  .hamburger-btn { display: flex !important; }
   
   .hero-title {
     font-size: 1.8rem;
@@ -410,8 +430,9 @@ body {
   }
   
   .main-content {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-top: calc(var(--navbar-height) + 1.5rem);
+    padding-left: 1rem;
+    padding-right: 1rem;
     padding-bottom: 2rem;
   }
   

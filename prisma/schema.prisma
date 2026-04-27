@@ -24,10 +24,22 @@ model User {
   questions          Question[]
   comments           Comment[]
   feedbacks          Feedback[]
+  bookmarks          Bookmark[]
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @default(now()) @updatedAt
 
   @@index([email, mobile])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  careerId  String
+  career    Career   @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, careerId])
 }
 
 model UserPreference {
@@ -67,6 +79,7 @@ model Career {
   quizResults        QuizResult[]
   comments           Comment[]
   feedbacks          Feedback[]
+  bookmarks          Bookmark[]
   createdAt          DateTime            @default(now())
 }
 

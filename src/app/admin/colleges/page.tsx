@@ -21,13 +21,13 @@ export default async function AdminCollegesPage() {
 
       <div className="glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
         <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', gap: '1rem' }}>
-          <div style={{ position: 'relative', flex: 1 }}>
-            <Search size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+          <div style={{ position: 'relative', flex: 1, minHeight: '44px' }}>
+            <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none', zIndex: 1 }} />
             <input 
               type="text" 
               placeholder="Search colleges..." 
               className="form-control" 
-              style={{ paddingLeft: '2.5rem', background: 'transparent' }} 
+              style={{ paddingLeft: '2.8rem', height: '44px' }} 
             />
           </div>
           <button className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

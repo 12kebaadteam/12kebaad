@@ -17,9 +17,11 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { exportToPDF } from '@/lib/pdfExport'
+import { useSession } from 'next-auth/react'
 
 export default function ResultsPage() {
   const router = useRouter()
+  const { data: session } = useSession()
   const [results, setResults] = useState<any>(null)
   const [careers, setCareers] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -102,12 +104,20 @@ export default function ResultsPage() {
           if (!career) return null
 
           const isBookmarked = bookmarked.includes(career.id)
-          const toggleBookmark = () => {
+          const toggleBookmark = async () => {
             const updated = isBookmarked
               ? bookmarked.filter(id => id !== career.id)
               : [...bookmarked, career.id]
             setBookmarked(updated)
             localStorage.setItem('bookmarked_careers', JSON.stringify(updated))
+
+            if (session?.user?.id) {
+              await fetch('/api/user/bookmarks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ careerId: career.id, action: isBookmarked ? 'remove' : 'add' })
+              })
+            }
           }
 
           return (
