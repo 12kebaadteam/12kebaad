@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         isPositive,
         reason,
         careerId,
-        userId: session?.user?.id
+        userId: (session?.user as any)?.id
       }
     })
 

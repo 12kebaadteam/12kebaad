@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         text,
         careerId,
         courseId,
-        userId: session.user.id,
+        userId: (session.user as any).id,
         status: "PENDING"
       }
     })
