@@ -21,7 +21,7 @@ export default function HomePage() {
     <main className="full-screen-layout">
       {/* 2.2 Hero Section */}
       <section className="hero-section">
-        <div className="main-content" style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
+        <div style={{ paddingTop: '2rem', paddingBottom: '2rem', maxWidth: '1200px', margin: '0 auto', paddingLeft: '1rem', paddingRight: '1rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -68,16 +68,18 @@ export default function HomePage() {
       </section>
 
       {/* 2.4 Social Proof / Stats Strip */}
-      <section style={{ padding: '1rem 0', textAlign: 'center' }}>
+      <section style={{ padding: '1rem 1rem', textAlign: 'center' }}>
         <div style={{ 
           background: 'var(--primary)', 
           color: 'white', 
-          padding: '1.5rem 3rem', 
-          borderRadius: '32px',
+          padding: '1.5rem 1.5rem', 
+          borderRadius: '24px',
           display: 'inline-flex',
           justifyContent: 'center',
-          gap: '3rem',
+          gap: '2rem',
           flexWrap: 'wrap',
+          width: '100%',
+          maxWidth: '800px',
           boxShadow: '0 20px 40px rgba(30, 58, 95, 0.15)'
         }}>
           <div style={{ textAlign: 'center' }}>
@@ -200,14 +202,14 @@ export default function HomePage() {
       </section>
 
       {/* CTA Bottom Section */}
-      <section style={{ padding: '2rem 5%', textAlign: 'center' }}>
+      <section style={{ padding: '2rem 1rem', textAlign: 'center' }}>
         <div style={{ 
           maxWidth: '800px', 
           margin: '0 auto',
           background: 'var(--primary)', 
           color: 'white',
-          padding: '3rem 2rem',
-          borderRadius: '40px',
+          padding: '3rem 1.5rem',
+          borderRadius: '32px',
           boxShadow: '0 30px 60px rgba(30, 58, 95, 0.2)'
         }}>
           <h2 style={{ fontSize: '2.25rem', fontWeight: '800', marginBottom: '1rem' }}>

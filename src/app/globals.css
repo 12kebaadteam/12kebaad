@@ -258,11 +258,12 @@ body {
   .hide-mobile { display: none; }
   
   .hero-title {
-    font-size: 2.75rem;
+    font-size: 2.2rem;
   }
   
   .navbar-top {
     height: 64px;
+    padding: 0 1rem;
   }
   
   :root {
@@ -271,6 +272,19 @@ body {
   
   .grid-cards {
     grid-template-columns: 1fr;
+  }
+  
+  .main-content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .hero-section {
+    padding: 6rem 1rem 3rem 1rem;
+  }
+  
+  .glass-panel {
+    padding: 1.5rem;
   }
 }
 
