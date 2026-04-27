@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import { generateAIResponse } from "@/lib/ai"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
 
 export async function POST(req: NextRequest) {
   try {
@@ -38,19 +35,18 @@ export async function POST(req: NextRequest) {
       Career Data (Context): ${JSON.stringify(topCareers.map(c => ({ id: c.id, name: c.name, description: c.description })))}
       
       Return JSON: [{ 
-        careerId: string, 
-        matchScore: number (0-100), 
-        whyItFits: string (1-2 sentences, personalised), 
-        roadmapSummary: string (3-5 steps) 
+        "careerId": "string", 
+        "matchScore": 0-100, 
+        "whyItFits": "string", 
+        "roadmapSummary": "string" 
       }]
       
-      IMPORTANT: Only recommend careers that exist in the provided Career Data. Do not invent careers.
+      IMPORTANT: Only recommend careers that exist in the provided Career Data. Do not invent careers. Return valid JSON only.
     `
 
     let recommendations;
     try {
-      const result = await model.generateContent(prompt)
-      const aiResponse = result.response.text()
+      const aiResponse = await generateAIResponse(prompt);
       const cleanedJson = aiResponse.replace(/```json|```/g, "").trim()
       recommendations = JSON.parse(cleanedJson)
     } catch (aiError) {

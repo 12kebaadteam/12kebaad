@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { explainRecommendation } from "@/lib/gemini";
+import { explainRecommendation } from "@/lib/ai";
 
 export async function POST(req: NextRequest) {
   try {
