@@ -52,8 +52,8 @@ export default function NavBar() {
         </div>
 
         {/* Right Side - Search + Auth */}
-        <div className="nav-right" style={{ flexShrink: 0 }}>
-          <div className="hide-mobile" style={{ marginRight: '1rem' }}>
+        <div className="nav-right" style={{ flexShrink: 0, overflow: 'hidden' }}>
+          <div className="hide-mobile">
             <SearchBar />
           </div>
           
@@ -110,9 +110,12 @@ export default function NavBar() {
       {mobileOpen && (
         <div className="mobile-menu-overlay" onClick={() => setMobileOpen(false)}>
           <div className="mobile-menu-panel" onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <span className="logo-text">12kebaad</span>
-              <button className="hamburger-btn" onClick={() => setMobileOpen(false)}>
+              <button 
+                onClick={() => setMobileOpen(false)} 
+                style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', padding: '0.5rem' }}
+              >
                 <X size={24} />
               </button>
             </div>

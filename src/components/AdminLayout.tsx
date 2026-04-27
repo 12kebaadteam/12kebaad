@@ -118,18 +118,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         @media (max-width: 1024px) {
           .admin-sidebar-minimal {
             position: fixed !important;
+            left: 0;
+            top: 0;
+            bottom: 0;
             transform: translateX(-100%);
             background: #fff;
+            z-index: 200 !important;
+            width: 260px !important;
           }
           .admin-sidebar-minimal.open {
             transform: translateX(0);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.15);
           }
           .admin-mobile-header {
             display: flex !important;
           }
           .admin-main-minimal {
-            padding: 6rem 1.5rem 2rem 1.5rem !important;
-            max-width: 100vw !important;
+            padding: 5rem 1rem 2rem 1rem !important;
+            width: 100% !important;
           }
           .admin-desktop-logo {
             display: none !important;

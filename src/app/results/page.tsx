@@ -24,6 +24,7 @@ export default function ResultsPage() {
   const [careers, setCareers] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [exporting, setExporting] = useState(false)
+  const [bookmarked, setBookmarked] = useState<string[]>([])
 
   const handleExport = async () => {
     setExporting(true)
@@ -38,6 +39,10 @@ export default function ResultsPage() {
       return
     }
     setResults(data)
+    
+    // Load bookmarks from localStorage
+    const saved = JSON.parse(localStorage.getItem('bookmarked_careers') || '[]')
+    setBookmarked(saved)
 
     const fetchCareerDetails = async () => {
       const ids = data.recommendations.map((r: any) => r.careerId)
@@ -61,40 +66,49 @@ export default function ResultsPage() {
   if (loading) return null
 
   return (
-    <div className="main-content" style={{ maxWidth: '100%' }}>
+    <div className="main-content" style={{ maxWidth: '900px', margin: '0 auto' }}>
       <OnboardingProgress currentStep={7} />
 
-      <div style={{ marginTop: '4rem', marginBottom: '4rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem' }}>
+      <div style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <p style={{ color: 'var(--accent)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
+            <p style={{ color: 'var(--accent)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.25rem', fontSize: '0.85rem' }}>
               Your Results Are Ready
             </p>
-            <h1 style={{ fontSize: '3rem', fontWeight: '800', color: 'var(--primary)' }}>
+            <h1 style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--primary)' }}>
               My Top 10 Career Matches
             </h1>
           </div>
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             <button 
               onClick={handleExport}
               disabled={exporting}
               className="btn-secondary" 
-              style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }}
+              style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}
             >
-              <Download size={18} style={{ marginRight: '8px' }} /> 
+              <Download size={16} style={{ marginRight: '6px' }} /> 
               {exporting ? 'Generating...' : 'Download PDF'}
             </button>
-            <Link href="/quiz-intro" className="btn-primary" style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }}>
+            <Link href="/quiz-intro" className="btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>
               Retake Quiz
             </Link>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {results.recommendations.map((rec: any, idx: number) => {
           const career = careers.find(c => c.id === rec.careerId)
           if (!career) return null
+
+          const isBookmarked = bookmarked.includes(career.id)
+          const toggleBookmark = () => {
+            const updated = isBookmarked
+              ? bookmarked.filter(id => id !== career.id)
+              : [...bookmarked, career.id]
+            setBookmarked(updated)
+            localStorage.setItem('bookmarked_careers', JSON.stringify(updated))
+          }
 
           return (
             <motion.div
@@ -110,24 +124,23 @@ export default function ResultsPage() {
                 flexDirection: 'column'
               }}
             >
-              {/* Card Header */}
-              <div style={{ padding: '2rem', display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+            <div style={{ padding: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 {/* Rank Badge */}
                 <div style={{ 
-                  width: '80px', height: '80px', 
+                  width: '60px', height: '60px', 
                   background: 'var(--bg-offset)', 
-                  borderRadius: '20px', 
+                  borderRadius: '14px', 
                   display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                   border: '1px solid var(--border)',
                   flexShrink: 0
                 }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)' }}>RANK</span>
-                  <span style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--primary)' }}>#{idx + 1}</span>
+                  <span style={{ fontSize: '0.65rem', fontWeight: '800', color: 'var(--text-muted)' }}>RANK</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)' }}>#{idx + 1}</span>
                 </div>
 
-                <div style={{ flex: '1', minWidth: '300px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                    <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--primary)' }}>
+                <div style={{ flex: '1', minWidth: 0 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <h2 style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--primary)' }}>
                       {career.name}
                     </h2>
                     <div style={{ 
@@ -185,16 +198,22 @@ export default function ResultsPage() {
                   </div>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <button style={{ 
-                    background: 'none', border: '1px solid var(--border)', 
-                    padding: '0.6rem', borderRadius: '12px', color: 'var(--text-muted)',
-                    cursor: 'pointer'
-                  }}>
-                    <Bookmark size={20} />
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <button 
+                    onClick={toggleBookmark}
+                    style={{ 
+                      background: isBookmarked ? 'rgba(30, 58, 95, 0.1)' : 'none', 
+                      border: '1px solid var(--border)', 
+                      padding: '0.5rem', borderRadius: '10px', 
+                      color: isBookmarked ? 'var(--primary)' : 'var(--text-muted)',
+                      cursor: 'pointer'
+                    }}
+                    title={isBookmarked ? 'Remove bookmark' : 'Bookmark this career'}
+                  >
+                    <Bookmark size={18} fill={isBookmarked ? 'currentColor' : 'none'} />
                   </button>
-                  <Link href={`/career/${career.slug || career.id}`} className="btn-primary" style={{ padding: '0.6rem 1.5rem', fontSize: '0.9rem' }}>
-                    View Full Roadmap <ChevronRight size={18} />
+                  <Link href={`/career/${career.slug || career.id}`} className="btn-primary" style={{ padding: '0.5rem 1.2rem', fontSize: '0.85rem' }}>
+                    View Roadmap <ChevronRight size={16} />
                   </Link>
                 </div>
               </div>

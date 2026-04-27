@@ -20,18 +20,15 @@ export const metadata: Metadata = {
     "best degrees for science students", "commerce career paths", "arts and humanities courses",
     "CUET coaching guidance", "JEE NEET alternatives", "management courses after 12th",
     "medical courses without NEET", "engineering entrance exams 2025", "government colleges India",
-    "private university reviews India", "career counseling for 12th students", "what to do after school",
-    "diploma courses after 12th", "short term professional courses", "skill based learning India",
-    "higher education roadmap", "subject choice help India", "PCM career options", 
+    "career counseling for 12th students", "what to do after school",
+    "diploma courses after 12th", "PCM career options", 
     "PCB career options", "commerce with maths jobs", "humanities scope in India",
-    "vocational training programs", "online courses after 12th", "national level entrance tests",
-    "state level entrance exams", "top 10 courses after 12th", "12kebaad career portal",
     "career predictor after 12th", "personalized career plan", "college matching engine",
-    "best jobs for PCM students", "best salary PCB courses", "careers in design after 12th",
-    "gaming and animation courses India", "aviation and pilot training guide", "data science after 12th",
-    "BCA vs BTech choice help", "legal careers after 12th", "CLAT preparation help",
-    "journalism courses India", "sports management degrees", "entrepreneurship for students",
-    "liberal arts colleges India", "study abroad after 12th guide", "career decision engine"
+    "CA after 12th commerce", "fintech career guide", "stock market career",
+    "marketing career after 12th", "e-commerce business after 12th",
+    "chartered accountant path", "banking career guide India",
+    "data science after 12th", "BCA vs BTech", "aviation pilot training guide",
+    "career decision engine", "best colleges India 2026"
   ],
   metadataBase: new URL("https://12kebaad.in"),
   verification: {
@@ -58,12 +55,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+      </head>
       <body>
         <Providers>
           <NavBar />
-          <main className="main-content">
+          <div style={{ paddingTop: 0 }}>
             {children}
-          </main>
+          </div>
           <Footer />
           <CookieConsent />
         </Providers>

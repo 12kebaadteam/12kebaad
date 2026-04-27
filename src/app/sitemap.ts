@@ -8,14 +8,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const colleges = await prisma.college.findMany({ select: { id: true } })
   const careers = await prisma.career.findMany({ select: { id: true, slug: true } })
   const entranceTests = await prisma.entranceTest.findMany({ select: { id: true } })
+  const courses = await prisma.course.findMany({ select: { id: true } })
+  const professionalCourses = await prisma.professionalCourse.findMany({ select: { id: true } })
 
   const mainRoutes = [
     '',
     '/quiz-intro',
     '/careers',
+    '/colleges',
+    '/courses',
+    '/entrance-tests',
+    '/professional-courses',
     '/about',
     '/terms',
     '/privacy',
+    '/feedback',
     '/courses-after-12th',
     '/courses-after-12th-science',
     '/courses-after-12th-commerce',
@@ -49,10 +56,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
+  const courseRoutes = courses.map(c => ({
+    url: `${baseUrl}/course/${c.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
+  const profCourseRoutes = professionalCourses.map(c => ({
+    url: `${baseUrl}/professional-course/${c.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
   return [
     ...mainRoutes,
     ...collegeRoutes,
     ...careerRoutes,
+    ...courseRoutes,
     ...testRoutes,
+    ...profCourseRoutes,
   ]
 }

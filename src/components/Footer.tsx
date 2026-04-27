@@ -5,9 +5,9 @@ export default function Footer() {
     <footer style={{ 
       background: 'var(--bg-offset)', 
       borderTop: '1px solid var(--border)',
-      padding: '5rem 5% 3rem 5%'
+      padding: '3rem 1rem 2rem 1rem'
     }}>
-      <div style={{ maxWidth: '100%', width: '100%' }}>
+      <div style={{ maxWidth: '1100px', width: '100%', margin: '0 auto' }}>
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 

@@ -46,23 +46,23 @@ export default function CareerDetailClient() {
   if (!career) return <div>Career not found</div>
 
   return (
-    <div className="main-content" style={{ maxWidth: '100%' }}>
+    <div className="main-content" style={{ maxWidth: '900px', margin: '0 auto' }}>
       <Link href="/results" className="back-link">
         <ArrowLeft size={16} style={{ marginRight: '8px', verticalAlign: 'middle' }} /> Back to recommendations
       </Link>
 
       {/* Header */}
-      <section style={{ marginBottom: '4rem' }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1.5rem', lineHeight: '1.1' }}>
+      <section style={{ marginBottom: '2rem' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1rem', lineHeight: '1.2' }}>
           {career.name}
         </h1>
-        <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', lineHeight: '1.6' }}>
+        <p style={{ fontSize: '1.05rem', color: 'var(--text-muted)', lineHeight: '1.6' }}>
           {career.description}
         </p>
       </section>
 
       {/* At a Glance */}
-      <div className="glass-panel" style={{ padding: '2.5rem', marginBottom: '4rem', background: 'var(--bg-offset)' }}>
+      <div className="glass-panel" style={{ marginBottom: '2rem', background: 'var(--bg-offset)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '2rem' }}>
           <div>
             <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>SALARY RANGE</p>
@@ -84,10 +84,10 @@ export default function CareerDetailClient() {
       </div>
 
       {/* Roadmap Section */}
-      <section style={{ marginBottom: '6rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '3rem' }}>
-          <Map size={32} style={{ color: 'var(--accent)' }} />
-          <h2 style={{ fontSize: '2.25rem', fontWeight: '800', color: 'var(--primary)' }}>Your Success Roadmap</h2>
+      <section style={{ marginBottom: '3rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
+          <Map size={24} style={{ color: 'var(--accent)' }} />
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)' }}>Your Success Roadmap</h2>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', position: 'relative', paddingLeft: '2rem' }}>
@@ -122,7 +122,7 @@ export default function CareerDetailClient() {
       </section>
 
       {/* Details Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '3rem', marginBottom: '6rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
         <div>
           <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Sparkles size={20} style={{ color: 'var(--accent)' }} /> Key Skills Required
@@ -151,12 +151,12 @@ export default function CareerDetailClient() {
       </div>
 
       {/* Typical Day */}
-      <section style={{ marginBottom: '6rem' }}>
-        <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1.5rem' }}>
+      <section style={{ marginBottom: '3rem' }}>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1rem' }}>
           A Typical Day in This Career
         </h3>
-        <div className="glass-panel" style={{ padding: '2rem' }}>
-          <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', fontSize: '1.1rem' }}>
+        <div className="glass-panel">
+          <p style={{ color: 'var(--text-muted)', lineHeight: '1.7', fontSize: '0.95rem' }}>
             As a {career.name}, your day typically begins with {career.stream === 'Science' ? 'analyzing technical data and coordination meetings.' : 'strategic planning and client interactions.'} You'll spend most of your time solving complex problems and collaborating with team members. No two days are exactly alike, making it a dynamic and fulfilling choice for those who love to learn.
           </p>
         </div>
@@ -185,25 +185,25 @@ export default function CareerDetailClient() {
       {/* CTA Section */}
       <section style={{ 
         background: 'var(--primary)', 
-        padding: '4rem', 
-        borderRadius: '32px', 
+        padding: '2rem 1.5rem', 
+        borderRadius: '20px', 
         textAlign: 'center', 
         color: '#fff',
-        marginBottom: '6rem'
+        marginBottom: '3rem'
       }}>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1.5rem' }}>This could be your future.</h2>
-        <p style={{ opacity: 0.9, fontSize: '1.1rem', marginBottom: '2.5rem', maxWidth: '600px', margin: '0 auto 2.5rem auto' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '0.75rem' }}>This could be your future.</h2>
+        <p style={{ opacity: 0.9, fontSize: '0.95rem', maxWidth: '500px', margin: '0 auto' }}>
           Save this career to your profile or download the full report to share with your parents or mentors.
         </p>
       </section>
 
       {/* Related Careers - Internal Linking Boost */}
       {career.related?.length > 0 && (
-        <section style={{ marginBottom: '6rem' }}>
+        <section style={{ marginBottom: '3rem' }}>
           <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '2rem' }}>
             Similar Career Paths
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
             {career.related.map((rel: any) => (
               <Link 
                 key={rel.id} 
@@ -223,15 +223,8 @@ export default function CareerDetailClient() {
       )}
 
       {/* Feedback & Comments */}
-      <section style={{ marginBottom: '6rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '3rem' }}>
+      <section style={{ marginBottom: '3rem' }}>
         <FeedbackSection careerId={career.id} />
-        <div>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1rem' }}>Expert Consultation</h3>
-          <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '1.5rem' }}>
-            Need more specific advice? Connect with our career mentors for a personalized 1-on-1 session.
-          </p>
-          <button className="btn-secondary" style={{ width: '100%' }}>Book a Call</button>
-        </div>
       </section>
 
       <CommentSection careerId={career.id} />

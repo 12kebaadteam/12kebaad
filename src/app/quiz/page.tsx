@@ -83,42 +83,42 @@ export default function QuizPage() {
         </h1>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+      <div className="quiz-options-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
         <AnimatePresence mode="wait">
           {[c1, c2].map((career, idx) => (
             <motion.div
               key={`${currentRound}-${career.id}`}
-              initial={{ opacity: 0, x: idx === 0 ? -20 : 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: idx === 0 ? -15 : 15 }}
+              animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -3 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleSelect(career.id)}
               className="glass-panel"
               style={{ 
                 cursor: 'pointer', 
-                padding: '3rem 2rem',
+                padding: '2rem 1.5rem',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                minHeight: '400px',
+                minHeight: '250px',
                 border: '2px solid transparent',
                 textAlign: 'center'
               }}
             >
               <div>
-                <h2 style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1.5rem' }}>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1rem' }}>
                   {career.name}
                 </h2>
-                <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '2rem' }}>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.5', marginBottom: '1.5rem' }}>
                   {career.description.substring(0, 100)}...
                 </p>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <span style={{ 
                     background: 'var(--bg-offset)', 
-                    padding: '0.5rem 1rem', 
+                    padding: '0.4rem 0.8rem', 
                     borderRadius: '99px', 
-                    fontSize: '0.85rem', 
+                    fontSize: '0.8rem', 
                     fontWeight: '600' 
                   }}>
                     ₹{career.salaryRangeMin}L - ₹{career.salaryRangeMax}L /yr
@@ -126,22 +126,22 @@ export default function QuizPage() {
                   <span style={{ 
                     background: 'rgba(232, 99, 10, 0.1)', 
                     color: 'var(--accent)',
-                    padding: '0.5rem 1rem', 
+                    padding: '0.4rem 0.8rem', 
                     borderRadius: '99px', 
-                    fontSize: '0.85rem', 
+                    fontSize: '0.8rem', 
                     fontWeight: '600',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.4rem'
+                    gap: '0.3rem'
                   }}>
-                    <TrendingUp size={16} /> High Demand
+                    <TrendingUp size={14} /> High Demand
                   </span>
                 </div>
               </div>
               
-              <div style={{ marginTop: '3rem' }}>
-                <span style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '0.9rem' }}>
-                  Click to select
+              <div style={{ marginTop: '1.5rem' }}>
+                <span style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '0.85rem' }}>
+                  Tap to select →
                 </span>
               </div>
             </motion.div>
