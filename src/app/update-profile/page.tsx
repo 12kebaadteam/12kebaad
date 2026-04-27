@@ -63,28 +63,19 @@ export default async function UpdateProfilePage({
             )}
           </div>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <button type="submit" className="btn-primary">Save &amp; Browse Courses</button>
+            <button type="submit" className="btn-primary">Save &amp; Browse Careers</button>
             <a href="/colleges" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', alignSelf: 'center', textDecoration: 'none' }}>
-              Browse Colleges instead →
+              Explore Colleges instead →
             </a>
           </div>
         </form>
 
         {(currentState || currentStream) ? (
           <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '1.5rem', borderTop: '1px solid var(--glass-border)', paddingTop: '1rem' }}>
-            Current: <strong style={{ color: 'var(--text-main)' }}>{currentState || 'All States'}</strong> ·{' '}
+            Current Preference: <strong style={{ color: 'var(--text-main)' }}>{currentState || 'All States'}</strong> ·{' '}
             <strong style={{ color: 'var(--text-main)' }}>{currentStream || 'All Streams'}</strong>
           </p>
         ) : null}
-        <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(239,68,68,0.2)', paddingTop: '2rem' }}>
-          <h4 style={{ color: '#ef4444', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Danger Zone</h4>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '1rem' }}>
-            Permanently delete your account and all associated career preferences. This action cannot be undone.
-          </p>
-          <a href="/delete-data" className="btn-secondary" style={{ color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)', padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>
-            Delete My Data Completely
-          </a>
-        </div>
       </div>
     </div>
   )

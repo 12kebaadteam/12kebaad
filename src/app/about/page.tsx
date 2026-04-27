@@ -8,7 +8,7 @@ export default function AboutPage() {
           <strong>12kebaad</strong> is a professional guidance platform, a proud <span style={{ color: "var(--accent)", fontWeight: "bold" }}>Product of MyPaperTrail</span>.
         </p>
         <p style={{ color: "var(--text-muted)", marginBottom: "2rem", lineHeight: "1.8" }}>
-          We were created with a single vision: to help guide students who have completed their 12th grade to choose the optimal course and career path. The abundance of choices can often be overwhelming, and we aim to simplify the process using factual, direct, and well-organized data. We believe a better informed student makes better career decisions.
+          We were created with a single vision: to help guide students who have completed their 12th grade to choose the optimal career path. The abundance of choices can often be overwhelming, and we aim to simplify the process using factual, direct, and well-organized data regarding careers and institutions. We believe a better informed student makes better career decisions.
         </p>
 
         <h2 style={{ marginBottom: "1rem", color: "var(--accent)" }}>The Founders</h2>
@@ -25,7 +25,7 @@ export default function AboutPage() {
 
         <h2 style={{ marginBottom: "1rem", color: "var(--primary)" }}>Contact & Feedback</h2>
         <p style={{ color: "var(--text-muted)" }}>
-          We are constantly improving 12kebaad. If you have any feedback or want to suggest new colleges/courses, please reach out to us:
+          We are constantly improving 12kebaad. If you have any feedback or want to suggest new colleges or career paths, please reach out to us:
         </p>
         <a href="mailto:12kebaad.team@gmail.com" className="btn-primary" style={{ marginTop: "1rem", display: "inline-block" }}>
           Email Feedback (12kebaad.team@gmail.com)

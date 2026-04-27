@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Ultimate Guide: Best Courses After 12th in India (2024-25)",
+  title: "Ultimate Guide: Best Career Options After 12th in India (2024-25)",
   description: "Comprehensive guide to career options after 12th science, commerce, and arts. Find high-salary courses, top colleges, and expert career advice.",
-  keywords: ["what to do after 12th", "best courses after 12th", "career options after 12th", "high salary courses after 12th"],
+  keywords: ["what to do after 12th", "best career options after 12th", "career options after 12th", "high salary career options after 12th"],
 }
 
 export default function CoursesAfter12thPage() {
@@ -12,7 +12,7 @@ export default function CoursesAfter12thPage() {
     <div className="animate-fade-in" style={{ maxWidth: '900px', margin: '0 auto', paddingBottom: '4rem' }}>
       <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h1 style={{ fontSize: '2.5rem', background: 'linear-gradient(135deg, var(--primary), var(--accent))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem' }}>
-          Beyond the Boards: The Ultimate Guide to Courses After 12th
+          Beyond the Boards: The Ultimate Guide to Career Options After 12th
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto' }}>
           Navigating the transition from school to professional excellence. A panoramic view of the most promising paths across all streams in 2024-25.

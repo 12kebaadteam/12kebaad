@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Best Courses After 12th Arts In India 2024-25 | Law, Design, BJMC",
+  title: "Best Career Options After 12th Arts In India 2024-25 | Law, Design, BJMC",
   description: "Creativity meets career in the arts stream. Explore BA LLB, Design, Journalism, Psychology, and Hotel Management. High-salary creative career pathways revealed.",
-  keywords: ["courses after 12th arts", "best arts courses", "career options after 12th humanities", "creative arts career"],
+  keywords: ["career options after 12th arts", "best arts career paths", "career options after 12th humanities", "creative arts career"],
 }
 
 export default function CoursesArtsPage() {
@@ -12,7 +12,7 @@ export default function CoursesArtsPage() {
     <div className="animate-fade-in" style={{ maxWidth: '900px', margin: '0 auto', paddingBottom: '4rem' }}>
       <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h1 style={{ fontSize: '2.5rem', background: 'linear-gradient(135deg, #f59e0b, #fbbf24)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem' }}>
-          Creativity Meets Career: Courses After 12th Arts
+          Creativity Meets Career: Career Options After 12th Arts
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '750px', margin: '0 auto' }}>
           Arts and Humanities are the breeding grounds for the world's most creative and influential professionals. From justice to design, the landscape is vast and vibrant.

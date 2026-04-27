@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Top Courses After 12th Science In India 2024-25 | PCM & PCB Guide",
+  title: "Top Career Options After 12th Science In India 2024-25 | PCM & PCB Guide",
   description: "Comprehensive guide for science students after 12th. Explore engineering, medical, pure sciences, and high-salary niche careers like aviation.",
-  keywords: ["courses after 12th science", "best courses after 12th pcm", "high salary courses after 12th pcb", "engineering vs medical"],
+  keywords: ["career options after 12th science", "best career options after 12th pcm", "high salary career options after 12th pcb", "engineering vs medical"],
 }
 
 export default function CoursesSciencePage() {
@@ -12,7 +12,7 @@ export default function CoursesSciencePage() {
     <div className="animate-fade-in" style={{ maxWidth: '900px', margin: '0 auto', paddingBottom: '4rem' }}>
       <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h1 style={{ fontSize: '2.5rem', background: 'linear-gradient(135deg, #3b82f6, #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem' }}>
-          Future-Proof Your Career: Courses After 12th Science
+          Future-Proof Your Career: Career Options After 12th Science
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto' }}>
           Explore the versatile and high-impact landscape of Science. High-paying paths in Engineering, Medical, Technology, and beyond.

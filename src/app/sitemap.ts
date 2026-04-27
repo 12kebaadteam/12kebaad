@@ -16,18 +16,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/quiz-intro',
     '/careers',
     '/colleges',
-    '/courses',
-    '/entrance-tests',
-    '/professional-courses',
     '/about',
     '/terms',
     '/privacy',
     '/feedback',
-    '/courses-after-12th',
-    '/courses-after-12th-science',
-    '/courses-after-12th-commerce',
-    '/courses-after-12th-arts',
-    '/high-salary-courses-after-12th',
   ].map(route => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
@@ -56,26 +48,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  const courseRoutes = courses.map(c => ({
-    url: `${baseUrl}/course/${c.id}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }))
-
-  const profCourseRoutes = professionalCourses.map(c => ({
-    url: `${baseUrl}/professional-course/${c.id}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
-
   return [
     ...mainRoutes,
     ...collegeRoutes,
     ...careerRoutes,
-    ...courseRoutes,
     ...testRoutes,
-    ...profCourseRoutes,
   ]
 }

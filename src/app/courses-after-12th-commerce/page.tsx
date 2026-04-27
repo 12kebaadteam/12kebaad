@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Professional Courses After 12th Commerce 2024-25 | CA, MBA, Fintech",
-  description: "Master the markets with the best courses after 12th commerce in India. Detailed guide on CA, BBA, B.Com Hons, Actuarial Science, and Investment Banking.",
-  keywords: ["courses after 12th commerce", "best commerce courses", "ca after 12th", "bba vs bcom"],
+  title: "Professional Career Options After 12th Commerce 2024-25 | CA, MBA, Fintech",
+  description: "Master the markets with the best career options after 12th commerce in India. Detailed guide on CA, BBA, B.Com Hons, Actuarial Science, and Investment Banking.",
+  keywords: ["career options after 12th commerce", "best commerce courses", "ca after 12th", "bba vs bcom"],
 }
 
 export default function CoursesCommercePage() {
@@ -12,7 +12,7 @@ export default function CoursesCommercePage() {
     <div className="animate-fade-in" style={{ maxWidth: '900px', margin: '0 auto', paddingBottom: '4rem' }}>
       <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h1 style={{ fontSize: '2.5rem', background: 'linear-gradient(135deg, #10b981, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem' }}>
-          Master of Markets: High-Salary Courses After 12th Commerce
+          Master of Markets: High-Salary Career Options After 12th Commerce
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '750px', margin: '0 auto' }}>
           Commerce is the heartbeat of the global economy. In 2024, it's a powerhouse of high-stakes careers in Fintech, Corporate Law, and Investment Banking.

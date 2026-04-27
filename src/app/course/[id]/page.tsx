@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title: `${course.title} Course | Best Colleges, Scope & Fees - 12kebaad`,
     description: `Complete guide for ${course.title} after 12th. Find the best colleges offering ${course.title}, eligibility criteria, and career prospects in the ${course.stream} stream.`,
-    keywords: [`${course.title} scope`, `${course.title} colleges`, `best courses after 12th ${course.stream}`, "career guidance"],
+    keywords: [`${course.title} scope`, `${course.title} colleges`, `best career options after 12th ${course.stream}`, "career guidance"],
   }
 }
 

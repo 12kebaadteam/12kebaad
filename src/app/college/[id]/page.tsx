@@ -9,9 +9,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const college = await prisma.college.findUnique({ where: { id } })
   if (!college) return { title: 'College Not Found' }
   return {
-    title: `${college.name} | Courses, Fees and Ranking - 12kebaad`,
-    description: `Details about ${college.name} in ${college.state}. Check fees, courses offered, and national ranking. Comprehensive guide for students after 12th.`,
-    keywords: [`${college.name} fees`, `${college.name} courses`, `top colleges in ${college.state}`, "career after 12th"],
+    title: `${college.name} | Specializations & Fees - 12kebaad`,
+    description: `Details about ${college.name} in ${college.state}. Explore top career specializations and placement opportunities. Comprehensive guide for students after 12th.`,
+    keywords: [`${college.name} placements`, `${college.name} specialties`, `top colleges in ${college.state}`, "career after 12th"],
   }
 }
 
@@ -65,13 +65,13 @@ export default async function CollegeDetailPage({
         </div>
       </div>
 
-      {/* Courses offered */}
+      {/* Career Specializations */}
       <div className="glass-panel animate-slide-up" style={{ marginBottom: '1.5rem' }}>
         <h2 style={{ color: 'var(--accent)', marginBottom: '1.2rem', fontSize: '1.1rem' }}>
-          Courses Offered ({college.courses.length})
+          Career Specializations ({college.courses.length})
         </h2>
         {college.courses.length === 0 ? (
-          <p style={{ color: 'var(--text-muted)' }}>No courses listed for this college yet.</p>
+          <p style={{ color: 'var(--text-muted)' }}>Specializations for this college are being updated.</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {college.courses.map(cc => (
@@ -79,9 +79,7 @@ export default async function CollegeDetailPage({
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
                   <div>
                     <h3 style={{ fontSize: '0.98rem', marginBottom: '0.3rem' }}>
-                      <Link href={`/course/${cc.courseId}`} style={{ color: 'var(--text-main)', textDecoration: 'none' }}>
-                        {cc.course.title}
-                      </Link>
+                      {cc.course.title}
                     </h3>
                     <span className="stream-badge">{cc.course.stream}</span>
                   </div>

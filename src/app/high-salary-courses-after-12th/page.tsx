@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Top 10 High Salary Courses After 12th in India (2024) | High ROI Guide",
+  title: "Top 10 High Salary Career Options After 12th in India (2024) | High ROI Guide",
   description: "Identify the most lucrative career paths after 12th. From Aviation and IITs to IPM and Investment Banking. Find courses that offer the best Return on Investment.",
-  keywords: ["high salary courses after 12th", "highest paying jobs in india after 12th", "roi courses after 12th", "commercial pilot salary india"],
+  keywords: ["high salary career options after 12th", "highest paying jobs in india after 12th", "roi career options after 12th", "commercial pilot salary india"],
 }
 
 export default function HighSalaryCoursesPage() {
@@ -12,7 +12,7 @@ export default function HighSalaryCoursesPage() {
     <div className="animate-fade-in" style={{ maxWidth: '900px', margin: '0 auto', paddingBottom: '4rem' }}>
       <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h1 style={{ fontSize: '2.5rem', background: 'linear-gradient(135deg, #ef4444, #f87171)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem' }}>
-          The Crore Club: Top 10 High-Salary Courses After 12th
+          The Crore Club: Top 10 High-Salary Career Options After 12th
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '750px', margin: '0 auto' }}>
           Success is often measured by both impact and income. Discover the premium paths with the highest Return on Investment (ROI) in modern India.

@@ -41,7 +41,7 @@ export default function SearchBar() {
           onChange={e => setQuery(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          placeholder="Search..."
+          placeholder="Search careers, colleges..."
           className="search-field"
           aria-label="Search"
         />
