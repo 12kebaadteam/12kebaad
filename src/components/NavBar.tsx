@@ -11,6 +11,7 @@ const links = [
   { href: '/', label: 'Home' },
   { href: '/quiz-intro', label: 'Career Quiz' },
   { href: '/careers', label: 'Browse Careers' },
+  { href: '/colleges', label: 'Top Colleges' },
   { href: '/about', label: 'About' },
 ]
 

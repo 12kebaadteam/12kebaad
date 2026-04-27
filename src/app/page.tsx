@@ -193,6 +193,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Colleges Section */}
+      <section style={{ padding: '4rem 1rem', maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h2 style={{ fontSize: '2rem', color: 'var(--primary)', fontWeight: '800' }}>Explore Top Colleges</h2>
+            <p style={{ color: 'var(--text-muted)' }}>Find the best institutions for your chosen career path.</p>
+          </div>
+          <Link href="/colleges" className="btn-secondary" style={{ padding: '0.6rem 1.5rem', fontSize: '0.9rem' }}>
+            View All Colleges
+          </Link>
+        </div>
+
+        <div className="grid-cards">
+          {[
+            { name: "Engineering Excellence", desc: "Top IITs, NITs and private universities for technical education.", count: "100+ Colleges" },
+            { name: "Business & Management", desc: "Premium IIMs and B-Schools for future leaders.", count: "50+ Colleges" },
+            { name: "Medical & Science", desc: "Leading medical colleges and research institutes.", count: "40+ Colleges" }
+          ].map((cat, i) => (
+            <Link href="/colleges" key={i} className="glass-panel" style={{ textDecoration: 'none', transition: 'all 0.3s' }}>
+              <p style={{ color: 'var(--accent)', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{cat.count}</p>
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--primary)', marginBottom: '0.75rem' }}>{cat.name}</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{cat.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* CTA Bottom Section */}
       <section style={{ padding: '2rem 1rem', textAlign: 'center' }}>
         <div style={{ 
