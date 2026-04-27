@@ -71,7 +71,7 @@ export default function QuizPage() {
   const [c1, c2] = pairs[currentRound]
 
   return (
-    <div className="main-content" style={{ maxWidth: '100%' }}>
+    <div style={{ maxWidth: '100%' }}>
       <OnboardingProgress currentStep={5} totalSteps={20} />
       
       <div style={{ marginTop: '2rem', textAlign: 'center', marginBottom: '3rem' }}>

@@ -32,7 +32,7 @@ export default function QuizIntroPage() {
   const router = useRouter()
 
   return (
-    <div className="main-content" style={{ maxWidth: '100%' }}>
+    <div style={{ maxWidth: '100%' }}>
       <OnboardingProgress currentStep={4} />
       
       <motion.div

@@ -81,11 +81,9 @@ export default async function UpdateProfilePage({
           <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '1rem' }}>
             Permanently delete your account and all associated career preferences. This action cannot be undone.
           </p>
-          <form action={deleteAccount}>
-            <button type="submit" style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)', padding: '0.6rem 1.2rem', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem' }}>
-              Delete My Data
-            </button>
-          </form>
+          <a href="/delete-data" className="btn-secondary" style={{ color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)', padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>
+            Delete My Data Completely
+          </a>
         </div>
       </div>
     </div>

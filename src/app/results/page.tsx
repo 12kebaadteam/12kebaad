@@ -68,7 +68,7 @@ export default function ResultsPage() {
   if (loading) return null
 
   return (
-    <div className="main-content" style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
       <OnboardingProgress currentStep={7} />
 
       <div style={{ marginTop: '2rem', marginBottom: '2rem' }}>

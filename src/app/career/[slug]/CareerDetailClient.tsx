@@ -46,7 +46,7 @@ export default function CareerDetailClient() {
   if (!career) return <div>Career not found</div>
 
   return (
-    <div className="main-content" style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
       <Link href="/results" className="back-link">
         <ArrowLeft size={16} style={{ marginRight: '8px', verticalAlign: 'middle' }} /> Back to recommendations
       </Link>

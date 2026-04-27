@@ -61,9 +61,9 @@ export default function RootLayout({
       <body>
         <Providers>
           <NavBar />
-          <div style={{ paddingTop: 0 }}>
+          <main className="main-content">
             {children}
-          </div>
+          </main>
           <Footer />
           <CookieConsent />
         </Providers>
