@@ -15,7 +15,7 @@ export default async function EntranceTestDetailPage({
   if (!test) notFound()
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '860px', margin: '0 auto' }}>
+    <div className="main-content animate-fade-in" style={{ maxWidth: '900px', margin: '0 auto' }}>
       <Link href="/entrance-tests" className="back-link">← Back to all entrance tests</Link>
 
       {/* Header */}

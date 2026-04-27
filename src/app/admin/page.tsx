@@ -1,6 +1,7 @@
 import AdminLayout from "@/components/AdminLayout";
 import prisma from "@/lib/prisma";
-import { Briefcase, Building2, Users, MousePointer2 } from "lucide-react";
+import { Briefcase, Building2, Users, MousePointer2, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 export default async function AdminDashboard() {
   const [careersCount, collegesCount, usersCount, leadsCount] = await Promise.all([
@@ -19,39 +20,73 @@ export default async function AdminDashboard() {
 
   return (
     <AdminLayout>
-      <div style={{ marginBottom: '4rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '0.75rem', letterSpacing: '-0.03em' }}>Overview</h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Welcome back, here's what's happening today.</p>
+      <div style={{ marginBottom: '3rem' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '0.5rem', letterSpacing: '-0.04em' }}>
+          Dashboard Overview
+        </h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Welcome back. Here's what's happening on 12kebaad today.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.name} className="glass-panel" style={{ padding: '2rem', display: 'flex', alignItems: 'center', gap: '1.5rem', borderRadius: '24px' }}>
+            <div key={stat.name} className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ 
-                padding: '1.25rem', 
-                borderRadius: '16px', 
-                background: `rgba(${stat.color === 'var(--primary)' ? '59, 130, 246' : '139, 92, 246'}, 0.1)`, 
-                color: stat.color 
+                width: '48px', height: '48px',
+                borderRadius: '12px', 
+                background: `${stat.color}15`, 
+                color: stat.color,
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
-                <Icon size={28} strokeWidth={2.5} />
+                <Icon size={24} strokeWidth={2.5} />
               </div>
               <div>
-                <div style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.name}</div>
-                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#fff' }}>{stat.value}</div>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: '600', marginBottom: '0.25rem' }}>{stat.name}</p>
+                <h3 style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--primary)' }}>{stat.value}</h3>
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="glass-panel" style={{ padding: '2rem' }}>
-        <h3 style={{ marginBottom: '1.5rem' }}>Quick Actions</h3>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <button className="btn-primary">Add New Career</button>
-          <button className="btn-secondary">Check New Leads</button>
-          <button className="btn-secondary">System Audit</button>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem' }}>
+        {/* Quick Actions */}
+        <div className="glass-panel" style={{ padding: '2rem' }}>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--primary)', marginBottom: '1.5rem' }}>Quick Actions</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <Link href="/admin/careers" className="btn-primary" style={{ padding: '0.75rem', fontSize: '0.9rem' }}>
+              Manage Careers
+            </Link>
+            <Link href="/admin/uploads" className="btn-secondary" style={{ padding: '0.75rem', fontSize: '0.9rem', borderColor: 'var(--border)' }}>
+              Upload CSV
+            </Link>
+            <Link href="/admin/users" className="btn-secondary" style={{ padding: '0.75rem', fontSize: '0.9rem', borderColor: 'var(--border)' }}>
+              View Leads
+            </Link>
+            <Link href="/admin/questions" className="btn-secondary" style={{ padding: '0.75rem', fontSize: '0.9rem', borderColor: 'var(--border)' }}>
+              Q&A Manager
+            </Link>
+          </div>
+        </div>
+
+        {/* System Health */}
+        <div className="glass-panel" style={{ padding: '2rem' }}>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--primary)', marginBottom: '1.5rem' }}>System Status</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>Database</span>
+              <span style={{ color: 'var(--success)', fontWeight: '700', fontSize: '0.9rem' }}>Connected</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>AI Engine</span>
+              <span style={{ color: 'var(--success)', fontWeight: '700', fontSize: '0.9rem' }}>Active</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>Last CSV Upload</span>
+              <span style={{ color: 'var(--text-main)', fontWeight: '600', fontSize: '0.9rem' }}>2 hours ago</span>
+            </div>
+          </div>
         </div>
       </div>
     </AdminLayout>

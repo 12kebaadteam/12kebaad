@@ -7,6 +7,7 @@ import { UploadCloud, FileText, CheckCircle2, AlertCircle, Trash2 } from "lucide
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [type, setType] = useState<"careers" | "colleges">("colleges");
+  const [wipe, setWipe] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState<any>(null);
 
@@ -18,6 +19,7 @@ export default function UploadPage() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("type", type);
+    formData.append("wipe", wipe.toString());
 
     try {
       const res = await fetch("/api/admin/upload-csv", {
@@ -139,6 +141,23 @@ export default function UploadPage() {
                 Careers
               </button>
             </div>
+          </div>
+
+          <div className="glass-panel" style={{ background: wipe ? 'rgba(239, 68, 68, 0.05)' : 'transparent' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.9rem' }}>
+              <input 
+                type="checkbox" 
+                checked={wipe} 
+                onChange={(e) => setWipe(e.target.checked)}
+                style={{ width: '18px', height: '18px' }}
+              />
+              <span style={{ fontWeight: '600', color: wipe ? '#ef4444' : 'inherit' }}>Wipe existing data</span>
+            </label>
+            {wipe && (
+              <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.5rem', fontWeight: '500' }}>
+                Warning: This will delete all current {type} records before uploading.
+              </p>
+            )}
           </div>
 
           <button 

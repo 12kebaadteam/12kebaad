@@ -1,199 +1,249 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { TrendingUp, BarChart3, MapPin, Briefcase, ChevronRight, Award } from "lucide-react";
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
+import OnboardingProgress from '@/components/OnboardingProgress'
+import { 
+  TrendingUp, 
+  Map, 
+  Download, 
+  Bookmark, 
+  ChevronRight, 
+  Star,
+  Zap,
+  Target,
+  Globe
+} from 'lucide-react'
+import Link from 'next/link'
+import { exportToPDF } from '@/lib/pdfExport'
 
 export default function ResultsPage() {
-  const [results, setResults] = useState<any[]>([]);
+  const router = useRouter()
+  const [results, setResults] = useState<any>(null)
+  const [careers, setCareers] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [exporting, setExporting] = useState(false)
 
-  useEffect(() => {
-    const saved = sessionStorage.getItem("career_results");
-    if (saved) setResults(JSON.parse(saved));
-  }, []);
-
-  if (results.length === 0) {
-    return (
-      <main className="main-content" style={{ textAlign: 'center', paddingTop: '10rem' }}>
-        <h2>No paths yet.</h2>
-        <Link href="/predictor" className="btn-primary" style={{ marginTop: '2rem' }}>Start Predictor</Link>
-      </main>
-    );
+  const handleExport = async () => {
+    setExporting(true)
+    await exportToPDF('results-report', '12kebaad-career-report.pdf')
+    setExporting(false)
   }
 
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem('quiz_results') || 'null')
+    if (!data) {
+      router.push('/')
+      return
+    }
+    setResults(data)
+
+    const fetchCareerDetails = async () => {
+      const ids = data.recommendations.map((r: any) => r.careerId)
+      try {
+        const res = await fetch(`/api/careers/batch`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ids })
+        })
+        const careerData = await res.json()
+        setCareers(careerData)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCareerDetails()
+  }, [])
+
+  if (loading) return null
+
   return (
-    <main className="main-content">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="hero-section"
-        style={{ textAlign: 'center', marginBottom: '4rem' }}
-      >
-        <h1 className="hero-title" style={{ fontSize: '3rem' }}>Your Top 5 Matches</h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem' }}>We've analyzed your profile. These paths offer the highest growth and alignment.</p>
-        {/* Personalised Popup Message */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5 }}
-          style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid var(--primary)', padding: '0.8rem 1.5rem', borderRadius: '99px', display: 'inline-block', marginTop: '1.5rem', color: 'var(--primary)', fontWeight: 600 }}
-        >
-          ✨ Hey there! We've successfully processed your responses.
-        </motion.div>
-      </motion.div>
+    <div className="main-content" style={{ maxWidth: '100%' }}>
+      <OnboardingProgress currentStep={7} />
 
-      <div style={{ display: 'grid', gap: '3rem' }}>
-        {results.map((career, idx) => (
-          <motion.div
-            key={career.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="glass-panel"
-            style={{ padding: '2.5rem', position: 'relative', overflow: 'visible' }}
-          >
-            {/* Rank Badge */}
-            <div style={{ 
-              position: 'absolute', top: '-15px', left: '2rem', 
-              background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-              padding: '0.5rem 1.2rem', borderRadius: '99px', fontWeight: 'bold', fontSize: '0.9rem',
-              boxShadow: '0 4px 15px rgba(59, 130, 246, 0.4)'
-            }}>
-              MATCH #{idx + 1} — {career.matchScore}%
-            </div>
+      <div style={{ marginTop: '4rem', marginBottom: '4rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem' }}>
+          <div>
+            <p style={{ color: 'var(--accent)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
+              Your Results Are Ready
+            </p>
+            <h1 style={{ fontSize: '3rem', fontWeight: '800', color: 'var(--primary)' }}>
+              My Top 10 Career Matches
+            </h1>
+          </div>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <button 
+              onClick={handleExport}
+              disabled={exporting}
+              className="btn-secondary" 
+              style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }}
+            >
+              <Download size={18} style={{ marginRight: '8px' }} /> 
+              {exporting ? 'Generating...' : 'Download PDF'}
+            </button>
+            <Link href="/quiz-intro" className="btn-primary" style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }}>
+              Retake Quiz
+            </Link>
+          </div>
+        </div>
+      </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
-              
-              {/* Info Column */}
-              <div>
-                <h2 style={{ fontSize: '2.2rem', marginBottom: '1rem', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  {career.name}
-                </h2>
-                <div className="glass-panel" style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderStyle: 'dashed', marginBottom: '1.5rem' }}>
-                  <p style={{ color: 'var(--text-main)', fontSize: '1.05rem', fontStyle: 'italic', lineHeight: '1.5' }}>
-                    "{career.aiSummary}"
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        {results.recommendations.map((rec: any, idx: number) => {
+          const career = careers.find(c => c.id === rec.careerId)
+          if (!career) return null
+
+          return (
+            <motion.div
+              key={career.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className="glass-panel"
+              style={{ 
+                padding: '0', 
+                overflow: 'hidden', 
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              {/* Card Header */}
+              <div style={{ padding: '2rem', display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                {/* Rank Badge */}
+                <div style={{ 
+                  width: '80px', height: '80px', 
+                  background: 'var(--bg-offset)', 
+                  borderRadius: '20px', 
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  border: '1px solid var(--border)',
+                  flexShrink: 0
+                }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--text-muted)' }}>RANK</span>
+                  <span style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--primary)' }}>#{idx + 1}</span>
+                </div>
+
+                <div style={{ flex: '1', minWidth: '300px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--primary)' }}>
+                      {career.name}
+                    </h2>
+                    <div style={{ 
+                      background: 'var(--success)', 
+                      color: '#fff', 
+                      padding: '0.4rem 1rem', 
+                      borderRadius: '99px', 
+                      fontSize: '0.9rem', 
+                      fontWeight: '700',
+                      display: 'flex', alignItems: 'center', gap: '0.4rem'
+                    }}>
+                      <Zap size={16} fill="white" /> {rec.matchScore}% Match
+                    </div>
+                  </div>
+                  
+                  <p style={{ color: 'var(--text-main)', fontSize: '1.05rem', fontWeight: '500', marginBottom: '1rem', lineHeight: '1.6' }}>
+                    {rec.whyItFits}
                   </p>
-                </div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                    <TrendingUp size={20} color="var(--primary)" />
-                    <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>SALARY REALITY</div>
-                      <div style={{ fontWeight: '600' }}>{career.salaryRange}</div>
+                  <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)' }}>
+                      <TrendingUp size={18} />
+                      <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>High Growth</span>
                     </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                    <Award size={20} color="var(--accent)" />
-                    <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>DIFFICULTY</div>
-                      <div style={{ fontWeight: '600' }}>{career.difficulty}/10</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)' }}>
+                      <Target size={18} />
+                      <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>{career.sector}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)' }}>
+                      <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>Stream: {career.stream}</span>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div style={{ marginTop: '2rem' }}>
-                  <Link href={`/career/${career.id}`} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: 'fit-content' }}>
+              {/* Card Footer / Quick Info */}
+              <div style={{ 
+                background: 'var(--bg-offset)', 
+                padding: '1.5rem 2rem', 
+                borderTop: '1px solid var(--border)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '1.5rem'
+              }}>
+                <div style={{ display: 'flex', gap: '2rem' }}>
+                  <div>
+                    <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>SALARY RANGE</p>
+                    <p style={{ fontWeight: '700', color: 'var(--primary)' }}>₹{career.salaryRangeMin}L - ₹{career.salaryRangeMax}L /yr</p>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>DIFFICULTY</p>
+                    <p style={{ fontWeight: '700', color: 'var(--primary)' }}>{career.difficulty}/10</p>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <button style={{ 
+                    background: 'none', border: '1px solid var(--border)', 
+                    padding: '0.6rem', borderRadius: '12px', color: 'var(--text-muted)',
+                    cursor: 'pointer'
+                  }}>
+                    <Bookmark size={20} />
+                  </button>
+                  <Link href={`/career/${career.slug || career.id}`} className="btn-primary" style={{ padding: '0.6rem 1.5rem', fontSize: '0.9rem' }}>
                     View Full Roadmap <ChevronRight size={18} />
                   </Link>
                 </div>
               </div>
-
-              {/* Colleges Column */}
-              <div>
-                <h4 style={{ color: 'var(--text-muted)', marginBottom: '1rem', letterSpacing: '0.05em' }}>RECOMMENDED COLLEGES</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  {career.colleges.map((college: any) => (
-                    <div 
-                      key={college.id} 
-                      className="glass-panel" 
-                      style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                    >
-                      <div>
-                        <div style={{ fontWeight: '600', fontSize: '1rem' }}>{college.name}</div>
-                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                          <MapPin size={12} /> {college.location} • ₹{college.fees.toLocaleString()}/yr
-                        </div>
-                      </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.9rem' }}>{college.realityScore}/10</div>
-                        <div style={{ fontSize: '0.65rem' }}>REALITY</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Feedback UI Below the Suggestion */}
-              <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem', marginTop: '1rem' }}>
-                 <FeedbackWidget careerId={career.id} />
-              </div>
-
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          )
+        })}
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: '6rem' }}>
-        <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Want professional help deciding?</p>
-        <button className="btn-secondary" style={{ padding: '1rem 2.5rem' }}>Talk to a Mentor (Coming Soon)</button>
-      </div>
-      
-      {/* AI Error Disclaimer */}
-      <div style={{ textAlign: 'center', marginTop: '3rem', opacity: 0.6 }}>
-         <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-           The AI can sometimes make mistakes. These are recommendations based on several computational analyses of your input.
-         </p>
-      </div>
-
-    </main>
-  );
-}
-
-function FeedbackWidget({ careerId }: { careerId: string }) {
-  const [status, setStatus] = useState<'idle' | 'down' | 'submitted'>('idle');
-  const [reason, setReason] = useState('');
-
-  const submitFeedback = async (isPositive: boolean) => {
-    try {
-      await fetch('/api/feedback', {
-        method: 'POST',
-        body: JSON.stringify({ careerId, isPositive, reason: isPositive ? null : reason })
-      });
-      setStatus('submitted');
-    } catch(e) {}
-  };
-
-  if (status === 'submitted') {
-    return <div style={{ fontSize: '0.85rem', color: '#10b981', textAlign: 'center' }}>Thank you for your feedback!</div>;
-  }
-
-  return (
-    <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-      <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Was this suggestion helpful?</p>
-      {status === 'idle' && (
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <button onClick={() => submitFeedback(true)} className="btn-secondary" style={{ padding: '0.5rem 1rem' }}>👍 Yes</button>
-          <button onClick={() => setStatus('down')} className="btn-secondary" style={{ padding: '0.5rem 1rem' }}>👎 No</button>
-        </div>
-      )}
-      {status === 'down' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'center', width: '100%', maxWidth: '300px' }}>
-          <select value={reason} onChange={e => setReason(e.target.value)} className="form-control" style={{ fontSize: '0.85rem', padding: '0.5rem' }}>
-            <option value="" disabled>Why wasn't this good?</option>
-            <option value="Not interested in this field">Not interested in this field</option>
-            <option value="Salary expectation doesn't match">Salary expectation doesn't match</option>
-            <option value="Too difficult">Too difficult</option>
-            <option value="Location mismatch">Location mismatch</option>
-            <option value="Other">Other</option>
-          </select>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-             <button onClick={() => submitFeedback(false)} disabled={!reason} className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>Submit</button>
-             <button onClick={() => setStatus('idle')} className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>Cancel</button>
+      {/* Hidden PDF Report Template */}
+      <div id="results-report" style={{ 
+        position: 'absolute', left: '-9999px', top: 0,
+        width: '794px', // A4 width at 96 DPI
+        padding: '40px',
+        background: '#fff',
+        color: '#000'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #1E3A5F', paddingBottom: '20px', marginBottom: '30px' }}>
+          <div>
+            <h1 style={{ color: '#1E3A5F', margin: 0 }}>12kebaad.in</h1>
+            <p style={{ margin: 0, opacity: 0.6 }}>Personalized Career Roadmap Report</p>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <p style={{ margin: 0, fontWeight: 'bold' }}>Date: {new Date().toLocaleDateString()}</p>
+            <p style={{ margin: 0 }}>Stream: {localStorage.getItem('onboarding_stream')}</p>
           </div>
         </div>
-      )}
+
+        {results.recommendations.map((rec: any, idx: number) => {
+          const career = careers.find(c => c.id === rec.careerId)
+          if (!career) return null
+          return (
+            <div key={idx} style={{ marginBottom: '30px', borderBottom: '1px solid #eee', paddingBottom: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <h3 style={{ margin: 0 }}>{idx + 1}. {career.name}</h3>
+                <span style={{ fontWeight: 'bold', color: '#E8630A' }}>{rec.matchScore}% Match</span>
+              </div>
+              <p style={{ margin: '0 0 10px 0', fontSize: '14px' }}>{rec.whyItFits}</p>
+              <div style={{ display: 'flex', gap: '20px', fontSize: '12px', color: '#666' }}>
+                <span>Salary: ₹{career.salaryRangeMin}L - ₹{career.salaryRangeMax}L</span>
+                <span>Sector: {career.sector}</span>
+              </div>
+            </div>
+          )
+        })}
+
+        <div style={{ marginTop: '50px', textAlign: 'center', borderTop: '1px solid #eee', paddingTop: '20px' }}>
+          <p style={{ margin: 0, fontSize: '12px' }}>This report was generated by 12kebaad.in - India's smartest career predictor.</p>
+        </div>
+      </div>
     </div>
-  );
+  )
 }

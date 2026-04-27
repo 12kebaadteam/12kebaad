@@ -1,14 +1,12 @@
 import { MetadataRoute } from 'next'
- 
-export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://12kebaad.vercel.app'
 
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/api/'], // Blocks Google from reading the admin dashboard
+      disallow: ['/admin/', '/api/', '/_next/', '/static/'],
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: 'https://12kebaad.in/sitemap.xml',
   }
 }

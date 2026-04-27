@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { Search as SearchIcon, X } from 'lucide-react'
 
 export default function SearchBar() {
   const [query, setQuery] = useState('')
@@ -32,10 +33,7 @@ export default function SearchBar() {
   return (
     <div ref={ref} className="search-wrapper">
       <form onSubmit={handleSearch} className={`search-form${focused ? ' search-form--active' : ''}`}>
-        <svg className="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
+        <SearchIcon className="search-icon" size={18} />
         <input
           ref={inputRef}
           type="text"
@@ -43,13 +41,13 @@ export default function SearchBar() {
           onChange={e => setQuery(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          placeholder="Search colleges, courses..."
+          placeholder="Search..."
           className="search-field"
           aria-label="Search"
         />
         {query && (
           <button type="button" className="search-clear" onClick={() => { setQuery(''); inputRef.current?.focus() }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <X size={14} />
           </button>
         )}
       </form>

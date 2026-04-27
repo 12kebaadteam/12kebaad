@@ -15,7 +15,7 @@ export default async function ProfessionalCourseDetailPage({
   if (!course) notFound()
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '860px', margin: '0 auto' }}>
+    <div className="main-content animate-fade-in" style={{ maxWidth: '900px', margin: '0 auto' }}>
       <Link href="/professional-courses" className="back-link">← Back to all professional courses</Link>
 
       {/* Header */}

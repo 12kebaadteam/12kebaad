@@ -1,34 +1,57 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from 'next/server'
+import prisma from '@/lib/prisma'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    const { text, targetId, type } = await req.json();
+    const session = await getServerSession(authOptions)
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-    if (!text || !targetId || !type) {
-      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
-    }
+    const { text, careerId, courseId } = await req.json()
 
-    const data: any = {
-      text,
-      userId: (session?.user as any)?.id || null,
-      status: "PENDING"
-    };
+    const comment = await prisma.comment.create({
+      data: {
+        text,
+        careerId,
+        courseId,
+        userId: session.user.id,
+        status: "PENDING"
+      }
+    })
 
-    if (type === 'course') {
-      data.courseId = targetId;
-    } else if (type === 'career') {
-      data.careerId = targetId;
-    }
+    return NextResponse.json(comment)
+  } catch (error) {
+    console.error("Comment Error:", error)
+    return NextResponse.json({ error: "Failed to submit comment" }, { status: 500 })
+  }
+}
 
-    await prisma.comment.create({ data });
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url)
+    const careerId = searchParams.get('careerId')
+    const courseId = searchParams.get('courseId')
 
-    return NextResponse.json({ success: true });
-  } catch(error) {
-    console.error("Comment Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    const comments = await prisma.comment.findMany({
+      where: {
+        OR: [
+          { careerId: careerId || undefined },
+          { courseId: courseId || undefined }
+        ],
+        status: "APPROVED"
+      },
+      include: {
+        user: {
+          select: { name: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    })
+
+    return NextResponse.json(comments)
+  } catch (error) {
+    console.error("Fetch Comments Error:", error)
+    return NextResponse.json({ error: "Failed to fetch comments" }, { status: 500 })
   }
 }

@@ -2,120 +2,235 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Sparkles, Compass, Target, Map, ArrowRight } from "lucide-react";
-
-import FlowingNodes from "@/components/FlowingNodes";
-import AmbientBackground from "@/components/AmbientBackground";
+import { useSession } from "next-auth/react";
+import { 
+  ArrowRight, 
+  CheckCircle2, 
+  Users, 
+  BookOpen, 
+  Trophy, 
+  Star,
+  Quote,
+  MessageSquare
+} from "lucide-react";
 
 export default function HomePage() {
+  const { data: session } = useSession();
+
   return (
-    <main className="main-content full-screen-layout" style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh' }}>
-      <AmbientBackground />
-      <FlowingNodes />
+    <main className="full-screen-layout">
+      {/* 2.2 Hero Section */}
+      <section className="hero-section">
+        <div className="main-content" style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <h1 className="hero-title">
+              Confused after 12th? <br />
+              <span className="text-accent">Find your path in 2 minutes.</span>
+            </h1>
+            <p className="hero-subtitle">
+              India's smartest career quiz — built for Science, Commerce & Arts students. 
+              Stop guessing and start building your future with data-driven guidance.
+            </p>
+            
+            <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href={session ? "/quiz-intro" : "/form"} className="btn-primary" style={{ padding: '1rem 3rem' }}>
+                Start the Quiz <ArrowRight size={20} />
+              </Link>
+              <Link href={session ? "/careers" : "/form"} className="btn-secondary" style={{ padding: '1rem 2.5rem' }}>
+                Browse All Careers
+              </Link>
+            </div>
+          </motion.div>
 
-      {/* Hero Section */}
-      <section style={{ textAlign: 'center', padding: '10rem 0', minHeight: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
-        
-        {/* Floating Icons for Visual Interest */}
-        <div className="hide-mobile" style={{ position: 'absolute', top: '15%', left: '10%', opacity: 0.3 }}>
-           <Compass size={80} color="var(--primary)" />
-        </div>
-        <div className="hide-mobile" style={{ position: 'absolute', bottom: '20%', right: '12%', opacity: 0.3 }}>
-           <Target size={100} color="var(--accent)" />
-        </div>
-
-        <div 
-          style={{ 
-            display: 'inline-flex', alignItems: 'center', gap: '0.6rem', 
-            background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)',
-            padding: '0.5rem 1.25rem', borderRadius: '99px', color: 'var(--primary)',
-            fontSize: '0.85rem', fontWeight: '700', marginBottom: '2.5rem', margin: '0 auto'
-          }}
-        >
-          <Sparkles size={16} /> 12kebaad Decision Engine V2.0
-        </div>
-        
-        <h1 className="hero-title" style={{ maxWidth: '1000px', margin: '0 auto 2rem auto', fontSize: '5rem', fontWeight: '900', lineHeight: 1 }}>
-          Confused after 12th? Get your <span style={{ color: 'var(--primary)' }}>career plan</span> in 60s.
-        </h1>
-        <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', maxWidth: '650px', margin: '0 auto 3rem auto', lineHeight: '1.6' }}>
-          Stop browsing thousands of colleges. We analyze your interests and marks to show you 5 paths that actually matter.
-        </p>
-        <div style={{ display: 'flex', gap: '1.2rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/predictor" className="btn-primary" style={{ padding: '1.2rem 3rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-            Start Career Predictor <ArrowRight size={20} />
-          </Link>
-          <Link href="/courses-after-12th" className="btn-secondary" style={{ padding: '1.2rem 2.5rem', fontSize: '1.1rem' }}>
-            Browse Streams
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 1 }}
+            style={{ marginTop: '5rem', position: 'relative' }}
+          >
+            <img 
+              src="/hero_illustration.png" 
+              alt="Student at crossroads of careers" 
+              style={{ 
+                maxWidth: '800px', 
+                width: '100%', 
+                height: 'auto', 
+                borderRadius: '32px',
+                boxShadow: '0 30px 60px rgba(30, 58, 95, 0.15)'
+              }} 
+            />
+          </motion.div>
         </div>
       </section>
 
-      {/* Philosophy Section */}
-      <section style={{ padding: '4rem 0' }}>
-        <div className="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
-          <div className="glass-panel">
-            <Compass color="var(--primary)" style={{ marginBottom: '1.25rem' }} />
-            <h3 style={{ marginBottom: '0.75rem' }}>Personalized Paths</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>We don't show filters. We show answers based on your marks and personality.</p>
+      {/* 2.4 Social Proof / Stats Strip */}
+      <section style={{ padding: '1rem 0', textAlign: 'center' }}>
+        <div style={{ 
+          background: 'var(--primary)', 
+          color: 'white', 
+          padding: '1.5rem 3rem', 
+          borderRadius: '32px',
+          display: 'inline-flex',
+          justifyContent: 'center',
+          gap: '3rem',
+          flexWrap: 'wrap',
+          boxShadow: '0 20px 40px rgba(30, 58, 95, 0.15)'
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <h3 style={{ fontSize: '1.75rem', fontWeight: '800', marginBottom: '0.2rem' }}>1,270+</h3>
+            <p style={{ opacity: 0.8, fontSize: '0.8rem' }}>Careers</p>
           </div>
-          <div className="glass-panel">
-            <Target color="var(--accent)" style={{ marginBottom: '1.25rem' }} />
-            <h3 style={{ marginBottom: '0.75rem' }}>Reality Scores</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Honest pros and cons for every college. No paid rankings, just truth.</p>
+          <div style={{ textAlign: 'center' }}>
+            <h3 style={{ fontSize: '1.75rem', fontWeight: '800', marginBottom: '0.2rem' }}>PCM/PCB/Arts</h3>
+            <p style={{ opacity: 0.8, fontSize: '0.8rem' }}>Specialized Paths</p>
           </div>
-          <div className="glass-panel">
-            <Map color="#10b981" style={{ marginBottom: '1.25rem' }} />
-            <h3 style={{ marginBottom: '0.75rem' }}>Full Roadmaps</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>From Class 12 to your first ₹10LPA job. Every step mapped out.</p>
+          <div style={{ textAlign: 'center' }}>
+            <h3 style={{ fontSize: '1.75rem', fontWeight: '800', marginBottom: '0.2rem' }}>100% Free</h3>
+            <p style={{ opacity: 0.8, fontSize: '0.8rem' }}>Unbiased Truth</p>
           </div>
         </div>
       </section>
 
-      {/* Stream Quick Links */}
-      <section style={{ padding: '6rem 0' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>Pick your stream to explore</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-          {['Science', 'Commerce', 'Arts'].map(s => (
-            <Link key={s} href={`/courses-after-12th-${s.toLowerCase()}`} style={{ textDecoration: 'none' }}>
-              <div className="glass-panel" style={{ textAlign: 'center', padding: '3rem 2rem', transition: 'all 0.3s' }}>
-                <h3 style={{ marginBottom: '0.5rem', color: '#ffffff' }}>{s}</h3>
-                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem' }}>Explore high-salary {s} careers</p>
+      {/* 2.3 How It Works Section */}
+      <section className="main-content" style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
+        <h2 style={{ 
+          fontSize: '2.5rem', 
+          textAlign: 'center', 
+          color: 'var(--primary)', 
+          fontWeight: '800',
+          marginBottom: '3rem'
+        }}>
+          How It Works
+        </h2>
+        
+        <div className="grid-cards">
+          <motion.div 
+            className="glass-panel"
+            whileHover={{ y: -10 }}
+          >
+            <div style={{ 
+              width: '60px', height: '60px', 
+              background: 'rgba(30, 58, 95, 0.1)', 
+              borderRadius: '16px', 
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              marginBottom: '1.5rem', color: 'var(--primary)'
+            }}>
+              <Users size={32} />
+            </div>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>1. Tell us about yourself</h3>
+            <p style={{ color: 'var(--text-muted)' }}>Share your stream, marks, and interests. We use this to personalize your journey.</p>
+          </motion.div>
+
+          <motion.div 
+            className="glass-panel"
+            whileHover={{ y: -10 }}
+          >
+            <div style={{ 
+              width: '60px', height: '60px', 
+              background: 'rgba(232, 99, 10, 0.1)', 
+              borderRadius: '16px', 
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              marginBottom: '1.5rem', color: 'var(--accent)'
+            }}>
+              <Trophy size={32} />
+            </div>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>2. Take the rapid quiz</h3>
+            <p style={{ color: 'var(--text-muted)' }}>Pick between two careers across 20 quick rounds. Our engine analyzes your split-second choices.</p>
+          </motion.div>
+
+          <motion.div 
+            className="glass-panel"
+            whileHover={{ y: -10 }}
+          >
+            <div style={{ 
+              width: '60px', height: '60px', 
+              background: 'rgba(45, 158, 107, 0.1)', 
+              borderRadius: '16px', 
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              marginBottom: '1.5rem', color: 'var(--success)'
+            }}>
+              <BookOpen size={32} />
+            </div>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>3. Get your roadmap</h3>
+            <p style={{ color: 'var(--text-muted)' }}>See your top 10 matches with full step-by-step guidance from Class 12 to your dream job.</p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 2.5 Testimonials */}
+      <section className="bg-offset" style={{ padding: '6rem 0' }}>
+        <div className="main-content" style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <h2 style={{ 
+            fontSize: '3rem', 
+            textAlign: 'center', 
+            color: 'var(--primary)', 
+            fontWeight: '800',
+            marginBottom: '4rem'
+          }}>
+            Trusted by Students
+          </h2>
+
+          <div className="grid-cards">
+            {[
+              { name: "Rahul Sharma", stream: "Science (PCM)", city: "Delhi", quote: "I was confused between B.Tech and Data Science. The quiz matched me perfectly with AI Research!" },
+              { name: "Ananya Iyer", stream: "Commerce", city: "Mumbai", quote: "Finally a platform that doesn't just push MBA. Found amazing paths in Fintech and Product Management." },
+              { name: "Sahil Khan", stream: "Arts", city: "Bangalore", quote: "The roadmap steps are so clear. I now know exactly which entrance tests to take for Design." }
+            ].map((t, i) => (
+              <div key={i} className="glass-panel" style={{ position: 'relative' }}>
+                <Quote 
+                  size={40} 
+                  style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', opacity: 0.1, color: 'var(--primary)' }} 
+                />
+                <div style={{ display: 'flex', gap: '0.2rem', marginBottom: '1rem', color: '#FFD700' }}>
+                  {[...Array(5)].map((_, j) => <Star key={j} size={16} fill="currentColor" />)}
+                </div>
+                <p style={{ fontStyle: 'italic', marginBottom: '2rem', fontSize: '1.1rem' }}>"{t.quote}"</p>
+                <div>
+                  <p style={{ fontWeight: '700', color: 'var(--primary)' }}>{t.name}</p>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{t.stream} • {t.city}</p>
+                </div>
               </div>
-            </Link>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Personalized Welcome Popup */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        style={{
-          position: 'fixed',
-          bottom: '2rem',
-          left: '2rem',
-          background: 'rgba(59, 130, 246, 0.15)',
-          border: '1px solid rgba(59, 130, 246, 0.4)',
-          backdropFilter: 'blur(10px)',
-          padding: '1rem 1.5rem',
-          borderRadius: '12px',
-          color: 'var(--text-main)',
-          zIndex: 50,
-          boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
-          display: 'flex',
-          gap: '1rem',
-          alignItems: 'center'
-        }}
-        className="hide-mobile"
-      >
-        <span style={{ fontSize: '1.5rem' }}>👋</span>
-        <div>
-          <p style={{ fontWeight: 600, fontSize: '0.95rem', margin: 0, color: 'var(--primary)' }}>Welcome to 12kebaad!</p>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0, marginTop: '2px' }}>Ready to find your dream career?</p>
+      {/* CTA Bottom Section */}
+      <section style={{ padding: '2rem 5%', textAlign: 'center' }}>
+        <div style={{ 
+          maxWidth: '800px', 
+          margin: '0 auto',
+          background: 'var(--primary)', 
+          color: 'white',
+          padding: '3rem 2rem',
+          borderRadius: '40px',
+          boxShadow: '0 30px 60px rgba(30, 58, 95, 0.2)'
+        }}>
+          <h2 style={{ fontSize: '2.25rem', fontWeight: '800', marginBottom: '1rem' }}>
+            Ready to find your future?
+          </h2>
+          <p style={{ fontSize: '1rem', opacity: 0.9, marginBottom: '2rem', maxWidth: '500px', margin: '0 auto 2rem auto' }}>
+            Join 50,000+ students who have found their path with 12kebaad.
+          </p>
+          <Link href={session ? "/quiz-intro" : "/form"} className="btn-primary" style={{ padding: '1rem 4rem', fontSize: '1.1rem', background: 'white', color: 'var(--primary)' }}>
+            Start the Quiz Now
+          </Link>
         </div>
-      </motion.div>
+      </section>
+
+      {/* Quick Feedback Link */}
+      <section style={{ padding: '2rem 0', textAlign: 'center' }}>
+        <p style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
+          <MessageSquare size={16} /> Have suggestions? 
+          <Link href="/feedback" style={{ color: 'var(--primary)', fontWeight: '600', textDecoration: 'none' }}>
+            Give Feedback
+          </Link>
+        </p>
+      </section>
     </main>
   );
 }

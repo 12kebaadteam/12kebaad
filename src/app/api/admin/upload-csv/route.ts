@@ -63,6 +63,22 @@ export async function POST(req: NextRequest) {
         }
       }
     } else if (type === "careers") {
+      const wipe = formData.get("wipe") === "true";
+      if (wipe) {
+        await prisma.career.deleteMany({});
+      }
+
+      const validStreams = [
+        "Science_PCM", "Science_PCB", "Science_PCM_PCB", 
+        "Commerce", "Arts", "Any", "ITI", "Skilled", "Self_Employed"
+      ];
+
+      const validSectors = [
+        "Technology", "Healthcare", "Finance", "Creative", "Education", 
+        "Law", "Science", "Media", "Sports", "Agriculture", 
+        "Engineering", "Travel", "Business", "Skilled Trades", "Government"
+      ];
+
       for (const [index, row] of records.entries()) {
         try {
           if (!row.name || !row.stream) {
@@ -70,26 +86,61 @@ export async function POST(req: NextRequest) {
             continue;
           }
 
+          // Standardize stream
+          let stream = row.stream.trim();
+          if (!validStreams.includes(stream)) {
+            if (stream.toLowerCase().includes("pcm") && stream.toLowerCase().includes("pcb")) stream = "Science_PCM_PCB";
+            else if (stream.toLowerCase().includes("pcm")) stream = "Science_PCM";
+            else if (stream.toLowerCase().includes("pcb")) stream = "Science_PCB";
+            else if (stream.toLowerCase().includes("science")) stream = "Science_PCM"; // Default
+            else if (stream.toLowerCase().includes("commerce")) stream = "Commerce";
+            else if (stream.toLowerCase().includes("arts") || stream.toLowerCase().includes("humanities")) stream = "Arts";
+            else stream = "Any";
+          }
+
+          // Standardize sector
+          let sector = row.sector || "Other";
+          const matchedSector = validSectors.find(s => s.toLowerCase() === sector.toLowerCase());
+          sector = matchedSector || "Other";
+
+          const slug = row.slug || row.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
+
           await prisma.career.upsert({
             where: { name: row.name },
             update: {
-              stream: row.stream,
+              slug,
+              stream,
+              sector: row.sector || "Other",
               description: row.description || "",
+              interestTags: row.interestTags ? row.interestTags.split(/[|,]/).map((s: string) => s.trim()) : [],
               salaryRangeMin: parseInt(row.salaryRangeMin) || 0,
               salaryRangeMax: parseInt(row.salaryRangeMax) || 0,
               difficulty: parseInt(row.difficulty) || 5,
               demand: parseInt(row.demand) || 5,
               growth: parseInt(row.growth) || 5,
+              entryExam: row.entryExam || "None",
+              degreeRequired: row.degreeRequired || "Bachelor's",
+              topColleges: row.topColleges || "",
+              keySkills: row.keySkills ? row.keySkills.split(/[|,]/).map((s: string) => s.trim()) : [],
+              roadmapSteps: row.roadmapSteps ? row.roadmapSteps.split('|').map((s: string) => s.trim()) : [],
             },
             create: {
               name: row.name,
-              stream: row.stream,
+              slug,
+              stream,
+              sector: row.sector || "Other",
               description: row.description || "",
+              interestTags: row.interestTags ? row.interestTags.split(/[|,]/).map((s: string) => s.trim()) : [],
               salaryRangeMin: parseInt(row.salaryRangeMin) || 0,
               salaryRangeMax: parseInt(row.salaryRangeMax) || 0,
               difficulty: parseInt(row.difficulty) || 5,
               demand: parseInt(row.demand) || 5,
               growth: parseInt(row.growth) || 5,
+              entryExam: row.entryExam || "None",
+              degreeRequired: row.degreeRequired || "Bachelor's",
+              topColleges: row.topColleges || "",
+              keySkills: row.keySkills ? row.keySkills.split(/[|,]/).map((s: string) => s.trim()) : [],
+              roadmapSteps: row.roadmapSteps ? row.roadmapSteps.split('|').map((s: string) => s.trim()) : [],
             }
           });
           count++;
