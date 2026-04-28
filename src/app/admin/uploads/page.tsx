@@ -27,10 +27,13 @@ export default function UploadPage() {
         body: formData,
       });
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Upload failed");
+      }
       setResult(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Upload failed.");
+      alert(err.message || "Upload failed.");
     } finally {
       setUploading(false);
     }

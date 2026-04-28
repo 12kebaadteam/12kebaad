@@ -18,7 +18,11 @@ export async function POST(req: NextRequest) {
     if (!file) return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
     const text = await file.text();
-    const records = parse(text, { columns: true, skip_empty_lines: true, bom: true }) as any[];
+    const records = parse(text, { 
+      columns: (header) => header.map((col: string) => col.trim().toLowerCase()), 
+      skip_empty_lines: true, 
+      bom: true 
+    }) as any[];
 
     const errors: any[] = [];
     let count = 0;
@@ -26,33 +30,41 @@ export async function POST(req: NextRequest) {
     if (type === "colleges") {
       for (const [index, row] of records.entries()) {
         try {
-          if (!row.name || !row.location) {
-            errors.push({ row: index + 1, reason: "Missing name or location" });
+          if (!row.name || (!row.location && !row.state)) {
+            errors.push({ row: index + 1, reason: "Missing 'name' or 'location'/'state' column" });
             continue;
           }
 
+          const cleanNum = (str: any) => {
+            if (!str) return 0;
+            const parsed = parseInt(String(str).replace(/\D/g, ''), 10);
+            return isNaN(parsed) ? 0 : parsed;
+          };
+
+          const location = row.location || row.state || 'Unknown';
+          
           await prisma.college.upsert({
             where: { name: row.name },
             update: {
-              location: row.location,
-              state: row.state || row.location || 'Not Specified',
+              location: location,
+              state: row.state || location,
               address: row.address || null,
-              fees: parseInt(row.fees) || 0,
-              placements: parseInt(row.placements) || 0,
+              fees: cleanNum(row.fees),
+              placements: cleanNum(row.placements),
               cutoff: parseFloat(row.cutoff) || null,
-              realityScore: parseInt(row.realityScore) || 5,
+              realityScore: cleanNum(row.realityscore) || 5,
               pros: row.pros ? row.pros.split('|').map((p: string) => p.trim()) : [],
               cons: row.cons ? row.cons.split('|').map((c: string) => c.trim()) : [],
             },
             create: {
               name: row.name,
-              location: row.location,
-              state: row.state || row.location || 'Not Specified',
+              location: location,
+              state: row.state || location,
               address: row.address || null,
-              fees: parseInt(row.fees) || 0,
-              placements: parseInt(row.placements) || 0,
+              fees: cleanNum(row.fees),
+              placements: cleanNum(row.placements),
               cutoff: parseFloat(row.cutoff) || null,
-              realityScore: parseInt(row.realityScore) || 5,
+              realityScore: cleanNum(row.realityscore) || 5,
               pros: row.pros ? row.pros.split('|').map((p: string) => p.trim()) : [],
               cons: row.cons ? row.cons.split('|').map((c: string) => c.trim()) : [],
             }
@@ -103,6 +115,12 @@ export async function POST(req: NextRequest) {
           const matchedSector = validSectors.find(s => s.toLowerCase() === sector.toLowerCase());
           sector = matchedSector || "Other";
 
+          const cleanNum = (str: any) => {
+            if (!str) return 0;
+            const parsed = parseInt(String(str).replace(/\D/g, ''), 10);
+            return isNaN(parsed) ? 0 : parsed;
+          };
+
           const slug = row.slug || row.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
 
           await prisma.career.upsert({
@@ -110,37 +128,37 @@ export async function POST(req: NextRequest) {
             update: {
               slug,
               stream,
-              sector: row.sector || "Other",
+              sector: sector,
               description: row.description || "",
-              interestTags: row.interestTags ? row.interestTags.split(/[|,]/).map((s: string) => s.trim()) : [],
-              salaryRangeMin: parseInt(row.salaryRangeMin) || 0,
-              salaryRangeMax: parseInt(row.salaryRangeMax) || 0,
-              difficulty: parseInt(row.difficulty) || 5,
-              demand: parseInt(row.demand) || 5,
-              growth: parseInt(row.growth) || 5,
-              entryExam: row.entryExam || "None",
-              degreeRequired: row.degreeRequired || "Bachelor's",
-              topColleges: row.topColleges || "",
-              keySkills: row.keySkills ? row.keySkills.split(/[|,]/).map((s: string) => s.trim()) : [],
-              roadmapSteps: row.roadmapSteps ? row.roadmapSteps.split('|').map((s: string) => s.trim()) : [],
+              interestTags: row.interesttags ? row.interesttags.split(/[|,]/).map((s: string) => s.trim()) : [],
+              salaryRangeMin: cleanNum(row.salaryrangemin),
+              salaryRangeMax: cleanNum(row.salaryrangemax),
+              difficulty: cleanNum(row.difficulty) || 5,
+              demand: cleanNum(row.demand) || 5,
+              growth: cleanNum(row.growth) || 5,
+              entryExam: row.entryexam || "None",
+              degreeRequired: row.degreerequired || "Bachelor's",
+              topColleges: row.topcolleges || "",
+              keySkills: row.keyskills ? row.keyskills.split(/[|,]/).map((s: string) => s.trim()) : [],
+              roadmapSteps: row.roadmapsteps ? row.roadmapsteps.split('|').map((s: string) => s.trim()) : [],
             },
             create: {
               name: row.name,
               slug,
               stream,
-              sector: row.sector || "Other",
+              sector: sector,
               description: row.description || "",
-              interestTags: row.interestTags ? row.interestTags.split(/[|,]/).map((s: string) => s.trim()) : [],
-              salaryRangeMin: parseInt(row.salaryRangeMin) || 0,
-              salaryRangeMax: parseInt(row.salaryRangeMax) || 0,
-              difficulty: parseInt(row.difficulty) || 5,
-              demand: parseInt(row.demand) || 5,
-              growth: parseInt(row.growth) || 5,
-              entryExam: row.entryExam || "None",
-              degreeRequired: row.degreeRequired || "Bachelor's",
-              topColleges: row.topColleges || "",
-              keySkills: row.keySkills ? row.keySkills.split(/[|,]/).map((s: string) => s.trim()) : [],
-              roadmapSteps: row.roadmapSteps ? row.roadmapSteps.split('|').map((s: string) => s.trim()) : [],
+              interestTags: row.interesttags ? row.interesttags.split(/[|,]/).map((s: string) => s.trim()) : [],
+              salaryRangeMin: cleanNum(row.salaryrangemin),
+              salaryRangeMax: cleanNum(row.salaryrangemax),
+              difficulty: cleanNum(row.difficulty) || 5,
+              demand: cleanNum(row.demand) || 5,
+              growth: cleanNum(row.growth) || 5,
+              entryExam: row.entryexam || "None",
+              degreeRequired: row.degreerequired || "Bachelor's",
+              topColleges: row.topcolleges || "",
+              keySkills: row.keyskills ? row.keyskills.split(/[|,]/).map((s: string) => s.trim()) : [],
+              roadmapSteps: row.roadmapsteps ? row.roadmapsteps.split('|').map((s: string) => s.trim()) : [],
             }
           });
           count++;

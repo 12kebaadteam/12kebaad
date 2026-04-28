@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 import { prisma } from '@/lib/prisma'
+import Papa from 'papaparse'
 
 async function checkAdmin() {
   const session = await getServerSession(authOptions)
@@ -13,37 +14,16 @@ async function checkAdmin() {
   return session
 }
 
-// ── CSV helpers ───────────────────────────────────────────────────────────────
-/** Parse a CSV line properly, handling quoted fields with commas */
-function parseCSVLine(line: string): string[] {
-  const result: string[] = []
-  let current = ''
-  let inQuotes = false
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i]
-    if (ch === '"') {
-      if (inQuotes && line[i + 1] === '"') { current += '"'; i++ }
-      else inQuotes = !inQuotes
-    } else if (ch === ',' && !inQuotes) {
-      result.push(current.trim())
-      current = ''
-    } else {
-      current += ch
-    }
-  }
-  result.push(current.trim())
-  return result
-}
-
 // ── Colleges+Courses CSV ──────────────────────────────────────────────────────
 export async function uploadCSV(formData: FormData) {
   await checkAdmin()
   const file = formData.get('csv') as File
   if (!file) return
   const text = await file.text()
-  const rows = text.split('\n')
+  const parsed = Papa.parse(text, { header: false, skipEmptyLines: true })
+  const rows = parsed.data as string[][]
   for (let i = 1; i < rows.length; i++) {
-    const cols = parseCSVLine(rows[i])
+    const cols = rows[i]
     if (cols.length < 2) continue
     const [collegeName = '', state = '', courseTitle = '', stream = '', fee = '', timeInvolved = '', remarks = '', detailedAddress = ''] = cols
     const safeCollege = collegeName.trim() || 'Unknown College'
@@ -75,9 +55,10 @@ export async function uploadTestsCSV(formData: FormData) {
   const file = formData.get('testsCsv') as File
   if (!file) return
   const text = await file.text()
-  const rows = text.split('\n')
+  const parsed = Papa.parse(text, { header: false, skipEmptyLines: true })
+  const rows = parsed.data as string[][]
   for (let i = 1; i < rows.length; i++) {
-    const cols = parseCSVLine(rows[i])
+    const cols = rows[i]
     if (cols.length < 2) continue
     const [name = '', fullForm = '', suitability = '', eligibility = '', extraRemarks = ''] = cols
     const safeName = name.trim()
@@ -164,9 +145,10 @@ export async function uploadProfessionalCSV(formData: FormData) {
   const file = formData.get('profCsv') as File
   if (!file) return
   const text = await file.text()
-  const rows = text.split('\n')
+  const parsed = Papa.parse(text, { header: false, skipEmptyLines: true })
+  const rows = parsed.data as string[][]
   for (let i = 1; i < rows.length; i++) {
-    const cols = parseCSVLine(rows[i])
+    const cols = rows[i]
     if (cols.length < 2) continue
     const [name = '', fullForm = '', eligibility = '', fees = '', duration = '', opportunities = '', extraRemarks = ''] = cols
     const safeName = name.trim()
