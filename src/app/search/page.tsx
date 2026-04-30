@@ -3,10 +3,11 @@ import { prisma } from '@/lib/prisma'
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>
+  searchParams: Promise<{ q?: string; tab?: string }>
 }) {
-  const { q } = await searchParams
-  const query = q?.trim() || ''
+  const resolved = await searchParams
+  const query = resolved.q?.trim() || ''
+  const tab = resolved.tab || 'careers'
 
   if (!query) {
     return (
@@ -112,101 +113,87 @@ export default async function SearchPage({
   return (
     <div className="animate-fade-in">
       <h1 style={{ color: 'var(--primary)', marginBottom: '0.5rem' }}>Search Results</h1>
-      <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
-        {total} result{total !== 1 ? 's' : ''} for &ldquo;<strong style={{ color: 'var(--text-main)' }}>{query}</strong>&rdquo;
+      <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+        Results for &ldquo;<strong style={{ color: 'var(--text-main)' }}>{query}</strong>&rdquo;
       </p>
 
-      {colleges.length > 0 && (
-        <section style={{ marginBottom: '2.5rem' }}>
-          <h2 style={{ color: 'var(--accent)', marginBottom: '1rem', fontSize: '1.1rem' }}>Colleges ({colleges.length})</h2>
-          <div className="grid-cards">
-            {colleges.map(c => (
-              <a key={c.id} href={`/college/${c.id}`} style={{ textDecoration: 'none' }}>
-                <div className="glass-panel search-result-card">
-                  <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.name}</h3>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{c.state}</p>
-                  {c.address && <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.3rem' }}>{c.address}</p>}
-                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', borderBottom: '1px solid var(--border)' }}>
+        <a 
+          href={`/search?q=${encodeURIComponent(query)}&tab=careers`} 
+          style={{ 
+            padding: '0.5rem 1rem', 
+            textDecoration: 'none', 
+            color: tab === 'careers' ? 'var(--primary)' : 'var(--text-muted)', 
+            borderBottom: tab === 'careers' ? '2px solid var(--primary)' : '2px solid transparent',
+            fontWeight: tab === 'careers' ? 'bold' : 'normal'
+          }}
+        >
+          Careers ({careers.length})
+        </a>
+        <a 
+          href={`/search?q=${encodeURIComponent(query)}&tab=colleges`} 
+          style={{ 
+            padding: '0.5rem 1rem', 
+            textDecoration: 'none', 
+            color: tab === 'colleges' ? 'var(--primary)' : 'var(--text-muted)', 
+            borderBottom: tab === 'colleges' ? '2px solid var(--primary)' : '2px solid transparent',
+            fontWeight: tab === 'colleges' ? 'bold' : 'normal'
+          }}
+        >
+          Colleges ({colleges.length})
+        </a>
+      </div>
 
-      {courses.length > 0 && (
-        <section style={{ marginBottom: '2.5rem' }}>
-          <h2 style={{ color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem' }}>Courses ({courses.length})</h2>
-          <div className="grid-cards">
-            {courses.map(c => (
-              <a key={c.id} href={`/course/${c.id}`} style={{ textDecoration: 'none' }}>
-                <div className="glass-panel search-result-card">
-                  <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.title}</h3>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Stream: {c.stream}</p>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {careers.length > 0 && (
-        <section style={{ marginBottom: '2.5rem' }}>
-          <h2 style={{ color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem' }}>Careers ({careers.length})</h2>
-          <div className="grid-cards">
-            {careers.map(c => (
-              <a key={c.id} href={`/career/${c.id}`} style={{ textDecoration: 'none' }}>
-                <div className="glass-panel search-result-card">
-                  <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.name}</h3>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Stream: {c.stream}</p>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {tests.length > 0 && (
-        <section style={{ marginBottom: '2.5rem' }}>
-          <h2 style={{ color: 'var(--accent)', marginBottom: '1rem', fontSize: '1.1rem' }}>Entrance Tests ({tests.length})</h2>
-          <div className="grid-cards">
-            {tests.map(t => (
-              <div key={t.id} className="glass-panel" style={{ padding: '1.2rem' }}>
-                <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{t.name}</h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{t.fullForm}</p>
-                <p style={{ fontSize: '0.8rem', color: 'var(--accent)', marginTop: '0.3rem' }}>{t.suitability}</p>
+      {tab === 'colleges' && (
+        <>
+          {colleges.length > 0 ? (
+            <section style={{ marginBottom: '2.5rem' }}>
+              <div className="grid-cards">
+                {colleges.map(c => (
+                  <a key={c.id} href={`/college/${c.id}`} style={{ textDecoration: 'none' }}>
+                    <div className="glass-panel search-result-card">
+                      <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.name}</h3>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{c.state}</p>
+                      {c.address && <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.3rem' }}>{c.address}</p>}
+                      <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
+                    </div>
+                  </a>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </section>
+          ) : (
+            <p style={{ color: 'var(--text-muted)' }}>No colleges found.</p>
+          )}
+        </>
       )}
 
-      {profCourses.length > 0 && (
-        <section style={{ marginBottom: '2.5rem' }}>
-          <h2 style={{ color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem' }}>Prof. Courses ({profCourses.length})</h2>
-          <div className="grid-cards">
-            {profCourses.map(p => (
-              <a key={p.id} href={`/professional-course/${p.id}`} style={{ textDecoration: 'none' }}>
-                <div className="glass-panel search-result-card">
-                  <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{p.name}</h3>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--accent)' }}>{p.fullForm}</p>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.3rem' }}>{p.duration}</p>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
+      {tab === 'careers' && (
+        <>
+          {careers.length > 0 ? (
+            <section style={{ marginBottom: '2.5rem' }}>
+              <div className="grid-cards">
+                {careers.map(c => (
+                  <a key={c.id} href={`/career/${c.id}`} style={{ textDecoration: 'none' }}>
+                    <div className="glass-panel search-result-card">
+                      <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{c.name}</h3>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--primary)' }}>Stream: {c.stream}</p>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>View details →</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </section>
+          ) : (
+            <p style={{ color: 'var(--text-muted)' }}>No careers found.</p>
+          )}
+        </>
       )}
 
-      {total === 0 && (
-        <div className="glass-panel" style={{ textAlign: 'center', padding: '3rem' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>No results found for &ldquo;{query}&rdquo;</p>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Try a different keyword or browse the tabs above.</p>
+      {(tab === 'careers' && careers.length === 0) || (tab === 'colleges' && colleges.length === 0) ? (
+        <div className="glass-panel" style={{ textAlign: 'center', padding: '3rem', marginTop: '1rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Try a different keyword or browse the tabs above.</p>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

@@ -52,7 +52,8 @@ export default function NavBar() {
 
           {/* Right Side - Search + Auth */}
           <div className="nav-right" style={{ flexShrink: 0 }}>
-            <div className="hide-mobile">
+            <div className="desktop-search-wrapper" style={{ display: 'none' }}>
+              {/* Desktop search is hidden on mobile via global CSS, but wait let's just make it show for both and style correctly. Actually, let's keep search visible. */}
               <SearchBar />
             </div>
             
@@ -99,12 +100,14 @@ export default function NavBar() {
 
         {/* Mobile Scrollable Links */}
         <div className="nav-mobile-scrollable">
+          <div style={{ paddingRight: '1rem', minWidth: '180px' }}>
+            <SearchBar />
+          </div>
           <Link href="/" className={`nav-link ${pathname === '/' ? 'active' : ''}`}>Home</Link>
           <Link href={session ? "/quiz-intro" : "/form"} className={`nav-link ${pathname === '/quiz-intro' ? 'active' : ''}`}>Career Quiz</Link>
           <Link href={session ? "/careers" : "/form"} className={`nav-link ${pathname === '/careers' ? 'active' : ''}`}>Browse Careers</Link>
           <Link href="/colleges" className={`nav-link ${pathname === '/colleges' ? 'active' : ''}`}>Colleges</Link>
           <Link href="/about" className={`nav-link ${pathname === '/about' ? 'active' : ''}`}>About</Link>
-          <Link href="/search" className={`nav-link ${pathname === '/search' ? 'active' : ''}`}>Search</Link>
         </div>
       </div>
 
@@ -160,6 +163,14 @@ export default function NavBar() {
           .nav-mobile-scrollable {
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
+          }
+          .desktop-search-wrapper {
+            display: none !important;
+          }
+        }
+        @media (min-width: 1025px) {
+          .desktop-search-wrapper {
+            display: block !important;
           }
         }
       `}</style>

@@ -25,6 +25,7 @@ export default function BrowseCareersPage() {
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState('Salary')
   const [searchQuery, setSearchQuery] = useState('')
+  const [bookmarkedCareers, setBookmarkedCareers] = useState<string[]>([])
 
   useEffect(() => {
     const fetchCareers = async () => {
@@ -44,8 +45,46 @@ export default function BrowseCareersPage() {
         setLoading(false)
       }
     }
+    
+    const fetchBookmarks = async () => {
+      try {
+        const res = await fetch('/api/user/bookmarks')
+        const data = await res.json()
+        if (data.bookmarks) {
+          setBookmarkedCareers(data.bookmarks)
+        }
+      } catch (e) {
+        console.error("Error fetching bookmarks:", e)
+      }
+    }
+
     fetchCareers()
+    fetchBookmarks()
   }, [])
+
+  const toggleBookmark = async (careerId: string) => {
+    const isBookmarked = bookmarkedCareers.includes(careerId)
+    const action = isBookmarked ? 'remove' : 'add'
+    
+    // Optimistic update
+    setBookmarkedCareers(prev => 
+      isBookmarked ? prev.filter(id => id !== careerId) : [...prev, careerId]
+    )
+
+    try {
+      await fetch('/api/user/bookmarks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ careerId, action })
+      })
+    } catch (e) {
+      console.error(e)
+      // Revert if failed
+      setBookmarkedCareers(prev => 
+        isBookmarked ? [...prev, careerId] : prev.filter(id => id !== careerId)
+      )
+    }
+  }
 
   // Filtering & Sorting Logic
   const filteredCareers = careers.filter(c => {
@@ -158,7 +197,7 @@ export default function BrowseCareersPage() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              style={{ marginTop: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', borderTop: '1px solid var(--border)', paddingTop: '2rem' }}
+              style={{ marginTop: '2rem', display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', gap: '0.75rem', borderTop: '1px solid var(--border)', paddingTop: '2rem', paddingBottom: '0.5rem' }}
             >
               {(filterBy === 'Stream' ? streams : filterBy === 'Sector' ? sectors : salaryRanges).map(sub => (
                 <button
@@ -185,7 +224,7 @@ export default function BrowseCareersPage() {
       </div>
 
       {/* Careers Grid */}
-      <div className="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
+      <div className="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))' }}>
         {loading ? (
           <p>Loading careers...</p>
         ) : filteredCareers.map((career, idx) => (
@@ -214,8 +253,11 @@ export default function BrowseCareersPage() {
                 }}>
                   {career.stream}
                 </span>
-                <button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
-                  <Bookmark size={20} />
+                <button 
+                  onClick={() => toggleBookmark(career.id)}
+                  style={{ background: 'none', border: 'none', color: bookmarkedCareers.includes(career.id) ? 'var(--accent)' : 'var(--text-muted)', cursor: 'pointer' }}
+                >
+                  <Bookmark size={20} fill={bookmarkedCareers.includes(career.id) ? 'currentColor' : 'none'} />
                 </button>
               </div>
               <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1rem' }}>

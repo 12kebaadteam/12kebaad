@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -10,11 +11,24 @@ import {
   Trophy, 
   Star,
   Quote,
-  MessageSquare
+  MessageSquare,
+  MapPin
 } from "lucide-react";
 
 export default function HomePage() {
   const { data: session } = useSession();
+  const [topColleges, setTopColleges] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch('/api/colleges/top')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setTopColleges(data);
+        }
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <main className="full-screen-layout">
@@ -206,17 +220,31 @@ export default function HomePage() {
         </div>
 
         <div className="grid-cards">
-          {[
-            { name: "Engineering Excellence", desc: "Top IITs, NITs and private universities for technical education.", count: "100+ Colleges" },
-            { name: "Business & Management", desc: "Premium IIMs and B-Schools for future leaders.", count: "50+ Colleges" },
-            { name: "Medical & Science", desc: "Leading medical colleges and research institutes.", count: "40+ Colleges" }
-          ].map((cat, i) => (
-            <Link href="/colleges" key={i} className="glass-panel" style={{ textDecoration: 'none', transition: 'all 0.3s' }}>
-              <p style={{ color: 'var(--accent)', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{cat.count}</p>
-              <h3 style={{ fontSize: '1.2rem', color: 'var(--primary)', marginBottom: '0.75rem' }}>{cat.name}</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{cat.desc}</p>
+          {topColleges.length > 0 ? topColleges.map((college, i) => (
+            <Link href={`/college/${college.id}`} key={i} className="glass-panel" style={{ textDecoration: 'none', transition: 'all 0.3s', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <p style={{ color: 'var(--accent)', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+                  {college.ranking ? `Rank #${college.ranking}` : 'Top College'}
+                </p>
+                <h3 style={{ fontSize: '1.2rem', color: 'var(--primary)', marginBottom: '0.75rem' }}>{college.name}</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <MapPin size={14} /> {college.state}
+                </p>
+              </div>
             </Link>
-          ))}
+          )) : (
+            [
+              { name: "Engineering Excellence", desc: "Top IITs, NITs and private universities for technical education.", count: "100+ Colleges" },
+              { name: "Business & Management", desc: "Premium IIMs and B-Schools for future leaders.", count: "50+ Colleges" },
+              { name: "Medical & Science", desc: "Leading medical colleges and research institutes.", count: "40+ Colleges" }
+            ].map((cat, i) => (
+              <Link href="/colleges" key={i} className="glass-panel" style={{ textDecoration: 'none', transition: 'all 0.3s' }}>
+                <p style={{ color: 'var(--accent)', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{cat.count}</p>
+                <h3 style={{ fontSize: '1.2rem', color: 'var(--primary)', marginBottom: '0.75rem' }}>{cat.name}</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{cat.desc}</p>
+              </Link>
+            ))
+          )}
         </div>
       </section>
 

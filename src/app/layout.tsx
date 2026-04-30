@@ -12,7 +12,6 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "12kebaad | AI Career Predictor & Decision Engine for Class 12",
   description: "Stop searching, start deciding. 12kebaad uses a specialized decision engine to predict your top 3 careers and 5 perfect colleges in under 60 seconds.",
-  keywords: [
     "career options after 12th", "best career paths after 12th", "career options after 12th science", 
     "career paths after 12th commerce", "career options after 12th arts", "high salary careers after 12th", 
     "career guidance India", "top colleges in India", "entrance tests after 12th India", 
@@ -28,7 +27,9 @@ export const metadata: Metadata = {
     "marketing career after 12th", "e-commerce business after 12th",
     "chartered accountant path", "banking career guide India",
     "data science after 12th", "BCA vs BTech", "aviation pilot training guide",
-    "career decision engine", "best colleges India 2026"
+    "career decision engine", "best colleges India 2026", "top courses after 12th",
+    "bba bca btech mbbs bams bds llb courses", "top jobs after class 12", "career roadmap",
+    "12th pass government jobs", "creative careers after 12th", "design careers India"
   ],
   metadataBase: new URL("https://12kebaad.in"),
   verification: {
