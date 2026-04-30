@@ -11,14 +11,14 @@ export default async function CollegesPage({
   const c = await cookies()
 
   const stateParam = resolvedParams.state || c.get('user_state')?.value || ''
-  const sort = resolvedParams.sort || 'ranking_asc'
+  const sort = resolvedParams.sort || 'name_asc'
   const feeMax = resolvedParams.feeMax ? parseInt(resolvedParams.feeMax) : undefined
 
   let orderBy: any = {}
-  if (sort === 'ranking_asc') orderBy = { ranking: 'asc' }
-  else if (sort === 'ranking_desc') orderBy = { ranking: 'desc' }
-  else if (sort === 'name_asc') orderBy = { name: 'asc' }
+  if (sort === 'name_asc') orderBy = { name: 'asc' }
   else if (sort === 'state_asc') orderBy = { state: 'asc' }
+  else if (sort === 'placements_desc') orderBy = { placements: 'desc' }
+  else if (sort === 'fees_asc') orderBy = { fees: 'asc' }
 
   const colleges = await prisma.college.findMany({
     where: stateParam ? { state: stateParam } : undefined,
@@ -61,10 +61,10 @@ export default async function CollegesPage({
       {/* Filters bar */}
       <form method="GET" className="filters-bar">
         <select name="sort" className="form-control filter-input" defaultValue={sort}>
-          <option value="ranking_asc">Rank (Best First)</option>
-          <option value="ranking_desc">Rank (Lowest First)</option>
           <option value="name_asc">Name A→Z</option>
           <option value="state_asc">State A→Z</option>
+          <option value="placements_desc">Highest Placements</option>
+          <option value="fees_asc">Lowest Fees</option>
         </select>
         <select name="state" className="form-control filter-input" defaultValue={stateParam}>
           <option value="">All States</option>
@@ -92,9 +92,8 @@ export default async function CollegesPage({
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
                   <h3 style={{ fontSize: '1.2rem', color: 'var(--text-main)' }}>{college.name}</h3>
-                  {college.ranking && <span className="rank-badge">#{college.ranking}</span>}
                 </div>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}>📍 {college.state}</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}>📍 {college.location}, {college.state}</p>
               </div>
               <a href={`/college/${college.id}`} className="btn-primary" style={{ marginTop: '1.2rem', textDecoration: 'none', fontSize: '0.83rem', padding: '0.5rem 1rem' }}>
                 View College Details →

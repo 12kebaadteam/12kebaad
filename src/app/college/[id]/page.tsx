@@ -49,19 +49,49 @@ export default async function CollegeDetailPage({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <h1 style={{ fontSize: '1.6rem', marginBottom: '0.4rem' }}>{college.name}</h1>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>📍 {college.state}</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>📍 {college.location}, {college.state}</p>
             {college.address && (
               <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginTop: '0.3rem' }}>{college.address}</p>
             )}
           </div>
-          {college.ranking && (
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ background: 'linear-gradient(135deg, var(--primary), var(--accent))', borderRadius: '12px', padding: '0.8rem 1.2rem' }}>
-                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.7)', marginBottom: '0.1rem' }}>NATIONAL RANK</div>
-                <div style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>#{college.ranking}</div>
-              </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ background: 'rgba(30, 58, 95, 0.05)', borderRadius: '12px', padding: '0.8rem 1.2rem', border: '1px solid var(--border)' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '0.1rem' }}>REALITY SCORE</div>
+              <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--primary)' }}>{college.realityScore}/10</div>
             </div>
-          )}
+          </div>
+        </div>
+      </div>
+
+      {/* College Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div className="glass-panel" style={{ padding: '1.25rem' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>AVG. PLACEMENT</p>
+          <p style={{ fontWeight: '700', color: 'var(--success)', fontSize: '1.2rem' }}>₹{college.placements}L /yr</p>
+        </div>
+        <div className="glass-panel" style={{ padding: '1.25rem' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>AVG. FEES</p>
+          <p style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.2rem' }}>₹{college.fees.toLocaleString()}</p>
+        </div>
+        <div className="glass-panel" style={{ padding: '1.25rem' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>ADMISSION CUTOFF</p>
+          <p style={{ fontWeight: '700', color: 'var(--accent)', fontSize: '1.2rem' }}>{college.cutoff ? `${college.cutoff}%` : 'N/A'}</p>
+        </div>
+      </div>
+
+      {/* Pros & Cons */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
+        <div className="glass-panel" style={{ borderColor: 'var(--success)' }}>
+          <h3 style={{ fontSize: '1rem', color: 'var(--success)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>✅ Pros</h3>
+          <ul style={{ paddingLeft: '1.2rem', fontSize: '0.9rem', color: 'var(--text-main)' }}>
+            {college.pros.map((p, i) => <li key={i} style={{ marginBottom: '0.5rem' }}>{p}</li>)}
+          </ul>
+        </div>
+        <div className="glass-panel" style={{ borderColor: '#ef4444' }}>
+          <h3 style={{ fontSize: '1rem', color: '#ef4444', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>❌ Cons</h3>
+          <ul style={{ paddingLeft: '1.2rem', fontSize: '0.9rem', color: 'var(--text-main)' }}>
+            {college.cons.map((c, i) => <li key={i} style={{ marginBottom: '0.5rem' }}>{c}</li>)}
+          </ul>
         </div>
       </div>
 

@@ -223,27 +223,32 @@ export default function HomePage() {
           {topColleges.length > 0 ? topColleges.map((college, i) => (
             <Link href={`/college/${college.id}`} key={i} className="glass-panel" style={{ textDecoration: 'none', transition: 'all 0.3s', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <p style={{ color: 'var(--accent)', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
-                  {college.ranking ? `Rank #${college.ranking}` : 'Top College'}
+                <p style={{ color: 'var(--success)', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+                  {college.realityScore ? `Score: ${college.realityScore}/10` : 'Top College'}
                 </p>
                 <h3 style={{ fontSize: '1.2rem', color: 'var(--primary)', marginBottom: '0.75rem' }}>{college.name}</h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <MapPin size={14} /> {college.state}
+                  <MapPin size={14} /> {college.location}, {college.state}
                 </p>
               </div>
             </Link>
           )) : (
-            [
-              { name: "Engineering Excellence", desc: "Top IITs, NITs and private universities for technical education.", count: "100+ Colleges" },
-              { name: "Business & Management", desc: "Premium IIMs and B-Schools for future leaders.", count: "50+ Colleges" },
-              { name: "Medical & Science", desc: "Leading medical colleges and research institutes.", count: "40+ Colleges" }
-            ].map((cat, i) => (
-              <Link href="/colleges" key={i} className="glass-panel" style={{ textDecoration: 'none', transition: 'all 0.3s' }}>
-                <p style={{ color: 'var(--accent)', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{cat.count}</p>
-                <h3 style={{ fontSize: '1.2rem', color: 'var(--primary)', marginBottom: '0.75rem' }}>{cat.name}</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{cat.desc}</p>
-              </Link>
-            ))
+            <>
+              {[
+                { name: "Engineering Excellence", desc: "Top IITs, NITs and private universities for technical education.", count: "100+ Colleges" },
+                { name: "Business & Management", desc: "Premium IIMs and B-Schools for future leaders.", count: "50+ Colleges" },
+                { name: "Medical & Science", desc: "Leading medical colleges and research institutes.", count: "40+ Colleges" }
+              ].map((cat, i) => (
+                <Link href="/colleges" key={i} className="glass-panel" style={{ textDecoration: 'none', transition: 'all 0.3s' }}>
+                  <p style={{ color: 'var(--accent)', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{cat.count}</p>
+                  <h3 style={{ fontSize: '1.2rem', color: 'var(--primary)', marginBottom: '0.75rem' }}>{cat.name}</h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{cat.desc}</p>
+                </Link>
+              ))}
+              <div style={{ gridColumn: '1 / -1', textAlign: 'center', marginTop: '1rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                Note: Upload your colleges CSV in the admin panel to see actual data here.
+              </div>
+            </>
           )}
         </div>
       </section>

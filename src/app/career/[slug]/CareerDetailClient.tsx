@@ -80,7 +80,24 @@ export default function CareerDetailClient() {
             <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>STREAM</p>
             <p style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.2rem' }}>{career.stream}</p>
           </div>
+          <div>
+            <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>SECTOR</p>
+            <p style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.2rem' }}>{career.sector}</p>
+          </div>
+          <div>
+            <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>DIFFICULTY</p>
+            <p style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.2rem' }}>{career.difficulty}/10</p>
+          </div>
         </div>
+      </div>
+
+      {/* Interest Tags */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2rem' }}>
+        {career.interestTags?.map((tag: string, i: number) => (
+          <span key={i} style={{ fontSize: '0.8rem', background: 'rgba(232, 99, 10, 0.1)', color: 'var(--accent)', padding: '0.3rem 0.8rem', borderRadius: '8px', fontWeight: '600' }}>
+            #{tag}
+          </span>
+        ))}
       </div>
 
       {/* Roadmap Section */}
@@ -141,7 +158,7 @@ export default function CareerDetailClient() {
             <GraduationCap size={20} style={{ color: 'var(--accent)' }} /> Top Colleges in India
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {(career.topColleges?.split(",") || ["IIT Delhi", "BITS Pilani", "SRCC Delhi", "IIM Ahmedabad"]).map((college: string, i: number) => (
+            {(career.topColleges ? career.topColleges.split(/[,|]/) : ["Contact us for specialized list"]).map((college: string, i: number) => (
               <div key={i} style={{ padding: '1rem', background: 'var(--bg-offset)', borderRadius: '12px', border: '1px solid var(--border)', fontWeight: '600', color: 'var(--text-main)' }}>
                 {college.trim()}
               </div>

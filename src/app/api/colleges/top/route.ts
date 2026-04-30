@@ -6,7 +6,7 @@ export async function GET() {
     const topColleges = await prisma.college.findMany({
       take: 3,
       orderBy: {
-        ranking: 'asc'
+        realityScore: 'desc'
       }
     });
 
