@@ -24,29 +24,107 @@ import {
   TrendingUp,
   Zap,
   ShoppingBag,
-  Target
+  Target,
+  Cpu,
+  Brush,
+  Wheat,
+  BarChart,
+  Building2,
+  BookOpen,
+  Globe,
+  Lock,
+  Activity,
+  Heart,
+  Scale as LawIcon,
+  Microscope,
+  Music,
+  Rocket,
+  Coffee,
+  Languages,
+  PenTool,
+  Brain,
+  Search,
+  Gavel,
+  CheckCircle,
+  Lightbulb,
+  TreePine,
+  Timer,
+  BicepsFlexed,
+  Layout,
+  Microchip,
+  Truck,
+  Edit3
 } from 'lucide-react'
 
 const interestCategories = [
-  { id: 'Tech_Coding', label: 'Tech & Coding', icon: <Monitor size={24} /> },
-  { id: 'AI_Data', label: 'AI & Data Science', icon: <Monitor size={24} /> },
-  { id: 'Medical_Pharma', label: 'Medicine & Pharma', icon: <Stethoscope size={24} /> },
-  { id: 'Healthcare_Mgmt', label: 'Healthcare Mgmt', icon: <Stethoscope size={24} /> },
-  { id: 'Fintech_Banking', label: 'Fintech & Banking', icon: <Briefcase size={24} /> },
-  { id: 'Stock_Markets', label: 'Stock Markets', icon: <TrendingUp size={24} /> },
-  { id: 'Entrepreneurship', label: 'Entrepreneurship', icon: <Zap size={24} /> },
-  { id: 'Ecommerce_D2C', label: 'E-commerce & D2C', icon: <ShoppingBag size={24} /> },
-  { id: 'Marketing_Ads', label: 'Marketing & Ads', icon: <Target size={24} /> },
-  { id: 'Management_HR', label: 'Management & HR', icon: <Users size={24} /> },
-  { id: 'Accounting_Audit', label: 'Accounting & Tax', icon: <Scale size={24} /> },
-  { id: 'Design_VFX', label: 'Design & VFX', icon: <Palette size={24} /> },
-  { id: 'Content_Journalism', label: 'Content & Media', icon: <Film size={24} /> },
-  { id: 'Law_Judiciary', label: 'Law & Judiciary', icon: <Scale size={24} /> },
-  { id: 'Pure_Science', label: 'Pure Science & R&D', icon: <Beaker size={24} /> },
-  { id: 'Engineering_Robotics', label: 'Robotics & Engg', icon: <Hammer size={24} /> },
-  { id: 'Defense_Army', label: 'Defense & Police', icon: <Shield size={24} /> },
-  { id: 'Aviation_Pilot', label: 'Pilot & Aviation', icon: <Plane size={24} /> },
-  { id: 'Culinary_Bakery', label: 'Culinary & Hotels', icon: <Utensils size={24} /> },
+  { id: 'AI', label: 'AI', icon: <Cpu size={24} /> },
+  { id: 'Aesthetics', label: 'Aesthetics', icon: <Palette size={24} /> },
+  { id: 'Agriculture', label: 'Agriculture', icon: <Wheat size={24} /> },
+  { id: 'Analysis', label: 'Analysis', icon: <BarChart size={24} /> },
+  { id: 'Architecture', label: 'Architecture', icon: <Building2 size={24} /> },
+  { id: 'Art', label: 'Art', icon: <Brush size={24} /> },
+  { id: 'Aviation', label: 'Aviation', icon: <Plane size={24} /> },
+  { id: 'Biology', label: 'Biology', icon: <Microscope size={24} /> },
+  { id: 'Business', label: 'Business', icon: <Briefcase size={24} /> },
+  { id: 'Coding', label: 'Coding', icon: <Monitor size={24} /> },
+  { id: 'Communication', label: 'Communication', icon: <Languages size={24} /> },
+  { id: 'Construction', label: 'Construction', icon: <Hammer size={24} /> },
+  { id: 'Creativity', label: 'Creativity', icon: <Palette size={24} /> },
+  { id: 'Culture', label: 'Culture', icon: <Globe size={24} /> },
+  { id: 'Current Affairs', label: 'Current Affairs', icon: <BookOpen size={24} /> },
+  { id: 'Cybersecurity', label: 'Cybersecurity', icon: <Lock size={24} /> },
+  { id: 'Data Analysis', label: 'Data Analysis', icon: <BarChart size={24} /> },
+  { id: 'Data Science', label: 'Data Science', icon: <Microchip size={24} /> },
+  { id: 'Defence', label: 'Defence', icon: <Shield size={24} /> },
+  { id: 'Design', label: 'Design', icon: <Palette size={24} /> },
+  { id: 'Discipline', label: 'Discipline', icon: <Target size={24} /> },
+  { id: 'Economics', label: 'Economics', icon: <TrendingUp size={24} /> },
+  { id: 'Empathy', label: 'Empathy', icon: <Heart size={24} /> },
+  { id: 'Engineering', label: 'Engineering', icon: <Zap size={24} /> },
+  { id: 'Environment', label: 'Environment', icon: <Leaf size={24} /> },
+  { id: 'Expression', label: 'Expression', icon: <Music size={24} /> },
+  { id: 'Finance', label: 'Finance', icon: <Briefcase size={24} /> },
+  { id: 'Food', label: 'Food', icon: <Utensils size={24} /> },
+  { id: 'Growth', label: 'Growth', icon: <TrendingUp size={24} /> },
+  { id: 'Hands-on Work', label: 'Hands-on Work', icon: <Hammer size={24} /> },
+  { id: 'Health', label: 'Health', icon: <Activity size={24} /> },
+  { id: 'Healthcare', label: 'Healthcare', icon: <Stethoscope size={24} /> },
+  { id: 'History', label: 'History', icon: <BookOpen size={24} /> },
+  { id: 'Hospitality', label: 'Hospitality', icon: <Utensils size={24} /> },
+  { id: 'Investigation', label: 'Investigation', icon: <Search size={24} /> },
+  { id: 'Justice', label: 'Justice', icon: <LawIcon size={24} /> },
+  { id: 'Law', label: 'Law', icon: <Gavel size={24} /> },
+  { id: 'Leadership', label: 'Leadership', icon: <Users size={24} /> },
+  { id: 'Learning', label: 'Learning', icon: <GraduationCap size={24} /> },
+  { id: 'Logic', label: 'Logic', icon: <Brain size={24} /> },
+  { id: 'Mathematics', label: 'Mathematics', icon: <Activity size={24} /> },
+  { id: 'Nature', label: 'Nature', icon: <TreePine size={24} /> },
+  { id: 'Numbers', label: 'Numbers', icon: <Activity size={24} /> },
+  { id: 'Organization', label: 'Organization', icon: <Layout size={24} /> },
+  { id: 'Patience', label: 'Patience', icon: <Timer size={24} /> },
+  { id: 'Philosophy', label: 'Philosophy', icon: <BookOpen size={24} /> },
+  { id: 'Physical Fitness', label: 'Physical Fitness', icon: <Dumbbell size={24} /> },
+  { id: 'Physics', label: 'Physics', icon: <Zap size={24} /> },
+  { id: 'Policy', label: 'Policy', icon: <FileText size={24} /> },
+  { id: 'Precision', label: 'Precision', icon: <CheckCircle size={24} /> },
+  { id: 'Problem Solving', label: 'Problem Solving', icon: <Lightbulb size={24} /> },
+  { id: 'Psychology', label: 'Psychology', icon: <Brain size={24} /> },
+  { id: 'Research', label: 'Research', icon: <Search size={24} /> },
+  { id: 'Science', label: 'Science', icon: <Beaker size={24} /> },
+  { id: 'Service', label: 'Service', icon: <Users size={24} /> },
+  { id: 'Social Science', label: 'Social Science', icon: <Users size={24} /> },
+  { id: 'Social Service', label: 'Social Service', icon: <Heart size={24} /> },
+  { id: 'Software', label: 'Software', icon: <Monitor size={24} /> },
+  { id: 'Space', label: 'Space', icon: <Rocket size={24} /> },
+  { id: 'Sports', label: 'Sports', icon: <Dumbbell size={24} /> },
+  { id: 'Subject Expertise', label: 'Subject Expertise', icon: <GraduationCap size={24} /> },
+  { id: 'Sustainability', label: 'Sustainability', icon: <Leaf size={24} /> },
+  { id: 'Teaching', label: 'Teaching', icon: <GraduationCap size={24} /> },
+  { id: 'Technical Skills', label: 'Technical Skills', icon: <Hammer size={24} /> },
+  { id: 'Technology', label: 'Technology', icon: <Monitor size={24} /> },
+  { id: 'Travel', label: 'Travel', icon: <Truck size={24} /> },
+  { id: 'Work', icon: <Briefcase size={24} />, label: 'Work' },
+  { id: 'Writing', label: 'Writing', icon: <Edit3 size={24} /> },
 ]
 
 export default function InterestsPage() {
@@ -58,9 +136,7 @@ export default function InterestsPage() {
     if (selected.includes(id)) {
       setSelected(selected.filter(i => i !== id))
     } else {
-      if (selected.length < 6) {
-        setSelected([...selected, id])
-      }
+      setSelected([...selected, id])
     }
   }
 
@@ -91,7 +167,7 @@ export default function InterestsPage() {
           What are your career interest areas?
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '3rem' }}>
-          Select 3 to 6 areas that excite you. This narrows down 1,200+ careers to your perfect matches.
+          Select 3 or more areas that excite you. This narrows down 1,200+ careers to your perfect matches.
         </p>
 
         <div style={{ 
@@ -144,7 +220,7 @@ export default function InterestsPage() {
           <p style={{ color: 'var(--text-muted)', fontWeight: '600' }}>
             {selected.length < 3 
               ? `Select ${3 - selected.length} more to continue` 
-              : `${selected.length} areas selected (Max 6)`}
+              : `${selected.length} areas selected`}
           </p>
           <button
             onClick={handleNext}

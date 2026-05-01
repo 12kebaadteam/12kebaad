@@ -141,6 +141,16 @@ export async function POST(req: NextRequest) {
               topColleges: row.topcolleges || "",
               keySkills: row.keyskills ? row.keyskills.split(/[|,]/).map((s: string) => s.trim()) : [],
               roadmapSteps: row.roadmapsteps ? row.roadmapsteps.split('|').map((s: string) => s.trim()) : [],
+              avg_salary_lpa: parseFloat(row.avg_salary_lpa) || null,
+              job_demand_trend: row.job_demand_trend || null,
+              work_from_home_possible: row.work_from_home_possible || null,
+              gender_diversity_index: parseFloat(row.gender_diversity_index) || null,
+              state_specific_relevance: row.state_specific_relevance || null,
+              certifications_recommended: row.certifications_recommended ? row.certifications_recommended.split(/[|,]/).map((s: string) => s.trim()) : [],
+              career_cluster: row.career_cluster || null,
+              years_to_first_job: cleanNum(row.years_to_first_job) || null,
+              self_employment_possible: row.self_employment_possible || null,
+              physical_demand: row.physical_demand || null,
             },
             create: {
               name: row.name,
@@ -159,6 +169,16 @@ export async function POST(req: NextRequest) {
               topColleges: row.topcolleges || "",
               keySkills: row.keyskills ? row.keyskills.split(/[|,]/).map((s: string) => s.trim()) : [],
               roadmapSteps: row.roadmapsteps ? row.roadmapsteps.split('|').map((s: string) => s.trim()) : [],
+              avg_salary_lpa: parseFloat(row.avg_salary_lpa) || null,
+              job_demand_trend: row.job_demand_trend || null,
+              work_from_home_possible: row.work_from_home_possible || null,
+              gender_diversity_index: parseFloat(row.gender_diversity_index) || null,
+              state_specific_relevance: row.state_specific_relevance || null,
+              certifications_recommended: row.certifications_recommended ? row.certifications_recommended.split(/[|,]/).map((s: string) => s.trim()) : [],
+              career_cluster: row.career_cluster || null,
+              years_to_first_job: cleanNum(row.years_to_first_job) || null,
+              self_employment_possible: row.self_employment_possible || null,
+              physical_demand: row.physical_demand || null,
             }
           });
           count++;

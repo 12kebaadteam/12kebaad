@@ -55,32 +55,42 @@ model UserPreference {
 }
 
 model Career {
-  id                 String              @id @default(cuid())
-  name               String              @unique
-  slug               String              @unique @default("")
-  stream             String              
-  sector             String              @default("Other")
-  description        String
-  interestTags       String[]            @default([])
-  salaryRangeMin     Int
-  salaryRangeMax     Int
-  difficulty         Int                 // 1-10 scale
-  demand             Int                 // 1-10 score
-  growth             Int                 // 1-10 score
-  entryExam          String?             @default("None")
-  degreeRequired     String?             @default("Bachelor's")
-  topColleges        String?             @default("")
-  keySkills          String[]            @default([])
-  roadmapSteps       String[]            @default([])
-  skills             CareerSkill[]
-  roadmaps           Roadmap[]
-  collegeCareers     CollegeCareer[]
-  recommendationLogs RecommendationLog[]
-  quizResults        QuizResult[]
-  comments           Comment[]
-  feedbacks          Feedback[]
-  bookmarks          Bookmark[]
-  createdAt          DateTime            @default(now())
+  id                        String              @id @default(cuid())
+  name                      String              @unique
+  slug                      String              @unique @default("")
+  stream                    String              
+  sector                    String              @default("Other")
+  description               String
+  interestTags              String[]            @default([])
+  salaryRangeMin            Int
+  salaryRangeMax            Int
+  difficulty                Int                 // 1-10 scale
+  demand                    Int                 // 1-10 score
+  growth                    Int                 // 1-10 score
+  entryExam                 String?             @default("None")
+  degreeRequired            String?             @default("Bachelor's")
+  topColleges               String?             @default("")
+  keySkills                 String[]            @default([])
+  roadmapSteps              String[]            @default([])
+  avg_salary_lpa            Float?
+  job_demand_trend          String?
+  work_from_home_possible   String?
+  gender_diversity_index    Float?
+  state_specific_relevance  String?
+  certifications_recommended String[]           @default([])
+  career_cluster            String?
+  years_to_first_job        Int?
+  self_employment_possible  String?
+  physical_demand           String?
+  skills                    CareerSkill[]
+  roadmaps                  Roadmap[]
+  collegeCareers            CollegeCareer[]
+  recommendationLogs        RecommendationLog[]
+  quizResults               QuizResult[]
+  comments                  Comment[]
+  feedbacks                 Feedback[]
+  bookmarks                 Bookmark[]
+  createdAt                 DateTime            @default(now())
 }
 
 model QuizSession {

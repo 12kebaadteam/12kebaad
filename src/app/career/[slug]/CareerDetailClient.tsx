@@ -15,7 +15,15 @@ import {
   Briefcase,
   GraduationCap,
   Sparkles,
-  MessageSquare
+  MessageSquare,
+  Globe,
+  Home,
+  Users2,
+  Calendar,
+  Award,
+  Zap as ZapIcon,
+  ShieldCheck,
+  Activity as ActivityIcon
 } from 'lucide-react'
 import Link from 'next/link'
 import FeedbackSection from '@/components/FeedbackSection'
@@ -85,8 +93,16 @@ export default function CareerDetailClient() {
             <p style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.2rem' }}>{career.sector}</p>
           </div>
           <div>
-            <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>DIFFICULTY</p>
-            <p style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.2rem' }}>{career.difficulty}/10</p>
+            <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>AVG SALARY (LPA)</p>
+            <p style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.2rem' }}>₹{career.avg_salary_lpa || career.salaryRangeMin}L</p>
+          </div>
+          <div>
+            <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>WFH POSSIBLE</p>
+            <p style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.2rem' }}>{career.work_from_home_possible || "No"}</p>
+          </div>
+          <div>
+            <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>TREND</p>
+            <p style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.2rem' }}>{career.job_demand_trend || "Stable"}</p>
           </div>
         </div>
       </div>
@@ -136,6 +152,75 @@ export default function CareerDetailClient() {
             </div>
           ))}
         </div>
+      </section>
+      {/* Market Insights & AI Analysis */}
+      <section style={{ marginBottom: '3rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
+          <Sparkles size={24} style={{ color: 'var(--accent)' }} />
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)' }}>Market Analysis & Insights</h2>
+        </div>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+          <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(30, 58, 95, 0.02)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+              <Users2 size={18} />
+              <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>GENDER DIVERSITY</span>
+            </div>
+            <p style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)' }}>{career.gender_diversity_index || 50}%</p>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Inclusive work environment</p>
+          </div>
+
+          <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(30, 58, 95, 0.02)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+              <Calendar size={18} />
+              <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>YEARS TO JOB</span>
+            </div>
+            <p style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)' }}>{career.years_to_first_job || 4} Years</p>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Post-Class 12 preparation</p>
+          </div>
+
+          <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(30, 58, 95, 0.02)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+              <ZapIcon size={18} />
+              <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>SELF EMPLOYMENT</span>
+            </div>
+            <p style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)' }}>{career.self_employment_possible || "Possible"}</p>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Entrepreneurial opportunities</p>
+          </div>
+
+          <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(30, 58, 95, 0.02)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+              <ActivityIcon size={18} />
+              <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>PHYSICAL DEMAND</span>
+            </div>
+            <p style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--primary)' }}>{career.physical_demand || "Low"}</p>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Nature of day-to-day work</p>
+          </div>
+        </div>
+
+        {career.state_specific_relevance && (
+          <div style={{ marginTop: '1.5rem', padding: '1.25rem', background: 'rgba(232, 99, 10, 0.05)', borderRadius: '16px', border: '1px solid rgba(232, 99, 10, 0.1)' }}>
+             <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: '1.5' }}>
+              <Globe size={16} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--accent)' }} />
+              <strong>Regional Relevance:</strong> {career.state_specific_relevance}
+            </p>
+          </div>
+        )}
+
+        {career.certifications_recommended?.length > 0 && (
+          <div style={{ marginTop: '1.5rem' }}>
+            <h4 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Award size={18} style={{ color: 'var(--accent)' }} /> Recommended Certifications
+            </h4>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+              {career.certifications_recommended.map((cert: string, i: number) => (
+                <span key={i} style={{ background: 'var(--bg-main)', border: '1px solid var(--border)', padding: '0.5rem 1rem', borderRadius: '10px', fontSize: '0.85rem', color: 'var(--text-main)' }}>
+                  {cert}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Details Grid */}

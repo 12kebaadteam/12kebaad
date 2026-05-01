@@ -32,7 +32,20 @@ export async function POST(req: NextRequest) {
       - Selected Interests: ${interests.join(", ")}
       - Quiz choices (frequency map of career IDs): ${JSON.stringify(freq)}
       
-      Career Data (Context): ${JSON.stringify(topCareers.map(c => ({ id: c.id, name: c.name, description: c.description })))}
+      Career Data (Context): ${JSON.stringify(topCareers.map(c => ({ 
+        id: c.id, 
+        name: c.name, 
+        description: c.description,
+        salary: `${c.salaryRangeMin}-${c.salaryRangeMax}L`,
+        demand: c.demand,
+        growth: c.growth,
+        avg_salary_lpa: c.avg_salary_lpa,
+        job_demand_trend: c.job_demand_trend,
+        work_from_home: c.work_from_home_possible,
+        gender_diversity: c.gender_diversity_index,
+        career_cluster: c.career_cluster,
+        self_employment: c.self_employment_possible
+      })))}
       
       Return JSON: [{ 
         "careerId": "string", 
