@@ -53,7 +53,8 @@ import {
   Layout,
   Microchip,
   Truck,
-  Edit3
+  Edit3,
+  FileText
 } from 'lucide-react'
 
 const interestCategories = [
