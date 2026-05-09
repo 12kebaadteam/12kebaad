@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       You are an expert career counsellor for Indian students after Class 12.
       Analyse ALL the student's data holistically and return their TOP 10 best-fit career recommendations.
       
-      IMPORTANT RULE: You may recommend careers NOT explicitly chosen in quiz if they align with the student's interests, stream and passion field. Think laterally.
+      IMPORTANT RULE: You MUST recommend a diverse mix. At least 50% of your recommendations MUST BE careers that were NOT explicitly chosen in the quiz, but are highly relevant based on the student's interests, stream and passion field. Do not just regurgitate the quiz choices. Introduce them to new, lateral paths.
       
       Student Profile:
       - Stream: ${stream}
@@ -93,11 +93,11 @@ export async function POST(req: NextRequest) {
       })))}
       
       Scoring Criteria (weigh each):
-      1. Stream compatibility (30%) — career must be accessible from student's stream
-      2. Interest tag overlap (25%) — more matching interest tags = higher score
-      3. Passion field alignment (20%) — if passion field matches career cluster/sector, boost score significantly
-      4. Market demand & growth (15%) — prioritise high-demand, high-growth careers
-      5. Quiz frequency reinforcement (10%) — careers chosen multiple times in quiz get a slight boost
+      1. Passion field alignment (25%) — if passion field matches career cluster/sector, boost score significantly.
+      2. Interest tag overlap (25%) — more matching interest tags = higher score.
+      3. Stream compatibility (25%) — career must be accessible from student's stream.
+      4. Market demand & growth (15%) — prioritise high-demand, high-growth careers.
+      5. Discovery factor (10%) — Boost careers that match the profile but weren't in the explicit quiz choices to encourage discovery.
 
       Return a JSON array of exactly 10 recommendations:
       [{ 

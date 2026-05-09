@@ -6,35 +6,19 @@ export const exportToPDF = async (elementId: string, filename: string = '12kebaa
   if (!element) return
 
   try {
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      windowWidth: element.scrollWidth,
-      windowHeight: element.scrollHeight
-    })
-
-    const imgData = canvas.toDataURL('image/png')
-    const pdf = new jsPDF('p', 'mm', 'a4')
+    const html2pdf = (await import('html2pdf.js')).default;
     
-    const imgProps = pdf.getImageProperties(imgData)
-    const pdfWidth = pdf.internal.pageSize.getWidth()
-    const pageHeight = pdf.internal.pageSize.getHeight()
-    const imgHeight = (imgProps.height * pdfWidth) / imgProps.width
-    let heightLeft = imgHeight
-    let position = 0
+    // We explicitly tell it to avoid breaking inside our career block divs
+    const opt = {
+      margin:       10,
+      filename:     filename,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: 'css', avoid: '.career-pdf-block' }
+    };
 
-    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight)
-    heightLeft -= pageHeight
-
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight
-      pdf.addPage()
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight)
-      heightLeft -= pageHeight
-    }
-
-    pdf.save(filename)
+    await html2pdf().set(opt).from(element).save();
   } catch (error) {
     console.error('PDF Export Error:', error)
   }

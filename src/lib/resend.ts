@@ -61,7 +61,7 @@ export async function sendRecommendations(email: string, recommendations: any[])
 export async function sendWelcomeEmail(email: string, name: string) {
   try {
     await resend.emails.send({
-      from: '12kebaad <welcome@verification.12kebaad.in>',
+      from: '12kebaad <verification@verification.12kebaad.in>',
       to: email,
       subject: "Welcome to 12kebaad.in! 🎉 Let's find your perfect career",
       html: `

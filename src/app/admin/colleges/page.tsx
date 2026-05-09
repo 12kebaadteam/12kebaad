@@ -1,6 +1,7 @@
 import AdminLayout from "@/components/AdminLayout";
 import prisma from "@/lib/prisma";
 import { Search, Filter, Plus } from "lucide-react";
+import Link from "next/link";
 
 export default async function AdminCollegesPage() {
   const colleges = await prisma.college.findMany({
@@ -14,9 +15,9 @@ export default async function AdminCollegesPage() {
           <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Colleges</h1>
           <p style={{ color: 'var(--text-muted)' }}>Manage your database of partner and listed colleges.</p>
         </div>
-        <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Plus size={18} /> Add College
-        </button>
+        <Link href="/admin/uploads" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+          <Plus size={18} /> Upload via CSV
+        </Link>
       </div>
 
       <div className="glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
@@ -63,8 +64,7 @@ export default async function AdminCollegesPage() {
                   </span>
                 </td>
                 <td style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>
-                  <button style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', marginRight: '1rem' }}>Edit</button>
-                  <button style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>Delete</button>
+                  <Link href="/admin/uploads" style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', marginRight: '1rem', textDecoration: 'none', fontSize: '0.8rem' }}>CSV Edit</Link>
                 </td>
               </tr>
             ))}

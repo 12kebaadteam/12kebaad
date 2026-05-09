@@ -6,7 +6,7 @@ import { UploadCloud, FileText, CheckCircle2, AlertCircle, Trash2 } from "lucide
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
-  const [type, setType] = useState<"careers" | "colleges">("colleges");
+  const [type, setType] = useState<"careers" | "colleges" | "exams">("colleges");
   const [wipe, setWipe] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -44,6 +44,25 @@ export default function UploadPage() {
       <div style={{ marginBottom: '3rem' }}>
         <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Bulk Import</h1>
         <p style={{ color: 'var(--text-muted)' }}>Upload CSV files to update your database in bulk.</p>
+        
+        <div style={{ marginTop: '1.5rem', padding: '1.5rem', background: 'rgba(30,58,95,0.05)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+          <h4 style={{ marginBottom: '0.5rem', color: 'var(--primary)' }}>CSV Data Structure ({type.charAt(0).toUpperCase() + type.slice(1)})</h4>
+          {type === 'exams' && (
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              <strong>Required Headers:</strong> Name, FullForm, Suitability, Eligibility, ExtraRemarks
+            </p>
+          )}
+          {type === 'careers' && (
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              <strong>Required Headers:</strong> Name, Stream, Sector, Description, SalaryRangeMin, SalaryRangeMax, Difficulty, Demand, Growth, etc.
+            </p>
+          )}
+          {type === 'colleges' && (
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              <strong>Required Headers:</strong> Name, State, Location, Fees, Placements, Cutoff, RealityScore, Pros, Cons
+            </p>
+          )}
+        </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem' }}>
@@ -142,6 +161,13 @@ export default function UploadPage() {
                 style={{ width: '100%', fontSize: '0.85rem' }}
               >
                 Careers
+              </button>
+              <button 
+                onClick={() => setType("exams")}
+                className={type === "exams" ? "btn-primary" : "btn-secondary"}
+                style={{ width: '100%', fontSize: '0.85rem' }}
+              >
+                Entrance Exams
               </button>
             </div>
           </div>

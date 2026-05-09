@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 import { prisma } from '@/lib/prisma'
+import { revalidatePath } from 'next/cache'
 import Papa from 'papaparse'
 
 async function checkAdmin() {
@@ -46,6 +47,7 @@ export async function uploadCSV(formData: FormData) {
       await prisma.collegeCourse.create({ data: { collegeId: college.id, courseId: course.id, fee: sanitizedFee, timeInvolved: timeInvolved.trim() || 'Not Specified', remarks: remarks.trim() || null } })
     }
   }
+  revalidatePath('/admin')
   redirect('/admin')
 }
 
@@ -69,6 +71,8 @@ export async function uploadTestsCSV(formData: FormData) {
       create: { name: safeName, fullForm: fullForm.trim(), suitability: suitability.trim(), eligibility: eligibility.trim(), extraRemarks: extraRemarks.trim() || null }
     })
   }
+  revalidatePath('/admin')
+  revalidatePath('/entrance-tests')
   redirect('/admin')
 }
 
@@ -86,6 +90,7 @@ export async function addRecommendation(formData: FormData) {
   } else {
     await prisma.recommendation.create({ data: { collegeId, adminRank, targetStream, reason } })
   }
+  revalidatePath('/admin')
   redirect('/admin')
 }
 
@@ -94,6 +99,7 @@ export async function deleteRecommendation(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
   await prisma.recommendation.delete({ where: { id } })
+  revalidatePath('/admin')
   redirect('/admin')
 }
 
@@ -104,6 +110,7 @@ export async function updateCourse(formData: FormData) {
   const stream = formData.get('stream') as string
   if (!id || !title || !stream) return
   await prisma.course.update({ where: { id }, data: { title: title.trim(), stream } })
+  revalidatePath('/admin')
 }
 
 export async function deleteCourse(formData: FormData) {
@@ -111,6 +118,7 @@ export async function deleteCourse(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
   await prisma.course.delete({ where: { id } })
+  revalidatePath('/admin')
 }
 
 // ── Delete by State (with 2FA) ────────────────────────────────────────────────
@@ -128,6 +136,7 @@ export async function deleteCollegesByState(formData: FormData) {
   }
 
   await prisma.college.deleteMany({ where: { state } })
+  revalidatePath('/admin')
   redirect('/admin?deleteSuccess=1')
 }
 
@@ -136,6 +145,7 @@ export async function deleteEntranceTest(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
   await prisma.entranceTest.delete({ where: { id } })
+  revalidatePath('/admin')
   redirect('/admin')
 }
 
@@ -160,6 +170,7 @@ export async function uploadProfessionalCSV(formData: FormData) {
       create: { name: safeName, fullForm: fullForm.trim(), eligibility: eligibility.trim(), fees: safeFee, duration: duration.trim(), opportunities: opportunities.trim(), extraRemarks: extraRemarks.trim() || null }
     })
   }
+  revalidatePath('/admin')
   redirect('/admin')
 }
 
@@ -168,6 +179,7 @@ export async function deleteProfessionalCourse(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
   await prisma.professionalCourse.delete({ where: { id } })
+  revalidatePath('/admin')
   redirect('/admin')
 }
 
@@ -181,6 +193,7 @@ export async function answerQuestion(formData: FormData) {
     where: { id },
     data: { answer, isAnswered: true, answeredAt: new Date() }
   })
+  revalidatePath('/admin/questions')
   redirect('/admin/questions')
 }
 
@@ -189,6 +202,7 @@ export async function deleteQuestion(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
   await prisma.question.delete({ where: { id } })
+  revalidatePath('/admin/questions')
   redirect('/admin/questions')
 }
 
@@ -200,6 +214,7 @@ export async function approveComment(formData: FormData) {
     where: { id },
     data: { status: "APPROVED" }
   })
+  revalidatePath('/admin/comments')
   redirect('/admin/comments')
 }
 
@@ -208,17 +223,21 @@ export async function deleteComment(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
   await prisma.comment.delete({ where: { id } })
+  revalidatePath('/admin/comments')
   redirect('/admin/comments')
 }
 
 export async function deleteAllProfessionalCourses() {
   await checkAdmin()
   await prisma.professionalCourse.deleteMany({})
+  revalidatePath('/admin')
   redirect('/admin?tab=prof')
 }
 
 export async function deleteAllEntranceTests() {
   await checkAdmin()
   await prisma.entranceTest.deleteMany({})
+  revalidatePath('/admin')
+  revalidatePath('/entrance-tests')
   redirect('/admin?tab=tests')
 }

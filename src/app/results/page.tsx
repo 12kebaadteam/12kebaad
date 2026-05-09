@@ -255,7 +255,7 @@ export default function ResultsPage() {
           const career = careers.find(c => c.id === rec.careerId)
           if (!career) return null
           return (
-            <div key={idx} style={{ marginBottom: '30px', borderBottom: '1px solid #eee', paddingBottom: '20px' }}>
+            <div key={idx} className="career-pdf-block" style={{ marginBottom: '30px', borderBottom: '1px solid #eee', paddingBottom: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                 <h3 style={{ margin: 0 }}>{idx + 1}. {career.name}</h3>
                 <span style={{ fontWeight: 'bold', color: '#E8630A' }}>{rec.matchScore}% Match</span>

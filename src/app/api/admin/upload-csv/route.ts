@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData();
     const file = formData.get("file") as File;
-    const type = formData.get("type"); // "colleges" or "careers"
+    const type = formData.get("type"); // "colleges", "careers", "exams"
 
     if (!file) return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
@@ -179,6 +179,40 @@ export async function POST(req: NextRequest) {
               years_to_first_job: cleanNum(row.years_to_first_job) || null,
               self_employment_possible: row.self_employment_possible || null,
               physical_demand: row.physical_demand || null,
+            }
+          });
+          count++;
+        } catch (e: any) {
+          errors.push({ row: index + 1, reason: e.message });
+        }
+      }
+    } else if (type === "exams") {
+      const wipe = formData.get("wipe") === "true";
+      if (wipe) {
+        await prisma.entranceTest.deleteMany({});
+      }
+
+      for (const [index, row] of records.entries()) {
+        try {
+          if (!row.name) {
+            errors.push({ row: index + 1, reason: "Missing name column" });
+            continue;
+          }
+
+          await prisma.entranceTest.upsert({
+            where: { name: row.name },
+            update: {
+              fullForm: row.fullform || "",
+              suitability: row.suitability || "",
+              eligibility: row.eligibility || "",
+              extraRemarks: row.extraremarks || null,
+            },
+            create: {
+              name: row.name,
+              fullForm: row.fullform || "",
+              suitability: row.suitability || "",
+              eligibility: row.eligibility || "",
+              extraRemarks: row.extraremarks || null,
             }
           });
           count++;
