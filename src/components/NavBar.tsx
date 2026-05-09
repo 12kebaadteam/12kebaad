@@ -48,6 +48,8 @@ export default function NavBar() {
             <Link href={session ? "/careers" : "/form"} className={`nav-link ${pathname === '/careers' ? 'active' : ''}`}>Browse Careers</Link>
             <Link href="/colleges" className={`nav-link ${pathname === '/colleges' ? 'active' : ''}`}>Top Colleges</Link>
             <Link href="/entrance-tests" className={`nav-link ${pathname === '/entrance-tests' ? 'active' : ''}`}>Exams</Link>
+      <Link href="/compare-careers" className={`nav-link ${pathname === '/compare-careers' ? 'active' : ''}`}>Compare</Link>
+      <Link href="/bookmarks" className={`nav-link ${pathname === '/bookmarks' ? 'active' : ''}`}>Bookmarks</Link>
             <Link href="/about" className={`nav-link ${pathname === '/about' ? 'active' : ''}`}>About</Link>
           </div>
 

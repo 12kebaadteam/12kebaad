@@ -34,6 +34,10 @@ export default function Footer() {
                 <li><Link href="/" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Home</Link></li>
                 <li><Link href="/quiz-intro" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Career Quiz</Link></li>
                 <li><Link href="/careers" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Browse Careers</Link></li>
+                <li><Link href="/colleges" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Colleges</Link></li>
+                <li><Link href="/entrance-tests" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Exams</Link></li>
+                <li><Link href="/compare-careers" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Compare Careers</Link></li>
+                <li><Link href="/bookmarks" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>My Bookmarks</Link></li>
                 <li><Link href="/parents" style={{ color: "var(--accent)", textDecoration: "none", fontSize: "0.95rem", fontWeight: "600" }}>For Parents</Link></li>
                 <li><Link href="/about" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>About Us</Link></li>
               </ul>
