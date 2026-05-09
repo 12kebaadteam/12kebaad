@@ -16,7 +16,7 @@ export const exportToPDF = async (elementId: string, filename: string = '12kebaa
       html2canvas:  { scale: 2, useCORS: true },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
       pagebreak:    { mode: 'css', avoid: '.career-pdf-block' }
-    };
+    } as const;
 
     await html2pdf().set(opt).from(element).save();
   } catch (error) {
