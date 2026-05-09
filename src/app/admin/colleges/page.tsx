@@ -35,6 +35,7 @@ export default async function AdminCollegesPage() {
           </button>
         </div>
 
+        <div style={{ maxHeight: '70vh', overflowY: 'auto', overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
           <thead>
             <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid var(--glass-border)' }}>
@@ -69,6 +70,7 @@ export default async function AdminCollegesPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </AdminLayout>
   );

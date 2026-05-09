@@ -7,83 +7,157 @@ import { authOptions } from "@/lib/auth"
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    const { selections, stream, interests, educationLevel } = await req.json()
+    const { selections, stream, interests, educationLevel, passionField } = await req.json()
 
-    // 1. Calculate frequency map
+    // 1. Calculate frequency map of quiz choices
     const freq: Record<string, number> = {}
     selections.forEach((id: string) => {
       freq[id] = (freq[id] || 0) + 1
     })
 
-    // 2. Get the career details from DB for the top chosen ones
-    const careerIds = Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 15)
-    const topCareers = await prisma.career.findMany({
-      where: { id: { in: careerIds } }
+    // 2. Get quiz-selected careers (for context)
+    const quizCareerIds = Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 10)
+    const quizCareers = await prisma.career.findMany({
+      where: { id: { in: quizCareerIds } }
     })
 
-    // 3. Prepare AI Prompt
+    // 3. Get BROADER career pool from DB based on:
+    //    a) Matching stream (Science_PCM, Science_PCB, Commerce, Arts, Any)
+    //    b) Interest tags matching the user's selected interests
+    //    c) Passion field (music, entrepreneurship, dance, sports, art, etc.)
+    const streamFilters = stream && stream !== 'NotSure'
+      ? [stream, 'Any']
+      : undefined
+
+    const allRelevantCareers = await prisma.career.findMany({
+      where: {
+        AND: [
+          streamFilters ? { stream: { in: streamFilters } } : {},
+          interests && interests.length > 0
+            ? {
+                OR: [
+                  { interestTags: { hasSome: interests } },
+                  { career_cluster: { in: interests } },
+                  // Include passion field as career cluster match
+                  ...(passionField ? [{ career_cluster: { contains: passionField } }] : [])
+                ]
+              }
+            : {}
+        ]
+      },
+      take: 50 // Wider pool for AI to reason over
+    })
+
+    // 4. Merge quiz careers + broader pool (deduplicated)
+    const allCareerIds = new Set([
+      ...quizCareers.map(c => c.id),
+      ...allRelevantCareers.map(c => c.id)
+    ])
+    const mergedCareers = [
+      ...quizCareers,
+      ...allRelevantCareers.filter(c => !quizCareers.find(qc => qc.id === c.id))
+    ].slice(0, 40)
+
+    // 5. Prepare enriched AI Prompt with broader context
     const prompt = `
-      System: You are a career counsellor for Indian students. 
-      Analyse the student's quiz data and return a JSON array of their top 10 career recommendations.
+      You are an expert career counsellor for Indian students after Class 12.
+      Analyse ALL the student's data holistically and return their TOP 10 best-fit career recommendations.
       
-      User Data:
+      IMPORTANT RULE: You may recommend careers NOT explicitly chosen in quiz if they align with the student's interests, stream and passion field. Think laterally.
+      
+      Student Profile:
       - Stream: ${stream}
       - Education Level: ${educationLevel}
-      - Selected Interests: ${interests.join(", ")}
-      - Quiz choices (frequency map of career IDs): ${JSON.stringify(freq)}
+      - Selected Interest Areas: ${interests.join(", ")}
+      - Passion / Field of Interest: ${passionField || "Not specified"}
+      - Quiz Choices (career IDs with frequency): ${JSON.stringify(freq)}
       
-      Career Data (Context): ${JSON.stringify(topCareers.map(c => ({ 
+      Available Careers to Recommend From (${mergedCareers.length} options):
+      ${JSON.stringify(mergedCareers.map(c => ({ 
         id: c.id, 
-        name: c.name, 
+        name: c.name,
+        stream: c.stream,
+        sector: c.sector,
         description: c.description,
+        interestTags: c.interestTags,
+        career_cluster: c.career_cluster,
         salary: `${c.salaryRangeMin}-${c.salaryRangeMax}L`,
         demand: c.demand,
         growth: c.growth,
         avg_salary_lpa: c.avg_salary_lpa,
         job_demand_trend: c.job_demand_trend,
         work_from_home: c.work_from_home_possible,
-        gender_diversity: c.gender_diversity_index,
-        career_cluster: c.career_cluster,
-        self_employment: c.self_employment_possible
+        self_employment: c.self_employment_possible,
+        years_to_first_job: c.years_to_first_job,
+        difficulty: c.difficulty
       })))}
       
-      Return JSON: [{ 
+      Scoring Criteria (weigh each):
+      1. Stream compatibility (30%) — career must be accessible from student's stream
+      2. Interest tag overlap (25%) — more matching interest tags = higher score
+      3. Passion field alignment (20%) — if passion field matches career cluster/sector, boost score significantly
+      4. Market demand & growth (15%) — prioritise high-demand, high-growth careers
+      5. Quiz frequency reinforcement (10%) — careers chosen multiple times in quiz get a slight boost
+
+      Return a JSON array of exactly 10 recommendations:
+      [{ 
         "careerId": "string", 
         "matchScore": 0-100, 
-        "whyItFits": "string", 
-        "roadmapSummary": "string" 
+        "whyItFits": "2-3 sentences explaining specifically why this fits THIS student's profile, interests and passion", 
+        "roadmapSummary": "Brief 1-sentence next step",
+        "confidenceLevel": "High|Medium|Exploratory",
+        "streamNote": "Optional: note if stream switch is needed"
       }]
       
-      IMPORTANT: Only recommend careers that exist in the provided Career Data. Do not invent careers. Return valid JSON only.
+      Sort by matchScore descending. Return ONLY valid JSON, no markdown code fences.
     `
 
     let recommendations;
     try {
       const aiResponse = await generateAIResponse(prompt);
-      const cleanedJson = aiResponse.replace(/```json|```/g, "").trim()
+      // Strip any markdown code fences if present
+      const cleanedJson = aiResponse
+        .replace(/```json\s*/gi, '')
+        .replace(/```\s*/g, '')
+        .trim()
       recommendations = JSON.parse(cleanedJson)
     } catch (aiError) {
-      console.error("AI Analysis Failed, using fallback:", aiError)
-      // Fallback: Use frequency map and topCareers directly
-      recommendations = topCareers.map((c, idx) => ({
-        careerId: c.id,
-        matchScore: 90 - (idx * 5),
-        whyItFits: `Based on your choices, ${c.name} is a strong match for your interests.`,
-        roadmapSummary: "Complete Class 12, pursue degree, gain experience."
-      })).slice(0, 10)
+      console.error("AI Analysis Failed, using intelligent fallback:", aiError)
+      // Intelligent fallback: score by interest tag overlap + stream match
+      const scored = mergedCareers.map((c, idx) => {
+        const interestOverlap = c.interestTags.filter(tag => interests.includes(tag)).length
+        const streamMatch = !c.stream || c.stream === 'Any' || c.stream === stream ? 20 : 0
+        const quizBoost = freq[c.id] ? freq[c.id] * 5 : 0
+        const passionBoost = passionField && c.career_cluster?.toLowerCase().includes(passionField.toLowerCase()) ? 15 : 0
+        const score = Math.min(95, 50 + interestOverlap * 8 + streamMatch + quizBoost + passionBoost)
+        return {
+          careerId: c.id,
+          matchScore: score,
+          whyItFits: `Based on your interest in ${interests.slice(0, 3).join(', ')}, ${c.name} is a strong match for your profile.`,
+          roadmapSummary: "Complete your degree, gain certifications, and build a portfolio.",
+          confidenceLevel: score >= 80 ? "High" : score >= 65 ? "Medium" : "Exploratory"
+        }
+      })
+      recommendations = scored
+        .sort((a, b) => b.matchScore - a.matchScore)
+        .slice(0, 10)
     }
 
-    // 4. Save to Database if user is logged in
+    // 6. Save to Database if user is logged in
     let quizSessionId = null
     if (session?.user?.id && recommendations.length > 0) {
       try {
+        // Filter out any recommendations where careerId doesn't exist in DB
+        const validCareerIds = mergedCareers.map(c => c.id)
+        const validRecs = recommendations.filter((r: any) => validCareerIds.includes(r.careerId))
+        
         const quizSession = await prisma.quizSession.create({
           data: {
             userId: (session.user as any).id,
             stream: stream,
             interests: interests,
             results: {
-              create: recommendations.map((r: any, idx: number) => ({
+              create: validRecs.map((r: any, idx: number) => ({
                 careerId: r.careerId,
                 matchScore: r.matchScore || 0,
                 matchReason: r.whyItFits || "High interest match.",

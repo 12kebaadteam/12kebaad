@@ -14,6 +14,7 @@ export default async function CommentsPage() {
         <h1 style={{ color: "var(--primary)" }}>Moderation: Comments</h1>
       </div>
       <div className="glass-panel" style={{ overflowX: "auto" }}>
+        <div style={{ maxHeight: '70vh', overflowY: 'auto' }}>
         <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -55,6 +56,7 @@ export default async function CommentsPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </AdminLayout>
   )

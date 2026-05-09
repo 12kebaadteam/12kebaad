@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { sendOTP } from "@/lib/resend";
+import { sendOTP, sendWelcomeEmail } from "@/lib/resend";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,7 +10,10 @@ export async function POST(req: NextRequest) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-    await prisma.user.upsert({
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const isNewUser = !existingUser;
+
+    const user = await prisma.user.upsert({
       where: { email },
       update: { otp, otpExpires: expires },
       create: { 
@@ -20,6 +23,11 @@ export async function POST(req: NextRequest) {
         name: email.split('@')[0], // Default name
       }
     });
+
+    if (isNewUser) {
+      // Don't await this so it doesn't block the OTP response
+      sendWelcomeEmail(email, user.name || email.split('@')[0]).catch(console.error);
+    }
 
     const sent = await sendOTP(email, otp);
     if (!sent) return NextResponse.json({ error: "Failed to send email" }, { status: 500 });

@@ -34,6 +34,7 @@ export default function Footer() {
                 <li><Link href="/" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Home</Link></li>
                 <li><Link href="/quiz-intro" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Career Quiz</Link></li>
                 <li><Link href="/careers" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Browse Careers</Link></li>
+                <li><Link href="/parents" style={{ color: "var(--accent)", textDecoration: "none", fontSize: "0.95rem", fontWeight: "600" }}>For Parents</Link></li>
                 <li><Link href="/about" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>About Us</Link></li>
               </ul>
             </div>
@@ -61,8 +62,13 @@ export default function Footer() {
           <p style={{ fontSize: "0.9rem", color: "var(--text-muted)" }}>
             © 2026 <span style={{ fontWeight: '600', color: 'var(--primary)' }}>MyPaperTrail</span>. All rights reserved.
           </p>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-             {/* Social icons can go here */}
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+             <a href="https://www.instagram.com/12kebaad?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', transition: 'color 0.2s', display: 'flex' }} aria-label="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+             </a>
+             <a href="https://youtube.com/@12kebaad?si=Zzkp_Ouvw7YKN6q0" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', transition: 'color 0.2s', display: 'flex' }} aria-label="YouTube">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.5 7.1C2.5 7.1 2.5 6 3.6 5c1.4-1.5 3-1.5 3.7-1.6 4.7-.3 9.4-.3 9.4-.3s4.7 0 9.4.3c.7.1 2.3.1 3.7 1.6 1.1 1 1.1 2.1 1.1 2.1s.3 1.8.3 3.6v1.8c0 1.8-.3 3.6-.3 3.6s0 1.1-1.1 2.1c-1.4 1.5-3.2 1.4-4 1.6-2.8.3-9.1.3-9.1.3s-4.7 0-9.4-.3c-.7-.1-2.3-.1-3.7-1.6-1.1-1-1.1-2.1-1.1-2.1s-.3-1.8-.3-3.6v-1.8c0-1.8.3-3.6.3-3.6z"/><polygon points="9.75 14.5 15.5 10.75 9.75 7"/></svg>
+             </a>
           </div>
         </div>
       </div>

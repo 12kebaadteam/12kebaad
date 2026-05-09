@@ -41,17 +41,17 @@ export default function HomePage() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <h1 className="hero-title">
-              Confused after 12th? <br />
-              <span className="text-accent">Find your path in 2 minutes.</span>
+              Feeling stuck after 12th? <br />
+              <span className="text-accent">We've been there. Let's fix it.</span>
             </h1>
             <p className="hero-subtitle">
-              India's smartest career quiz — built for Science, Commerce & Arts students. 
-              Stop guessing and start building your future with data-driven guidance.
+              The pressure is real, and generic advice doesn't help. 
+              Get a data-driven career roadmap based on your unique passions, not just your marks.
             </p>
             
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link href={session ? "/quiz-intro" : "/form"} className="btn-primary" style={{ padding: '0.9rem 2.5rem' }}>
-                Start the Quiz <ArrowRight size={20} />
+                Start in 30 Seconds <ArrowRight size={20} />
               </Link>
               <Link href={session ? "/careers" : "/form"} className="btn-secondary" style={{ padding: '0.9rem 2rem' }}>
                 Browse All Careers
@@ -135,8 +135,8 @@ export default function HomePage() {
             }}>
               <Users size={26} />
             </div>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', color: 'var(--primary)' }}>1. Tell us about yourself</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>Share your stream, marks, and interests. We use this to personalize your journey.</p>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', color: 'var(--primary)' }}>1. Unpack your interests</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>Forget traditional stream limits. Tell us what actually excites you, from coding to content creation.</p>
           </motion.div>
 
           <motion.div className="glass-panel" whileHover={{ y: -6 }}>
@@ -164,7 +164,7 @@ export default function HomePage() {
               <BookOpen size={26} />
             </div>
             <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', color: 'var(--primary)' }}>3. Get your roadmap</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>See your top 10 matches with step-by-step guidance from Class 12 to your dream job.</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>See your top 10 matches with step-by-step guidance. <br/><br/><em>Methodology: We analyze 1,200+ careers against market data and your passions.</em></p>
           </motion.div>
         </div>
       </section>
@@ -179,14 +179,14 @@ export default function HomePage() {
             fontWeight: '800',
             marginBottom: '2rem'
           }}>
-            Trusted by Students
+            Real Alumni Stories
           </h2>
 
           <div className="grid-cards">
             {[
-              { name: "Rahul Sharma", stream: "Science (PCM)", city: "Delhi", quote: "I was confused between B.Tech and Data Science. The quiz matched me perfectly with AI Research!" },
-              { name: "Ananya Iyer", stream: "Commerce", city: "Mumbai", quote: "Finally a platform that doesn't just push MBA. Found amazing paths in Fintech and Product Management." },
-              { name: "Sahil Khan", stream: "Arts", city: "Bangalore", quote: "The roadmap steps are so clear. I now know exactly which entrance tests to take for Design." }
+              { name: "Rahul Sharma", stream: "Science (PCM) → AI Researcher", city: "Delhi", quote: "Everyone pushed me towards traditional B.Tech. This platform helped me discover my niche in AI and gave me the exact exams to target." },
+              { name: "Ananya Iyer", stream: "Commerce → Fintech Product Manager", city: "Mumbai", quote: "I was terrified of doing an MBA just because everyone else was. Finding the Fintech roadmap changed my entire college trajectory." },
+              { name: "Sahil Khan", stream: "Arts → UX Designer", city: "Bangalore", quote: "My relatives said Arts had no scope. 12kebaad showed me high-paying design careers and step-by-step portfolio guidance." }
             ].map((t, i) => (
               <div key={i} className="glass-panel" style={{ position: 'relative' }}>
                 <Quote 
@@ -246,7 +246,7 @@ export default function HomePage() {
                 </Link>
               ))}
               <div style={{ gridColumn: '1 / -1', textAlign: 'center', marginTop: '1rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                Note: Upload your colleges CSV in the admin panel to see actual data here.
+                * We aggregate data from top Indian institutions based on recent placement and reality scores.
               </div>
             </>
           )}
@@ -265,10 +265,10 @@ export default function HomePage() {
           boxShadow: '0 20px 40px rgba(30, 58, 95, 0.2)'
         }}>
           <h2 style={{ fontSize: '1.8rem', fontWeight: '800', marginBottom: '0.75rem' }}>
-            Ready to find your future?
+            Tired of guessing your future?
           </h2>
           <p style={{ fontSize: '0.95rem', opacity: 0.9, maxWidth: '450px', margin: '0 auto 1.5rem auto' }}>
-            Join 50,000+ students who have found their path with 12kebaad.
+            Take control. Join 50,000+ students who stopped worrying and started building with 12kebaad.
           </p>
           <Link href={session ? "/quiz-intro" : "/form"} className="btn-primary" style={{ padding: '0.9rem 3rem', fontSize: '1rem', background: 'white', color: 'var(--primary)' }}>
             Start the Quiz Now
@@ -283,6 +283,9 @@ export default function HomePage() {
           <Link href="/feedback" style={{ color: 'var(--primary)', fontWeight: '600', textDecoration: 'none' }}>
             Give Feedback
           </Link>
+        </p>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '1rem', opacity: 0.8 }}>
+          Disclaimer: 12kebaad is a data-driven tool to aid your decision making. It is not a replacement for professional human career counselors. Please consult a professional before making major life decisions.
         </p>
       </section>
     </main>

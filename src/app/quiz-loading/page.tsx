@@ -33,12 +33,13 @@ export default function QuizLoadingPage() {
       const stream = localStorage.getItem('onboarding_stream') || 'Any'
       const interests = JSON.parse(localStorage.getItem('onboarding_interests') || '[]')
       const level = localStorage.getItem('onboarding_level') || '12th'
+      const passionField = localStorage.getItem('onboarding_passion') || ''
 
       try {
         const res = await fetch('/api/quiz/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ selections, stream, interests, educationLevel: level })
+          body: JSON.stringify({ selections, stream, interests, educationLevel: level, passionField })
         })
         const data = await res.json()
         

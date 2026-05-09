@@ -20,6 +20,7 @@ export default async function AdminCareersPage() {
       </div>
 
       <div className="glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
+        <div style={{ maxHeight: '70vh', overflowY: 'auto', overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
           <thead>
             <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid var(--glass-border)' }}>
@@ -59,6 +60,7 @@ export default async function AdminCareersPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </AdminLayout>
   );

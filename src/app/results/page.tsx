@@ -261,6 +261,22 @@ export default function ResultsPage() {
                 <span style={{ fontWeight: 'bold', color: '#E8630A' }}>{rec.matchScore}% Match</span>
               </div>
               <p style={{ margin: '0 0 10px 0', fontSize: '14px' }}>{rec.whyItFits}</p>
+              
+              <div style={{ marginTop: '15px', marginBottom: '15px' }}>
+                <h4 style={{ margin: '0 0 10px 0', fontSize: '13px', color: '#1E3A5F' }}>Roadmap:</h4>
+                <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '12px', lineHeight: '1.5' }}>
+                  {(career.roadmapSteps && career.roadmapSteps.length > 0 ? career.roadmapSteps : [
+                    "Complete Class 12 in " + career.stream + " stream",
+                    "Prepare for entrance exams like " + (career.entryExam || "CUET/Specific tests"),
+                    "Pursue a " + (career.degreeRequired || "Bachelor's degree") + " in a related field",
+                    "Build core skills like " + (career.keySkills?.join(", ") || "Technical/Soft skills"),
+                    "Apply for entry-level positions"
+                  ]).map((step: string, i: number) => (
+                    <li key={i} style={{ marginBottom: '5px' }}>{step}</li>
+                  ))}
+                </ul>
+              </div>
+
               <div style={{ display: 'flex', gap: '20px', fontSize: '12px', color: '#666' }}>
                 <span>Salary: ₹{career.salaryRangeMin}L - ₹{career.salaryRangeMax}L</span>
                 <span>Sector: {career.sector}</span>

@@ -47,6 +47,7 @@ export default function NavBar() {
             <Link href={session ? "/quiz-intro" : "/form"} className={`nav-link ${pathname === '/quiz-intro' ? 'active' : ''}`}>Career Quiz</Link>
             <Link href={session ? "/careers" : "/form"} className={`nav-link ${pathname === '/careers' ? 'active' : ''}`}>Browse Careers</Link>
             <Link href="/colleges" className={`nav-link ${pathname === '/colleges' ? 'active' : ''}`}>Top Colleges</Link>
+            <Link href="/entrance-tests" className={`nav-link ${pathname === '/entrance-tests' ? 'active' : ''}`}>Exams</Link>
             <Link href="/about" className={`nav-link ${pathname === '/about' ? 'active' : ''}`}>About</Link>
           </div>
 
@@ -107,6 +108,7 @@ export default function NavBar() {
           <Link href={session ? "/quiz-intro" : "/form"} className={`nav-link ${pathname === '/quiz-intro' ? 'active' : ''}`}>Career Quiz</Link>
           <Link href={session ? "/careers" : "/form"} className={`nav-link ${pathname === '/careers' ? 'active' : ''}`}>Browse Careers</Link>
           <Link href="/colleges" className={`nav-link ${pathname === '/colleges' ? 'active' : ''}`}>Colleges</Link>
+          <Link href="/entrance-tests" className={`nav-link ${pathname === '/entrance-tests' ? 'active' : ''}`}>Exams</Link>
           <Link href="/about" className={`nav-link ${pathname === '/about' ? 'active' : ''}`}>About</Link>
         </div>
       </div>

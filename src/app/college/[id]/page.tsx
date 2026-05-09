@@ -12,6 +12,15 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     title: `${college.name} | Specializations & Fees - 12kebaad`,
     description: `Details about ${college.name} in ${college.state}. Explore top career specializations and placement opportunities. Comprehensive guide for students after 12th.`,
     keywords: [`${college.name} placements`, `${college.name} specialties`, `top colleges in ${college.state}`, "career after 12th"],
+    alternates: {
+      canonical: `https://12kebaad.in/college/${id}`,
+    },
+    openGraph: {
+      title: `${college.name} - Fees, Placements & Courses | 12kebaad`,
+      description: `${college.name} in ${college.state}: Placements ₹${college.placements}L, Reality Score ${college.realityScore}/10.`,
+      url: `https://12kebaad.in/college/${id}`,
+      type: 'article',
+    },
   }
 }
 

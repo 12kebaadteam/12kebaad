@@ -147,7 +147,7 @@ export default function InterestsPage() {
     setLoading(true)
     try {
       localStorage.setItem('onboarding_interests', JSON.stringify(selected))
-      router.push('/quiz-intro')
+      router.push('/onboarding/passion')
     } catch (error) {
       console.error(error)
     } finally {
@@ -157,7 +157,7 @@ export default function InterestsPage() {
 
   return (
     <div className="main-content" style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-      <OnboardingProgress currentStep={3} />
+      <OnboardingProgress currentStep={3} totalSteps={4} />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}

@@ -16,6 +16,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${career.name} Roadmap & Career Guide after Class 12 | 12kebaad`,
     description: `Discover how to become a ${career.name} in India. Complete step-by-step roadmap from Class 12, top colleges, entrance exams, and salary guide for ${career.stream} students.`,
+    alternates: {
+      canonical: `https://12kebaad.in/career/${career.slug || career.id}`,
+    },
+    openGraph: {
+      title: `${career.name} - Career Roadmap | 12kebaad`,
+      description: `How to become a ${career.name} in India after Class 12. Salary, roadmap, and top colleges.`,
+      url: `https://12kebaad.in/career/${career.slug || career.id}`,
+      type: 'article',
+    },
   };
 }
 

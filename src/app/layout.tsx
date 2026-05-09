@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import SearchBar from "../components/SearchBar";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -47,7 +48,21 @@ export const metadata: Metadata = {
   icons: {
     icon: '/logo.png',
     apple: '/logo.png',
-  }
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://12kebaad.in',
+  },
 };
 
 export default function RootLayout({
@@ -80,6 +95,7 @@ export default function RootLayout({
           `}
         </Script>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
