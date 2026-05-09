@@ -33,17 +33,7 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Redirect www to non-www (fixes "Page with redirect" if using www)
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.12kebaad.in" }],
-        destination: "https://12kebaad.in/:path*",
-        permanent: true,
-      },
-    ];
-  },
+
 
   // Optimize images
   images: {
