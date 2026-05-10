@@ -25,8 +25,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (isNewUser) {
-      // Don't await this so it doesn't block the OTP response
-      sendWelcomeEmail(email, user.name || email.split('@')[0]).catch(console.error);
+      await sendWelcomeEmail(email, user.name || email.split('@')[0]).catch(console.error);
     }
 
     const sent = await sendOTP(email, otp);

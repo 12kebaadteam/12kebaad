@@ -168,19 +168,6 @@ export async function POST(req: NextRequest) {
           }
         })
         quizSessionId = quizSession.id
-
-        // Autosend recommendations email
-        const emailRecs = validRecs.map((r: any) => {
-          const career = mergedCareers.find(c => c.id === r.careerId);
-          return {
-            name: career?.name || "Career",
-            aiSummary: r.whyItFits
-          };
-        }).slice(0, 5); // Top 5
-        
-        if (session.user.email) {
-          sendRecommendations(session.user.email, emailRecs).catch(console.error);
-        }
       } catch (dbError) {
         console.error("Failed to save quiz session:", dbError)
       }
