@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Bookmark, ChevronRight, TrendingUp, Target, Map } from 'lucide-react'
 import Link from 'next/link'
-import Navbar from '@/components/NavBar'
 
 export default function BookmarksPage() {
   const [bookmarked, setBookmarked] = useState<any[]>([])
@@ -45,8 +44,7 @@ export default function BookmarksPage() {
 
   return (
     <>
-      <Navbar />
-      <main className="main-content" style={{ maxWidth: '900px', margin: '0 auto', paddingTop: '100px' }}>
+      <main style={{ maxWidth: '900px', margin: '0 auto' }}>
         <div style={{ marginBottom: '2rem' }}>
           <h1 style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--primary)' }}>My Saved Careers</h1>
           <p style={{ color: 'var(--text-muted)' }}>Your shortlisted paths for future reference.</p>

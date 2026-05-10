@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Navbar from '@/components/NavBar'
 import { Check, X, ArrowLeftRight, TrendingUp, BarChart, Target, Zap, Building2, Briefcase, Minus } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -89,8 +88,7 @@ export default function CompareCareersPage() {
 
   return (
     <>
-      <Navbar />
-      <main className="main-content" style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '100px' }}>
+      <main style={{ maxWidth: '1200px', margin: '0 auto' }}>
         
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '0.5rem' }}>Compare Careers</h1>
