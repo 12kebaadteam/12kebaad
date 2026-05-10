@@ -234,11 +234,16 @@ export default function ResultsPage() {
 
       {/* Hidden PDF Report Template */}
       <div id="results-report" style={{ 
-        position: 'absolute', left: '-9999px', top: 0,
-        width: '794px', // A4 width at 96 DPI
+        position: 'fixed', 
+        left: '0', 
+        top: '0',
+        width: '794px', 
         padding: '40px',
         background: '#fff',
-        color: '#000'
+        color: '#000',
+        zIndex: -1,
+        opacity: 0,
+        pointerEvents: 'none'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #1E3A5F', paddingBottom: '20px', marginBottom: '30px' }}>
           <div>

@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { generateAIResponse } from "@/lib/ai"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { sendRecommendations } from "@/lib/resend";
 
 export async function POST(req: NextRequest) {
   try {
@@ -145,9 +146,9 @@ export async function POST(req: NextRequest) {
 
     // 6. Save to Database if user is logged in
     let quizSessionId = null
+
     if (session?.user?.id && recommendations.length > 0) {
       try {
-        // Filter out any recommendations where careerId doesn't exist in DB
         const validCareerIds = mergedCareers.map(c => c.id)
         const validRecs = recommendations.filter((r: any) => validCareerIds.includes(r.careerId))
         
@@ -167,6 +168,19 @@ export async function POST(req: NextRequest) {
           }
         })
         quizSessionId = quizSession.id
+
+        // Autosend recommendations email
+        const emailRecs = validRecs.map((r: any) => {
+          const career = mergedCareers.find(c => c.id === r.careerId);
+          return {
+            name: career?.name || "Career",
+            aiSummary: r.whyItFits
+          };
+        }).slice(0, 5); // Top 5
+        
+        if (session.user.email) {
+          sendRecommendations(session.user.email, emailRecs).catch(console.error);
+        }
       } catch (dbError) {
         console.error("Failed to save quiz session:", dbError)
       }
