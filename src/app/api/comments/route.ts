@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
         careerId,
         courseId,
         userId: (session.user as any).id,
-        status: "PENDING"
+        status: "APPROVED"
       }
     })
 
@@ -38,8 +38,7 @@ export async function GET(req: NextRequest) {
         OR: [
           { careerId: careerId || undefined },
           { courseId: courseId || undefined }
-        ],
-        status: "APPROVED"
+        ]
       },
       include: {
         user: {
