@@ -41,10 +41,6 @@ export default function PredictorPage() {
     stream: "", marks: 75, interests: [] as string[], budget: 200000, location: "",
     name: "", email: "", phone: ""
   });
-  const [otpSent, setOtpSent] = useState(false);
-  const [emailForOtp, setEmailForOtp] = useState("");
-  const [otpCode, setOtpCode] = useState("");
-  const [authView, setAuthView] = useState<'intro' | 'manual-details' | 'otp'>('intro');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 

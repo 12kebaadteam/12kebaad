@@ -12,8 +12,6 @@ model User {
   name               String?
   mobile             String?
   email              String?             @unique
-  otp                String?
-  otpExpires         DateTime?
   preferences        UserPreference?
   leads              Lead[]
   state              String?

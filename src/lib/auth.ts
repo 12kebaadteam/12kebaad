@@ -10,31 +10,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET || "",
     }),
     CredentialsProvider({
-      id: "otp",
-      name: "OTP Verification",
-      credentials: {
-        email: { label: "Email", type: "text" },
-        otp: { label: "OTP", type: "text" }
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.otp) return null;
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        });
-
-        if (user && user.otp === credentials.otp && user.otpExpires && user.otpExpires > new Date()) {
-          // Clear OTP after use
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { otp: null, otpExpires: null }
-          });
-          return { id: user.id, name: user.name, email: user.email, role: "user" };
-        }
-        return null;
-      }
-    }),
-    CredentialsProvider({
       id: "admin",
       name: "Admin Credentials",
       credentials: {
