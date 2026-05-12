@@ -9,8 +9,8 @@ export const exportToPDF = async (elementId: string, filename: string = '12kebaa
     const html2pdf = (await import('html2pdf.js')).default;
     
     // We explicitly tell it to avoid breaking inside our career block divs
-    const opt = {
-      margin:       [10, 10, 10, 10], // top, left, bottom, right
+    const opt: any = {
+      margin:       10,
       filename:     filename,
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { 
