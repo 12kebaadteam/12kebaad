@@ -74,20 +74,21 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user, account }) {
       if (user) {
+        const t = token as any;
         if (account?.provider === 'admin') {
-          (token as any).role = 'admin'
-          (token as any).userId = user.id
+          t.role = 'admin';
+          t.userId = user.id;
         } else {
-          (token as any).role = 'user'
+          t.role = 'user';
           const dbUser = await prisma.user.findUnique({
             where: { email: user.email! }
-          })
+          });
           if (dbUser) {
-            (token as any).userId = dbUser.id
+            t.userId = dbUser.id;
           }
         }
       }
-      return token
+      return token;
     }
   },
   secret: process.env.NEXTAUTH_SECRET,
