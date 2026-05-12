@@ -21,7 +21,7 @@ export const exportToPDF = async (elementId: string, filename: string = '12kebaa
       },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
       pagebreak:    { mode: 'css', avoid: '.career-pdf-block' }
-    } as const;
+    };
 
     // Use a promise to ensure capture happens after a tiny delay
     const exporter = html2pdf().set(opt).from(element);
