@@ -102,6 +102,10 @@ main:has(.full-screen-layout) {
   background: rgba(255, 255, 255, 0.95) !important;
 }
 
+.navbar--hidden {
+  transform: translateY(-100%);
+}
+
 .navbar-container {
   display: flex;
   flex-direction: column;

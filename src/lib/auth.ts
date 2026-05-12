@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 import prisma from "./prisma"
+import { sendWelcomeEmail } from "./resend"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -45,12 +46,16 @@ export const authOptions: NextAuthOptions = {
             where: { email: user.email! }
           });
           if (!existingUser) {
-            await prisma.user.create({
+            const newUser = await prisma.user.create({
               data: {
                 email: user.email!,
                 name: user.name || "Google User"
               }
             });
+            // Send welcome email to new users
+            if (newUser.email) {
+              await sendWelcomeEmail(newUser.email, newUser.name || "Student");
+            }
           }
         } catch (e) {
           console.error("Error creating Google user:", e);

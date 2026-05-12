@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma'
 import { generateAIResponse } from "@/lib/ai"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
-import { sendRecommendations } from "@/lib/resend";
+import { sendRecommendations, sendWelcomeEmail } from "@/lib/resend";
 
 export async function POST(req: NextRequest) {
   try {
@@ -168,6 +168,22 @@ export async function POST(req: NextRequest) {
           }
         })
         quizSessionId = quizSession.id
+
+        // 7. Send automated email with top 5 recommendations
+        if (session.user?.email && validRecs.length > 0) {
+          const emailRecs = validRecs.slice(0, 5).map((r: any) => {
+            const career = mergedCareers.find(c => c.id === r.careerId)
+            return {
+              name: career?.name || "Career",
+              aiSummary: r.whyItFits || r.matchReason
+            }
+          })
+          
+          // Fire and forget email to not block response
+          sendRecommendations(session.user.email, emailRecs).catch(err => 
+            console.error("Delayed Recommendations Email Error:", err)
+          )
+        }
       } catch (dbError) {
         console.error("Failed to save quiz session:", dbError)
       }

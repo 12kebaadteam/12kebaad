@@ -11,12 +11,38 @@ export default function NavBar() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [scrolled, setScrolled] = useState(false)
+  const [visible, setVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll)
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      
+      // Update scrolled state for background change
+      setScrolled(currentScrollY > 20)
+
+      // Only apply hide/show logic on mobile (width <= 1024px)
+      if (window.innerWidth <= 1024) {
+        if (currentScrollY < 10) {
+          setVisible(true)
+        } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          // Scrolling down and past threshold
+          setVisible(false)
+        } else if (currentScrollY < lastScrollY) {
+          // Scrolling up
+          setVisible(true)
+        }
+      } else {
+        // Always visible on desktop
+        setVisible(true)
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [lastScrollY])
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -30,7 +56,7 @@ export default function NavBar() {
   ]
 
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
+    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''} ${!visible ? 'navbar--hidden' : ''}`}>
       <div className="navbar-container">
         <div className="navbar-top">
           <Link href="/" className="logo">
