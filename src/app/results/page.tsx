@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+export const dynamic = "force-dynamic";
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import OnboardingProgress from '@/components/OnboardingProgress'
@@ -81,7 +82,7 @@ export default function ResultsPage() {
               My Top 10 Career Matches
             </h1>
           </div>
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <div className="onboarding-footer" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             <button 
               onClick={handleExport}
               disabled={exporting}
@@ -234,15 +235,17 @@ export default function ResultsPage() {
 
       {/* Hidden PDF Report Template */}
       <div id="results-report" style={{ 
-        position: 'absolute', 
-        left: '-9999px', 
+        position: 'fixed', 
+        left: '-2000px', 
         top: '0',
         width: '794px', 
         padding: '40px',
-        background: '#fff',
+        background: '#ffffff',
         color: '#000',
         zIndex: -1,
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        display: 'block',
+        visibility: 'visible'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #1E3A5F', paddingBottom: '20px', marginBottom: '30px' }}>
           <div>

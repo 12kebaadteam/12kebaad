@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { MessageSquare, Send, User } from 'lucide-react'
+import { submitComment } from '@/lib/actions'
 import { useSession } from 'next-auth/react'
 
 export default function CommentSection({ careerId, courseId }: { careerId?: string, courseId?: string }) {
@@ -34,14 +35,14 @@ export default function CommentSection({ careerId, courseId }: { careerId?: stri
 
     setSubmitting(true)
     try {
-      await fetch('/api/comments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, careerId, courseId })
-      })
-      setText('')
-      fetchComments()
-      alert("Your comment has been posted!")
+      const res = await submitComment({ text, careerId, courseId })
+      if (res.success) {
+        setText('')
+        fetchComments()
+        alert("Your comment has been posted!")
+      } else {
+        alert(res.error)
+      }
     } catch (err) {
       console.error(err)
     } finally {

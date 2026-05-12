@@ -1,38 +1,63 @@
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 export const exportToPDF = async (elementId: string, filename: string = '12kebaad-career-report.pdf') => {
-  const element = document.getElementById(elementId)
-  if (!element) return
+  const element = document.getElementById(elementId);
+  if (!element) return;
 
+  // Show loading indicator or handle state outside if needed
   try {
-    const html2pdf = (await import('html2pdf.js')).default;
-    
-    // We explicitly tell it to avoid breaking inside our career block divs
-    const opt: any = {
-      margin:       10,
-      filename:     filename,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { 
-        scale: 2, 
-        useCORS: true, 
-        logging: true,
-        letterRendering: true
-      },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak:    { mode: 'css', avoid: '.career-pdf-block' }
-    };
+    // 1. Prepare the element for capture
+    // Ensure it's temporarily visible and has a white background
+    const originalStyle = element.style.cssText;
+    element.style.position = 'absolute';
+    element.style.left = '0';
+    element.style.top = '0';
+    element.style.opacity = '1';
+    element.style.visibility = 'visible';
+    element.style.zIndex = '9999';
+    element.style.background = '#ffffff';
+    element.style.width = '800px'; // Fixed width for consistent PDF scale
 
-    // Scroll to top to ensure html2canvas captures correctly
-    window.scrollTo(0, 0);
-    
-    // Tiny delay to allow layout to settle
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // 2. Capture using html2canvas
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#ffffff',
+      windowWidth: 800
+    });
 
-    // Use a promise to ensure capture happens after a tiny delay
-    const exporter = html2pdf().set(opt).from(element);
-    await exporter.save();
+    // 3. Reset element styles
+    element.style.cssText = originalStyle;
+
+    // 4. Generate PDF
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const imgWidth = 210; // A4 width in mm
+    const pageHeight = 297; // A4 height in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    pdf.save(filename);
   } catch (error) {
-    console.error('PDF Export Error:', error)
+    console.error('PDF Export Error:', error);
+    alert("There was an error generating your PDF. Please try again or use the Print option.");
   }
-}
+};

@@ -749,3 +749,46 @@ main:has(.full-screen-layout) {
     order: 1;
   }
 }
+
+/* ── REFINED Onboarding Footer Mobile Fix ────────────────────── */
+@media (max-width: 768px) {
+  .onboarding-footer {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    padding: 1.25rem !important;
+    text-align: center !important;
+    border-radius: 20px !important;
+    width: 100% !important;
+    margin-top: 2rem !important;
+  }
+  
+  .onboarding-footer button, 
+  .onboarding-footer .btn-primary {
+    width: 100% !important;
+    padding: 0.85rem !important;
+    font-size: 1rem !important;
+    border-radius: 12px !important;
+    height: auto !important;
+    min-height: 48px !important;
+    aspect-ratio: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    order: 1 !important;
+  }
+
+  .onboarding-footer p {
+    font-size: 0.85rem !important;
+    order: 2 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Ensure buttons are never forced to be circular unless explicit */
+.btn-primary, .btn-secondary {
+  border-radius: 12px;
+  height: auto;
+  width: auto;
+}

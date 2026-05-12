@@ -125,7 +125,7 @@ export default function QualificationPage() {
           </motion.div>
         )}
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <div className="onboarding-footer" style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <button
             onClick={handleNext}
             disabled={!level || (showStream && !stream) || loading}

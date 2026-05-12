@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ThumbsUp, ThumbsDown, Send } from 'lucide-react'
+import { submitFeedback } from '@/lib/actions'
 
 export default function FeedbackSection({ careerId }: { careerId?: string }) {
   const [submitted, setSubmitted] = useState(false)
@@ -15,12 +16,12 @@ export default function FeedbackSection({ careerId }: { careerId?: string }) {
     
     setLoading(true)
     try {
-      await fetch('/api/feedback', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isPositive, reason, careerId })
-      })
-      setSubmitted(true)
+      const res = await submitFeedback({ isPositive, reason, careerId })
+      if (res.success) {
+        setSubmitted(true)
+      } else {
+        alert(res.error)
+      }
     } catch (err) {
       console.error(err)
     } finally {
