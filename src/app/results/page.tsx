@@ -234,15 +234,14 @@ export default function ResultsPage() {
 
       {/* Hidden PDF Report Template */}
       <div id="results-report" style={{ 
-        position: 'fixed', 
-        left: '0', 
+        position: 'absolute', 
+        left: '-9999px', 
         top: '0',
         width: '794px', 
         padding: '40px',
         background: '#fff',
         color: '#000',
         zIndex: -1,
-        opacity: 0,
         pointerEvents: 'none'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #1E3A5F', paddingBottom: '20px', marginBottom: '30px' }}>
@@ -252,7 +251,7 @@ export default function ResultsPage() {
           </div>
           <div style={{ textAlign: 'right' }}>
             <p style={{ margin: 0, fontWeight: 'bold' }}>Date: {new Date().toLocaleDateString()}</p>
-            <p style={{ margin: 0 }}>Stream: {localStorage.getItem('onboarding_stream')}</p>
+            <p style={{ margin: 0 }}>Stream: {results?.stream || 'N/A'}</p>
           </div>
         </div>
 

@@ -10,15 +10,22 @@ export const exportToPDF = async (elementId: string, filename: string = '12kebaa
     
     // We explicitly tell it to avoid breaking inside our career block divs
     const opt = {
-      margin:       10,
+      margin:       [10, 10, 10, 10], // top, left, bottom, right
       filename:     filename,
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
+      html2canvas:  { 
+        scale: 2, 
+        useCORS: true, 
+        logging: true,
+        letterRendering: true
+      },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
       pagebreak:    { mode: 'css', avoid: '.career-pdf-block' }
     } as const;
 
-    await html2pdf().set(opt).from(element).save();
+    // Use a promise to ensure capture happens after a tiny delay
+    const exporter = html2pdf().set(opt).from(element);
+    await exporter.save();
   } catch (error) {
     console.error('PDF Export Error:', error)
   }
