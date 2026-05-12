@@ -239,7 +239,7 @@ export default function ResultsPage() {
         left: '-2000px', 
         top: '0',
         width: '794px', 
-        padding: '40px',
+        padding: '60px 40px',
         background: '#ffffff',
         color: '#000',
         zIndex: -1,
