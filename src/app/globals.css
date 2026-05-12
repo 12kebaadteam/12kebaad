@@ -670,7 +670,7 @@ main:has(.full-screen-layout) {
   h1, h2, h3, h4, p {
     overflow-wrap: break-word;
     word-wrap: break-word;
-    hyphens: auto;
+    hyphens: none;
   }
 }
 
@@ -689,5 +689,37 @@ main:has(.full-screen-layout) {
   .nav-link {
     font-size: 0.85rem;
     padding: 0.4rem 0.5rem;
+  }
+}
+
+/* ── Quiz Card Sizing ────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .quiz-card {
+    padding: 1rem !important;
+    min-height: 180px !important;
+  }
+  
+  .quiz-card h2 {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .quiz-card p {
+    font-size: 0.8rem !important;
+    margin-bottom: 0.75rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .quiz-card .tag-group {
+    gap: 0.3rem !important;
+  }
+  
+  .quiz-card .tag-group span {
+    padding: 0.3rem 0.6rem !important;
+    font-size: 0.65rem !important;
+  }
+
+  .quiz-card div:last-child {
+    margin-top: 0.75rem !important;
   }
 }

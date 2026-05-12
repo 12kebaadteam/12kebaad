@@ -94,7 +94,7 @@ export default function QuizPage() {
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleSelect(career.id)}
-              className="glass-panel"
+              className="glass-panel quiz-card"
               style={{ 
                 cursor: 'pointer', 
                 padding: '2rem 1.5rem',
@@ -113,7 +113,7 @@ export default function QuizPage() {
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.5', marginBottom: '1.5rem' }}>
                   {career.description.substring(0, 100)}...
                 </p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <div className="tag-group" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <span style={{ 
                     background: 'var(--bg-offset)', 
                     padding: '0.4rem 0.8rem', 

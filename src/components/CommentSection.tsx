@@ -40,7 +40,8 @@ export default function CommentSection({ careerId, courseId }: { careerId?: stri
         body: JSON.stringify({ text, careerId, courseId })
       })
       setText('')
-      alert("Your comment has been submitted and is awaiting moderation.")
+      fetchComments()
+      alert("Your comment has been posted!")
     } catch (err) {
       console.error(err)
     } finally {
