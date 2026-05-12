@@ -723,3 +723,29 @@ main:has(.full-screen-layout) {
     margin-top: 0.75rem !important;
   }
 }
+
+/* ── Onboarding Footer Mobile Fix ────────────────────────────── */
+@media (max-width: 768px) {
+  .onboarding-footer {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    padding: 1.5rem !important;
+    text-align: center !important;
+  }
+  
+  .onboarding-footer button {
+    width: 100% !important;
+    padding: 1rem !important;
+    font-size: 1.1rem !important;
+    border-radius: 16px !important;
+  }
+
+  .onboarding-footer p {
+    font-size: 0.9rem !important;
+    order: 2;
+  }
+
+  .onboarding-footer button {
+    order: 1;
+  }
+}

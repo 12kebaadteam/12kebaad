@@ -126,7 +126,7 @@ export default function PassionPage() {
           })}
         </div>
 
-        <div style={{ 
+        <div className="onboarding-footer" style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',

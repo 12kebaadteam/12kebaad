@@ -15,7 +15,6 @@ const menuItems = [
   { name: "Colleges", href: "/admin/colleges", icon: Building2 },
   { name: "CSV Upload", href: "/admin/uploads", icon: UploadCloud },
   { name: "Users & Leads", href: "/admin/users", icon: Users },
-  { name: "Q&A Manager", href: "/admin/questions", icon: MessageSquare },
   { name: "Comments", href: "/admin/comments", icon: MessageSquare },
   { name: "Feedback", href: "/admin/feedback", icon: ThumbsUp },
 ];

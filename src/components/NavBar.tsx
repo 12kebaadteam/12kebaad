@@ -28,7 +28,6 @@ export default function NavBar() {
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: session ? "/quiz-intro" : "/form", label: 'Career Quiz' },
     { href: session ? "/careers" : "/form", label: 'Browse Careers' },
     { href: "/colleges", label: 'Top Colleges' },
     { href: "/entrance-tests", label: 'Exams' },

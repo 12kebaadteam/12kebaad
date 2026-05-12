@@ -23,6 +23,12 @@ export const exportToPDF = async (elementId: string, filename: string = '12kebaa
       pagebreak:    { mode: 'css', avoid: '.career-pdf-block' }
     };
 
+    // Scroll to top to ensure html2canvas captures correctly
+    window.scrollTo(0, 0);
+    
+    // Tiny delay to allow layout to settle
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     // Use a promise to ensure capture happens after a tiny delay
     const exporter = html2pdf().set(opt).from(element);
     await exporter.save();

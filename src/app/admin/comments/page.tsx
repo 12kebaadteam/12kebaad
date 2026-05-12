@@ -1,5 +1,6 @@
 import AdminLayout from "@/components/AdminLayout";
 import { prisma } from "@/lib/prisma";
+export const dynamic = "force-dynamic";
 import { approveComment, deleteComment } from "../actions";
 
 export default async function CommentsPage() {

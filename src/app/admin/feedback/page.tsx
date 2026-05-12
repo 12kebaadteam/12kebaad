@@ -1,5 +1,6 @@
 import AdminLayout from "@/components/AdminLayout";
 import { prisma } from "@/lib/prisma";
+export const dynamic = "force-dynamic";
 
 export default async function FeedbackPage() {
   const feedbacks = await prisma.feedback.findMany({
