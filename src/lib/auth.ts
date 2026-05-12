@@ -67,18 +67,24 @@ export const authOptions: NextAuthOptions = {
       if (token.role) {
         (session as any).user.role = token.role
       }
-      if (token.sub) {
-        (session as any).user.id = token.sub
+      if (token.userId) {
+        (session as any).user.id = token.userId
       }
       return session
     },
     async jwt({ token, user, account }) {
       if (user) {
-        // Strictly only allow the 'admin' credential provider to grant admin role
         if (account?.provider === 'admin') {
           (token as any).role = 'admin'
+          (token as any).userId = user.id
         } else {
           (token as any).role = 'user'
+          const dbUser = await prisma.user.findUnique({
+            where: { email: user.email! }
+          })
+          if (dbUser) {
+            (token as any).userId = dbUser.id
+          }
         }
       }
       return token
