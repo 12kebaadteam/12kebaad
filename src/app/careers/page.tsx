@@ -137,6 +137,8 @@ export default function BrowseCareersPage() {
                 padding: '1rem 1rem 1rem 3.5rem', 
                 borderRadius: '16px', 
                 border: '1px solid var(--border)',
+                background: 'var(--bg-main)',
+                color: 'var(--text-main)',
                 fontSize: '1rem'
               }}
             />
@@ -155,7 +157,7 @@ export default function BrowseCareersPage() {
                     borderRadius: '99px', 
                     border: '1px solid',
                     borderColor: filterBy === f ? 'var(--primary)' : 'var(--border)',
-                    background: filterBy === f ? 'var(--primary)' : '#fff',
+                    background: filterBy === f ? 'var(--primary)' : 'var(--bg-main)',
                     color: filterBy === f ? '#fff' : 'var(--text-main)',
                     fontSize: '0.85rem',
                     fontWeight: '600',
@@ -178,6 +180,8 @@ export default function BrowseCareersPage() {
                 padding: '0.6rem 1.2rem', 
                 borderRadius: '99px', 
                 border: '1px solid var(--border)',
+                background: 'var(--bg-main)',
+                color: 'var(--text-main)',
                 fontWeight: '600',
                 fontSize: '0.85rem'
               }}
@@ -208,7 +212,7 @@ export default function BrowseCareersPage() {
                     borderRadius: '99px', 
                     border: '1px solid',
                     borderColor: activeFilter === sub ? 'var(--accent)' : 'var(--border)',
-                    background: activeFilter === sub ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
+                    background: activeFilter === sub ? 'var(--accent)' : 'var(--bg-main)',
                     color: activeFilter === sub ? '#fff' : 'var(--text-muted)',
                     fontSize: '0.8rem',
                     fontWeight: '600',
