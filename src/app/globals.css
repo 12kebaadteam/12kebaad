@@ -19,6 +19,26 @@
   --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #8AB4F8;
+    --primary-light: #AECBFA;
+    --accent: #FF9E64;
+    --accent-hover: #FFB385;
+    --bg-main: #0B0F19;
+    --bg-offset: #131A2C;
+    --text-main: #F1F5F9;
+    --text-muted: #94A3B8;
+    --success: #34D399;
+    --border: #1E293B;
+    --glass-bg: rgba(19, 26, 44, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
+  }
+}
+
 * { 
   box-sizing: border-box; 
   padding: 0; 
@@ -99,7 +119,7 @@ main:has(.full-screen-layout) {
 
 .navbar--scrolled {
   box-shadow: var(--shadow-md);
-  background: rgba(255, 255, 255, 0.95) !important;
+  background: var(--glass-bg) !important;
 }
 
 .navbar-container {
@@ -311,7 +331,7 @@ main:has(.full-screen-layout) {
 
 /* ── Cards ────────────────────────────────────────────────────────── */
 .glass-panel {
-  background: #fff;
+  background: var(--glass-bg);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 2rem;
@@ -388,7 +408,7 @@ main:has(.full-screen-layout) {
   left: 0;
   right: 0;
   bottom: 0;
-  background: #ffffff;
+  background: var(--bg-main);
   z-index: 999;
   transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -458,7 +478,7 @@ main:has(.full-screen-layout) {
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  background: #fff;
+  background: var(--bg-main);
   border: 2px solid #ef4444;
   color: #ef4444;
   padding: 1rem;
@@ -547,7 +567,7 @@ main:has(.full-screen-layout) {
   padding: 0.75rem 1rem;
   border-radius: 10px;
   border: 1.5px solid var(--border);
-  background: #fff;
+  background: var(--bg-main);
   color: var(--text-main);
   font-size: 0.9rem;
   transition: all 0.2s;

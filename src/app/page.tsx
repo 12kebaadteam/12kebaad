@@ -12,7 +12,11 @@ import {
   Star,
   Quote,
   MessageSquare,
-  MapPin
+  MapPin,
+  Compass,
+  Atom,
+  Award,
+  Palette
 } from "lucide-react";
 
 export default function HomePage() {
@@ -166,6 +170,111 @@ export default function HomePage() {
             <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', color: 'var(--primary)' }}>3. Get your roadmap</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>See your top 10 matches with step-by-step guidance. <br/><br/><em>Methodology: We analyze 1,200+ careers against market data and your passions.</em></p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Popular Stream & Career Guides */}
+      <section style={{ padding: '4rem 1rem', maxWidth: '1100px', margin: '0 auto' }}>
+        <h2 style={{ 
+          fontSize: '2.2rem', 
+          textAlign: 'center', 
+          color: 'var(--primary)', 
+          fontWeight: '800',
+          marginBottom: '0.75rem',
+          letterSpacing: '-0.03em'
+        }}>
+          Popular Stream & Career Guides
+        </h2>
+        <p style={{ 
+          textAlign: 'center', 
+          color: 'var(--text-muted)', 
+          fontSize: '1.05rem',
+          maxWidth: '600px',
+          margin: '0 auto 3rem auto'
+        }}>
+          Expert-curated, in-depth roadmaps to help you choose the right course and build a successful future.
+        </p>
+
+        <div className="grid-cards" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+          {[
+            {
+              title: "Ultimate 12th Guide",
+              desc: "The definitive master guide to career paths across all streams after Class 12.",
+              link: "/courses-after-12th",
+              color: "#3B82F6",
+              icon: Compass,
+            },
+            {
+              title: "Science Stream Options",
+              desc: "Deep dive into engineering, medical, biotechnology, and modern technology pathways.",
+              link: "/courses-after-12th-science",
+              color: "#10B981",
+              icon: Atom,
+            },
+            {
+              title: "Commerce Stream Options",
+              desc: "Expert paths for Finance, CA, CS, Actuarial Science, Fintech, and Business.",
+              link: "/courses-after-12th-commerce",
+              color: "#F59E0B",
+              icon: Award,
+            },
+            {
+              title: "Arts & Humanities Options",
+              desc: "Creative careers, law, design, journalism, psychology, and liberal arts roadmaps.",
+              link: "/courses-after-12th-arts",
+              color: "#EC4899",
+              icon: Palette,
+            },
+            {
+              title: "High-Salary Courses",
+              desc: "Discover the most rewarding and highly-compensated career options in India.",
+              link: "/high-salary-courses-after-12th",
+              color: "#8B5CF6",
+              icon: Trophy,
+            }
+          ].map((guide, idx) => {
+            const Icon = guide.icon;
+            return (
+              <Link 
+                href={guide.link} 
+                key={idx} 
+                style={{ textDecoration: 'none' }}
+              >
+                <motion.div 
+                  className="glass-panel" 
+                  whileHover={{ y: -6 }}
+                  style={{ 
+                    height: '100%', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    justifyContent: 'space-between',
+                    borderLeft: `4px solid ${guide.color}`
+                  }}
+                >
+                  <div>
+                    <div style={{ 
+                      width: '44px', height: '44px', 
+                      background: `${guide.color}15`, 
+                      borderRadius: '12px', 
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      marginBottom: '1.25rem', color: guide.color
+                    }}>
+                      <Icon size={22} />
+                    </div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', color: 'var(--primary)', fontWeight: '700' }}>
+                      {guide.title}
+                    </h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>
+                      {guide.desc}
+                    </p>
+                  </div>
+                  <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem', color: guide.color, fontWeight: '600', fontSize: '0.9rem' }}>
+                    Read Guide <ArrowRight size={16} />
+                  </div>
+                </motion.div>
+              </Link>
+            )
+          })}
         </div>
       </section>
 

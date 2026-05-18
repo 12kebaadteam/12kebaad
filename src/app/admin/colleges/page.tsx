@@ -10,7 +10,7 @@ export default async function AdminCollegesPage() {
 
   return (
     <AdminLayout>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Colleges</h1>
           <p style={{ color: 'var(--text-muted)' }}>Manage your database of partner and listed colleges.</p>
@@ -21,7 +21,7 @@ export default async function AdminCollegesPage() {
       </div>
 
       <div className="glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
-        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', gap: '1rem' }}>
+        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <div style={{ position: 'relative', flex: 1, minHeight: '44px' }}>
             <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none', zIndex: 1 }} />
             <input 

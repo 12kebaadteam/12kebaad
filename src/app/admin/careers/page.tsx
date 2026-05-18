@@ -10,7 +10,7 @@ export default async function AdminCareersPage() {
 
   return (
     <AdminLayout>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Careers</h1>
           <p style={{ color: 'var(--text-muted)' }}>Define career paths and their attributes.</p>

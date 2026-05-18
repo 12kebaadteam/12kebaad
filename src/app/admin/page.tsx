@@ -31,7 +31,7 @@ export default async function AdminDashboard() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.name} className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div key={stat.name} className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ 
                 width: '48px', height: '48px',
                 borderRadius: '12px', 
@@ -50,11 +50,11 @@ export default async function AdminDashboard() {
         })}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '2rem' }}>
         {/* Quick Actions */}
-        <div className="glass-panel" style={{ padding: '2rem' }}>
+        <div className="glass-panel">
           <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--primary)', marginBottom: '1.5rem' }}>Quick Actions</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem' }}>
             <Link href="/admin/careers" className="btn-primary" style={{ padding: '0.75rem', fontSize: '0.9rem' }}>
               Manage Careers
             </Link>
@@ -71,7 +71,7 @@ export default async function AdminDashboard() {
         </div>
 
         {/* System Health */}
-        <div className="glass-panel" style={{ padding: '2rem' }}>
+        <div className="glass-panel">
           <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--primary)', marginBottom: '1.5rem' }}>System Status</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

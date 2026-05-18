@@ -24,7 +24,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/professional-courses',
     '/entrance-tests',
     '/predictor',
-    '/methodology',
     '/about',
     '/terms',
     '/privacy',

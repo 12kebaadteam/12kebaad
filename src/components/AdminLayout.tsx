@@ -29,7 +29,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [pathname]);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-offset)', color: 'var(--text-main)', width: '100%' }}>
+    <div className="admin-container">
       
       {/* Mobile Header */}
       <header className="admin-mobile-header">
@@ -113,12 +113,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Styles for mobile responsive */}
       <style jsx>{`
+        .admin-container {
+          display: flex;
+          min-height: 100vh;
+          background: var(--bg-offset);
+          color: var(--text-main);
+          width: 100%;
+        }
+
         .admin-mobile-header {
           display: none;
           align-items: center; 
           justify-content: space-between; 
           padding: 0.75rem 1.25rem; 
-          background: #fff; 
+          background: var(--bg-main); 
           border-bottom: 1px solid var(--border); 
           position: fixed; 
           top: 0; 
@@ -144,7 +152,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         .admin-sidebar-minimal {
           width: 280px;
-          background: #fff;
+          background: var(--bg-main);
           border-right: 1px solid var(--border);
           padding: 2rem 1.25rem;
           display: flex;
@@ -165,6 +173,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }
 
         @media (max-width: 1024px) {
+          .admin-container {
+            display: block;
+          }
           .admin-sidebar-minimal {
             position: fixed !important;
             left: 0;
