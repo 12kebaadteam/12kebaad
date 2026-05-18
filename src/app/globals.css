@@ -21,8 +21,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary: #8AB4F8;
-    --primary-light: #AECBFA;
+    --primary: #4C6EF5;
+    --primary-light: #748FFC;
     --accent: #FF9E64;
     --accent-hover: #FFB385;
     --bg-main: #0B0F19;
