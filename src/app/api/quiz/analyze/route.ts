@@ -175,7 +175,10 @@ export async function POST(req: NextRequest) {
             const career = mergedCareers.find(c => c.id === r.careerId)
             return {
               name: career?.name || "Career",
-              aiSummary: r.whyItFits || r.matchReason
+              aiSummary: r.whyItFits || r.matchReason,
+              matchScore: r.matchScore || 0,
+              sector: career?.sector || "Other",
+              stream: career?.stream || "Any"
             }
           })
           
