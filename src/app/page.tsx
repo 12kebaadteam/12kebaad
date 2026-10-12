@@ -54,7 +54,7 @@ export default function HomePage() {
             </p>
             
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/quiz-intro" className="btn-primary" style={{ padding: '0.9rem 2.5rem' }}>
+              <Link href="/onboarding/qualification" className="btn-primary" style={{ padding: '0.9rem 2.5rem' }}>
                 Start in 30 Seconds <ArrowRight size={20} />
               </Link>
               <Link href="/careers" className="btn-secondary" style={{ padding: '0.9rem 2rem' }}>
@@ -358,7 +358,7 @@ export default function HomePage() {
           <p style={{ fontSize: '0.95rem', opacity: 0.9, maxWidth: '450px', margin: '0 auto 1.5rem auto' }}>
             Take control. Join 50,000+ students who stopped worrying and started building with 12kebaad.
           </p>
-          <Link href={session ? "/quiz-intro" : "/form"} className="btn-primary" style={{ padding: '0.9rem 3rem', fontSize: '1rem', background: 'white', color: 'var(--primary)' }}>
+          <Link href="/onboarding/qualification" className="btn-primary" style={{ padding: '0.9rem 3rem', fontSize: '1rem', background: 'white', color: 'var(--primary)' }}>
             Start the Quiz Now
           </Link>
         </div>

@@ -62,7 +62,7 @@ export default function QuizLoadingPage() {
 
   return (
     <div className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
-      <OnboardingProgress currentStep={6} />
+      <OnboardingProgress currentStep={5} totalSteps={5} />
       
       <div style={{ textAlign: 'center', maxWidth: '500px' }}>
         <motion.div

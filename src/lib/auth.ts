@@ -37,6 +37,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/form", // General user login screen
+    error: "/form",  // Redirect auth errors to form with friendly feedback
   },
   callbacks: {
     async signIn({ user, account, profile }) {

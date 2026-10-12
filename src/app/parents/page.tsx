@@ -103,7 +103,7 @@ export default function ParentsPage() {
         <p style={{ color: 'var(--text-muted)', marginBottom: '2rem', maxWidth: '500px', margin: '0 auto 2rem' }}>
           Have your child take our 60-second assessment and uncover their potential.
         </p>
-        <a href="/quiz-intro" className="btn-primary" style={{ display: 'inline-block', padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
+        <a href="/onboarding/qualification" className="btn-primary" style={{ display: 'inline-block', padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
           Take the Assessment Now
         </a>
       </section>

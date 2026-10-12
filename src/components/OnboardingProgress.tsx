@@ -3,11 +3,11 @@
 import { motion } from 'framer-motion'
 
 interface OnboardingProgressProps {
-  currentStep: number // 1 to 7 (based on the blueprint steps)
+  currentStep: number // 1 to 5
   totalSteps?: number
 }
 
-export default function OnboardingProgress({ currentStep, totalSteps = 7 }: OnboardingProgressProps) {
+export default function OnboardingProgress({ currentStep, totalSteps = 5 }: OnboardingProgressProps) {
   const percentage = (currentStep / totalSteps) * 100
 
   return (

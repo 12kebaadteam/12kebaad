@@ -32,7 +32,7 @@ export default function Footer() {
               <h4 style={{ color: "var(--primary)", marginBottom: "1.5rem", fontWeight: '700' }}>Platform</h4>
               <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.8rem" }}>
                 <li><Link href="/" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Home</Link></li>
-                <li><Link href="/quiz-intro" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Career Quiz</Link></li>
+                <li><Link href="/onboarding/qualification" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Career Quiz</Link></li>
                 <li><Link href="/careers" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Browse Careers</Link></li>
                 <li><Link href="/colleges" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Colleges</Link></li>
                 <li><Link href="/entrance-tests" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.95rem' }}>Exams</Link></li>

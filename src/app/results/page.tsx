@@ -70,7 +70,7 @@ export default function ResultsPage() {
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-      <OnboardingProgress currentStep={7} />
+      <OnboardingProgress currentStep={5} totalSteps={5} />
 
       <div style={{ marginTop: '2rem', marginBottom: '2rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1rem' }}>
@@ -92,7 +92,7 @@ export default function ResultsPage() {
               <Download size={16} style={{ marginRight: '6px' }} /> 
               {exporting ? 'Generating...' : 'Download PDF'}
             </button>
-            <Link href="/quiz-intro" className="btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>
+            <Link href="/onboarding/qualification" className="btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.85rem' }}>
               Retake Quiz
             </Link>
           </div>

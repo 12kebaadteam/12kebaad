@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { motion } from 'framer-motion'
 import OnboardingProgress from '@/components/OnboardingProgress'
 import { ArrowRight, Music, TrendingUp, Zap, Dumbbell, Palette, Globe, Cpu, Heart, Book, Coffee, Plane, Camera, Mic2, Gamepad2, TreePine, Building, Beaker, Scale } from 'lucide-react'
@@ -29,8 +30,31 @@ const passionFields = [
 
 export default function PassionPage() {
   const router = useRouter()
+  const { data: session, status } = useSession()
   const [selected, setSelected] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/form?callbackUrl=/onboarding/qualification')
+      return
+    }
+
+    try {
+      const level = localStorage.getItem('onboarding_level')
+      const interests = localStorage.getItem('onboarding_interests')
+      if (!level || !interests) {
+        router.replace('/onboarding/qualification')
+        return
+      }
+      const saved = localStorage.getItem('onboarding_passion')
+      if (saved) {
+        setSelected(saved)
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [status, router])
 
   const handleNext = async () => {
     if (!selected) return
@@ -45,9 +69,13 @@ export default function PassionPage() {
     }
   }
 
+  if (status === 'loading') {
+    return null
+  }
+
   return (
     <div className="main-content" style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
-      <OnboardingProgress currentStep={4} />
+      <OnboardingProgress currentStep={3} totalSteps={5} />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -63,7 +91,7 @@ export default function PassionPage() {
           marginBottom: '1.5rem'
         }}>
           <span style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--accent)', letterSpacing: '0.05em' }}>
-            STEP 4 OF 4 — PASSION CHECK
+            STEP 3 OF 5 — PASSION CHECK
           </span>
         </div>
         

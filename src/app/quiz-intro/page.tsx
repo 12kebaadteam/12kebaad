@@ -1,6 +1,8 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { motion } from 'framer-motion'
 import OnboardingProgress from '@/components/OnboardingProgress'
 import { Zap, Heart, RefreshCw, Save, Rocket } from 'lucide-react'
@@ -30,10 +32,33 @@ const tips = [
 
 export default function QuizIntroPage() {
   const router = useRouter()
+  const { data: session, status } = useSession()
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/form?callbackUrl=/onboarding/qualification')
+      return
+    }
+
+    try {
+      const level = localStorage.getItem('onboarding_level')
+      const interests = localStorage.getItem('onboarding_interests')
+      if (!level || !interests) {
+        // Did not complete initial steps; return to Step 1
+        router.replace('/onboarding/qualification')
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [status, router])
+
+  if (status === 'loading') {
+    return null
+  }
 
   return (
     <div style={{ maxWidth: '100%' }}>
-      <OnboardingProgress currentStep={4} />
+      <OnboardingProgress currentStep={4} totalSteps={5} />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}

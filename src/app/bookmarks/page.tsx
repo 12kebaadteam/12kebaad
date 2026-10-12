@@ -57,7 +57,7 @@ export default function BookmarksPage() {
             <Bookmark size={48} color="var(--border)" style={{ marginBottom: '1rem' }} />
             <h3>No bookmarks yet</h3>
             <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>You haven't saved any careers. Take the quiz to get started!</p>
-            <Link href="/quiz-intro" className="btn-primary">Take Career Quiz</Link>
+            <Link href="/onboarding/qualification" className="btn-primary">Take Career Quiz</Link>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

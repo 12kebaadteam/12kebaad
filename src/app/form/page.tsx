@@ -17,15 +17,32 @@ export const metadata: Metadata = {
 export default async function FormPage({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string }>
+  searchParams: Promise<{ callbackUrl?: string; error?: string }>
 }) {
   const resolvedParams = await searchParams
   const callbackUrl = resolvedParams.callbackUrl
+  const error = resolvedParams.error
   const session = await getServerSession(authOptions)
   
   if (session) {
     redirect(callbackUrl || "/onboarding/qualification")
   }
+
+  const getErrorMessage = (err?: string) => {
+    if (!err) return null
+    if (err === 'OAuthSignin' || err === 'OAuthCallback') {
+      return 'Google sign-in could not be completed. Please try again or check your account permissions.'
+    }
+    if (err === 'AccessDenied') {
+      return 'Access was denied. Please sign in with an authorized Google account.'
+    }
+    if (err === 'Verification') {
+      return 'The sign-in link has expired or has already been used.'
+    }
+    return 'Authentication failed. Please try signing in again.'
+  }
+
+  const errorMessage = getErrorMessage(error)
 
   return (
     <div style={{
@@ -50,6 +67,22 @@ export default async function FormPage({
             <img src="/logo.png" alt="12kebaad Logo" style={{ height: '40px', borderRadius: '8px' }} />
             <span style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--primary)', letterSpacing: '-0.03em' }}>12kebaad</span>
           </Link>
+
+          {errorMessage && (
+            <div style={{
+              background: 'rgba(232, 99, 10, 0.1)',
+              border: '1px solid rgba(232, 99, 10, 0.3)',
+              color: 'var(--accent)',
+              borderRadius: '12px',
+              padding: '0.85rem 1rem',
+              fontSize: '0.85rem',
+              lineHeight: 1.5,
+              marginBottom: '1.5rem',
+              textAlign: 'left'
+            }}>
+              <strong>Sign-in notice:</strong> {errorMessage}
+            </div>
+          )}
 
           <h1 style={{
             fontSize: '1.75rem',

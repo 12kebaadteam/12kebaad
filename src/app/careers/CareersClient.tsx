@@ -116,48 +116,30 @@ export default function CareersClient({ initialCareers = [] }: { initialCareers?
       </div>
 
       {/* Filters Section */}
-      <div className="glass-panel" style={{ padding: '2rem', marginBottom: '3rem', background: 'var(--bg-offset)', maxWidth: '100%' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center' }}>
+      <div className="glass-panel career-filters-panel">
+        <div className="career-filters-container">
           
           {/* Search */}
-          <div style={{ flex: '1', minWidth: '300px', position: 'relative' }}>
-            <Search style={{ position: 'absolute', left: '1.2rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={20} />
+          <div className="career-search-box">
+            <Search style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={18} />
             <input 
               type="text" 
               placeholder="Search careers by name or keywords..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ 
-                width: '100%', 
-                padding: '1rem 1rem 1rem 3.5rem', 
-                borderRadius: '16px', 
-                border: '1px solid var(--border)',
-                background: 'var(--bg-main)',
-                color: 'var(--text-main)',
-                fontSize: '1rem'
-              }}
+              className="career-search-input"
             />
           </div>
 
           {/* Filter Type */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '0.9rem' }}>FILTER BY:</span>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div className="career-filter-group">
+            <span className="career-filter-label">FILTER BY:</span>
+            <div className="career-filter-buttons">
               {['None', 'Stream', 'Sector', 'Salary'].map(f => (
                 <button
                   key={f}
                   onClick={() => { setFilterBy(f); setActiveFilter(null); }}
-                  style={{ 
-                    padding: '0.6rem 1.2rem', 
-                    borderRadius: '99px', 
-                    border: '1px solid',
-                    borderColor: filterBy === f ? 'var(--primary)' : 'var(--border)',
-                    background: filterBy === f ? 'var(--primary)' : 'var(--bg-main)',
-                    color: filterBy === f ? '#fff' : 'var(--text-main)',
-                    fontSize: '0.85rem',
-                    fontWeight: '600',
-                    cursor: 'pointer'
-                  }}
+                  className={`career-filter-btn ${filterBy === f ? 'active' : ''}`}
                 >
                   {f}
                 </button>
@@ -166,20 +148,12 @@ export default function CareersClient({ initialCareers = [] }: { initialCareers?
           </div>
 
           {/* Sort By */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '0.9rem' }}>SORT BY:</span>
+          <div className="career-sort-group">
+            <span className="career-filter-label">SORT BY:</span>
             <select 
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              style={{ 
-                padding: '0.6rem 1.2rem', 
-                borderRadius: '99px', 
-                border: '1px solid var(--border)',
-                background: 'var(--bg-main)',
-                color: 'var(--text-main)',
-                fontWeight: '600',
-                fontSize: '0.85rem'
-              }}
+              className="career-sort-select"
             >
               <option>Salary</option>
               <option>Demand</option>
@@ -196,23 +170,13 @@ export default function CareersClient({ initialCareers = [] }: { initialCareers?
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              style={{ marginTop: '2rem', display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', gap: '0.75rem', borderTop: '1px solid var(--border)', paddingTop: '2rem', paddingBottom: '0.5rem' }}
+              className="career-subfilters-row"
             >
               {(filterBy === 'Stream' ? streams : filterBy === 'Sector' ? sectors : salaryRanges).map(sub => (
                 <button
                   key={sub}
                   onClick={() => setActiveFilter(sub)}
-                  style={{ 
-                    padding: '0.5rem 1.2rem', 
-                    borderRadius: '99px', 
-                    border: '1px solid',
-                    borderColor: activeFilter === sub ? 'var(--accent)' : 'var(--border)',
-                    background: activeFilter === sub ? 'var(--accent)' : 'var(--bg-main)',
-                    color: activeFilter === sub ? '#fff' : 'var(--text-muted)',
-                    fontSize: '0.8rem',
-                    fontWeight: '600',
-                    cursor: 'pointer'
-                  }}
+                  className={`career-subfilter-btn ${activeFilter === sub ? 'active' : ''}`}
                 >
                   {sub}
                 </button>

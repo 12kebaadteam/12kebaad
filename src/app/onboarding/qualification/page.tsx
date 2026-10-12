@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { motion } from 'framer-motion'
 import OnboardingProgress from '@/components/OnboardingProgress'
 import { ArrowRight, GraduationCap, School, BookOpen } from 'lucide-react'
@@ -24,9 +25,30 @@ const streams = [
 
 export default function QualificationPage() {
   const router = useRouter()
+  const { data: session, status } = useSession()
   const [level, setLevel] = useState('')
   const [stream, setStream] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    // If not authenticated, ensure redirect to login with safe callback
+    if (status === 'unauthenticated') {
+      router.replace('/form?callbackUrl=/onboarding/qualification')
+      return
+    }
+
+    // Reset stale quiz attempts when beginning a fresh quiz flow
+    try {
+      localStorage.removeItem('quiz_selections')
+      localStorage.removeItem('quiz_results')
+      const savedLevel = localStorage.getItem('onboarding_level')
+      const savedStream = localStorage.getItem('onboarding_stream')
+      if (savedLevel) setLevel(savedLevel)
+      if (savedStream) setStream(savedStream)
+    } catch (e) {
+      // ignore storage access errors
+    }
+  }, [status, router])
 
   const handleNext = async () => {
     if (!level) return
@@ -34,7 +56,6 @@ export default function QualificationPage() {
 
     setLoading(true)
     try {
-      // Save to local storage for now, will sync to DB at the end of onboarding or per step
       localStorage.setItem('onboarding_level', level)
       localStorage.setItem('onboarding_stream', stream)
       router.push('/onboarding/interests')
@@ -47,9 +68,13 @@ export default function QualificationPage() {
 
   const showStream = ['12th', 'grad1', 'grad2'].includes(level)
 
+  if (status === 'loading') {
+    return null
+  }
+
   return (
     <div className="main-content" style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
-      <OnboardingProgress currentStep={2} />
+      <OnboardingProgress currentStep={1} totalSteps={5} />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}

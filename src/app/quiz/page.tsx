@@ -2,27 +2,42 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import OnboardingProgress from '@/components/OnboardingProgress'
 import { TrendingUp, AlertCircle, Loader2 } from 'lucide-react'
 
 export default function QuizPage() {
   const router = useRouter()
+  const { data: session, status } = useSession()
   const [pairs, setPairs] = useState<any[][]>([])
   const [currentRound, setCurrentRound] = useState(0)
   const [selections, setSelections] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/form?callbackUrl=/onboarding/qualification')
+      return
+    }
+
+    const level = localStorage.getItem('onboarding_level')
+    const stream = localStorage.getItem('onboarding_stream')
+    const interests = localStorage.getItem('onboarding_interests')
+    
+    // If user somehow skipped steps 1-3, send back to Step 1
+    if (!level || !stream || !interests) {
+      router.replace('/onboarding/qualification')
+      return
+    }
+
     const fetchPairs = async () => {
-      const stream = localStorage.getItem('onboarding_stream') || 'Any'
-      const interests = localStorage.getItem('onboarding_interests') || '[]'
-      const interestList = JSON.parse(interests).join(',')
+      const interestList = JSON.parse(interests || '[]').join(',')
       
       try {
         const res = await fetch(`/api/quiz/pairs?stream=${stream}&interests=${interestList}`)
         const data = await res.json()
-        setPairs(data.pairs)
+        setPairs(data.pairs || [])
       } catch (error) {
         console.error(error)
       } finally {
@@ -30,13 +45,13 @@ export default function QuizPage() {
       }
     }
     fetchPairs()
-  }, [])
+  }, [status, router])
 
   const handleSelect = (careerId: string) => {
     const newSelections = [...selections, careerId]
     setSelections(newSelections)
     
-    if (currentRound < 19) {
+    if (currentRound < 19 && currentRound < pairs.length - 1) {
       setCurrentRound(currentRound + 1)
     } else {
       // Quiz finished
@@ -45,7 +60,7 @@ export default function QuizPage() {
     }
   }
 
-  if (loading) {
+  if (status === 'loading' || loading) {
     return (
       <div className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
         <div style={{ textAlign: 'center' }}>
@@ -62,17 +77,18 @@ export default function QuizPage() {
         <h2 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>No careers found matching your profile</h2>
         <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Try selecting a different stream or more interests.</p>
         <button onClick={() => router.push('/onboarding/qualification')} className="btn-primary">
-          Back to Onboarding
+          Back to Step 1
         </button>
       </div>
     )
   }
 
-  const [c1, c2] = pairs[currentRound]
+  const [c1, c2] = pairs[currentRound] || []
+  if (!c1 || !c2) return null
 
   return (
     <div style={{ maxWidth: '100%' }}>
-      <OnboardingProgress currentStep={5} totalSteps={20} />
+      <OnboardingProgress currentStep={4} totalSteps={5} />
       
       <div style={{ marginTop: '2rem', textAlign: 'center', marginBottom: '3rem' }}>
         <p style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>

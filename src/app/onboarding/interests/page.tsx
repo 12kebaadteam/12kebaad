@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { motion } from 'framer-motion'
 import OnboardingProgress from '@/components/OnboardingProgress'
 import { 
@@ -130,8 +131,30 @@ const interestCategories = [
 
 export default function InterestsPage() {
   const router = useRouter()
+  const { data: session, status } = useSession()
   const [selected, setSelected] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/form?callbackUrl=/onboarding/qualification')
+      return
+    }
+
+    try {
+      const level = localStorage.getItem('onboarding_level')
+      if (!level) {
+        router.replace('/onboarding/qualification')
+        return
+      }
+      const saved = localStorage.getItem('onboarding_interests')
+      if (saved) {
+        setSelected(JSON.parse(saved))
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [status, router])
 
   const toggleInterest = (id: string) => {
     if (selected.includes(id)) {
@@ -155,9 +178,13 @@ export default function InterestsPage() {
     }
   }
 
+  if (status === 'loading') {
+    return null
+  }
+
   return (
     <div className="main-content" style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-      <OnboardingProgress currentStep={3} totalSteps={4} />
+      <OnboardingProgress currentStep={2} totalSteps={5} />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}

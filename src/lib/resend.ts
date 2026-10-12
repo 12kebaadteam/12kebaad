@@ -196,7 +196,7 @@ export async function sendWelcomeEmail(email: string, name: string) {
 
         <!-- CTA Button -->
         <div style="text-align: center; margin-bottom: 32px;">
-          <a href="${appUrl}/quiz-intro" style="display: inline-block; padding: 14px 32px; background-color: #e8630a; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 8px rgba(232, 99, 10, 0.25); font-family: Arial, sans-serif;">
+          <a href="${appUrl}/onboarding/qualification" style="display: inline-block; padding: 14px 32px; background-color: #e8630a; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 8px rgba(232, 99, 10, 0.25); font-family: Arial, sans-serif;">
             Start Your Career Quiz →
           </a>
         </div>

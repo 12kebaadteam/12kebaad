@@ -10,6 +10,10 @@ export function proxy(request: NextRequest) {
     '/bookmarks',
     '/update-profile',
     '/onboarding',
+    '/quiz',
+    '/quiz-intro',
+    '/quiz-loading',
+    '/results',
   ]
 
   // Check if current path matches any private route exactly or as a sub-path
@@ -28,7 +32,11 @@ export function proxy(request: NextRequest) {
       // Redirect to sign in page (the /form page)
       const url = request.nextUrl.clone()
       url.pathname = '/form'
-      url.searchParams.set('callbackUrl', pathname)
+      // Ensure starting the quiz always begins at Step 1 (qualification) after authentication
+      const returnUrl = (pathname === '/quiz' || pathname === '/quiz-intro')
+        ? '/onboarding/qualification'
+        : pathname
+      url.searchParams.set('callbackUrl', returnUrl)
       return NextResponse.redirect(url)
     }
   }
