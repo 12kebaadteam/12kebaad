@@ -305,7 +305,7 @@ main:has(.full-screen-layout) {
 
 /* ── Hero Section ─────────────────────────────────────────────────── */
 .hero-section {
-  padding: 6rem 5% 4rem 5%;
+  padding: 5rem 5% 3.5rem 5%;
   background: radial-gradient(circle at top right, rgba(232, 99, 10, 0.05), transparent),
               radial-gradient(circle at bottom left, rgba(30, 58, 95, 0.05), transparent);
   text-align: center;
@@ -640,7 +640,7 @@ main:has(.full-screen-layout) {
   }
   
   .hero-section {
-    padding: 7rem 1rem 2rem 1rem;
+    padding: 6rem 1rem 2rem 1rem;
   }
 
   .hero-section > div > div:first-child > div {

@@ -1,6 +1,30 @@
+import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const test = await prisma.entranceTest.findUnique({ where: { id } })
+
+  if (!test) return { title: 'Entrance Test Not Found | 12kebaad' }
+
+  const canonicalUrl = `https://12kebaad.in/entrance-test/${test.id}`
+
+  return {
+    title: `${test.name} (${test.fullForm || ''}) — Exam Guide | 12kebaad`,
+    description: `Complete guide to ${test.name}${test.fullForm ? ` (${test.fullForm})` : ''}. Eligibility, pattern, suitability for ${test.suitability || 'all streams'}, and key details.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${test.name} Entrance Exam Guide | 12kebaad`,
+      description: `Everything about ${test.name} — eligibility, exam dates, and preparation.`,
+      url: canonicalUrl,
+      type: 'article',
+    },
+  }
+}
 
 export default async function EntranceTestDetailPage({
   params,

@@ -28,8 +28,8 @@ export default function NavBar() {
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: session ? "/careers" : "/form", label: 'Browse Careers' },
-    { href: "/colleges", label: 'Top Colleges' },
+    { href: '/careers', label: 'Browse Careers' },
+    { href: '/colleges', label: 'Top Colleges' },
     { href: "/entrance-tests", label: 'Exams' },
     { href: "/compare-careers", label: 'Compare' },
     { href: "/bookmarks", label: 'Bookmarks' },

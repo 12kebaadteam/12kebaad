@@ -1,3 +1,13 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Terms & Conditions | 12kebaad',
+  description: 'Terms and Conditions governing the use of the 12kebaad career decision and college guidance platform.',
+  alternates: {
+    canonical: 'https://12kebaad.in/terms',
+  },
+}
+
 export default function TermsPage() {
   return (
     <main className="main-content" style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>

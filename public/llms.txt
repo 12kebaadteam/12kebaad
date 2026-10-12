@@ -1,0 +1,27 @@
+# 12kebaad.in
+
+> 12kebaad.in is an independent, free career and education guidance portal for Indian students after completing Class 12.
+
+## About the Platform
+12kebaad.in provides comprehensive, fact-checked roadmaps, entrance exam insights, college directories, and course guides across Science (PCM/PCB), Commerce, and Arts & Humanities.
+
+## Key Public Resources
+- Homepage: https://12kebaad.in/
+- Career Guides: https://12kebaad.in/careers
+- College Directory: https://12kebaad.in/colleges
+- Degrees & Courses: https://12kebaad.in/courses
+- Courses After 12th Science: https://12kebaad.in/courses-after-12th-science
+- Courses After 12th Commerce: https://12kebaad.in/courses-after-12th-commerce
+- Courses After 12th Arts: https://12kebaad.in/courses-after-12th-arts
+- Entrance Examinations: https://12kebaad.in/entrance-tests
+- Professional Courses: https://12kebaad.in/courses/professional
+- State & Stream Guides: https://12kebaad.in/state-guidance
+- About 12kebaad: https://12kebaad.in/about
+- Privacy Policy: https://12kebaad.in/privacy
+- Terms of Service: https://12kebaad.in/terms
+- Contact: https://12kebaad.in/contact
+
+## Canonical Hostname & Policy
+- Primary Domain: https://12kebaad.in (non-www)
+- Sitemap: https://12kebaad.in/sitemap.xml
+- Robots: https://12kebaad.in/robots.txt

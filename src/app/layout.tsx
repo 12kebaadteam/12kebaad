@@ -85,15 +85,51 @@ export default function RootLayout({
           <CookieConsent />
         </Providers>
 
-        <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} strategy="afterInteractive" />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){window.dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-          `}
-        </Script>
+        {/* Website & Organization Structured Data for Search & AI Engines */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://12kebaad.in/#organization",
+                  "name": "12kebaad",
+                  "url": "https://12kebaad.in",
+                  "logo": "https://12kebaad.in/logo.png",
+                  "description": "AI-powered career predictor and decision engine for Class 12 students in India."
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://12kebaad.in/#website",
+                  "url": "https://12kebaad.in",
+                  "name": "12kebaad",
+                  "publisher": { "@id": "https://12kebaad.in/#organization" },
+                  "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://12kebaad.in/search?q={search_term_string}",
+                    "query-input": "required name=search_term_string"
+                  }
+                }
+              ]
+            })
+          }}
+        />
+
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} strategy="afterInteractive" />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){window.dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
         <Analytics />
         <SpeedInsights />
       </body>

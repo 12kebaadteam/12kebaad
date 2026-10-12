@@ -28,33 +28,39 @@ import {
 import Link from 'next/link'
 import FeedbackSection from '@/components/FeedbackSection'
 import CommentSection from '@/components/CommentSection'
+import ProgressiveLoginGate from '@/components/ProgressiveLoginGate'
 
-export default function CareerDetailClient() {
+export default function CareerDetailClient({ initialCareer }: { initialCareer?: any }) {
   const { slug } = useParams()
   const router = useRouter()
-  const [career, setCareer] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [career, setCareer] = useState<any>(initialCareer || null)
+  const [loading, setLoading] = useState(!initialCareer)
 
   useEffect(() => {
-    const fetchCareer = async () => {
-      try {
-        const res = await fetch(`/api/career/${slug}`)
-        const data = await res.json()
-        setCareer(data)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setLoading(false)
+    if (!initialCareer && slug) {
+      const fetchCareer = async () => {
+        try {
+          const res = await fetch(`/api/career/${slug}`)
+          const data = await res.json()
+          setCareer(data)
+        } catch (error) {
+          console.error(error)
+        } finally {
+          setLoading(false)
+        }
       }
+      fetchCareer()
     }
-    fetchCareer()
-  }, [slug])
+  }, [slug, initialCareer])
 
   if (loading) return null
-  if (!career) return <div>Career not found</div>
+  if (!career) return <div style={{ padding: '3rem', textAlign: 'center' }}>Career not found</div>
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <>
+      {/* Progressive login gate — fires at 65% scroll or on 2nd career page visit */}
+      <ProgressiveLoginGate />
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
       <Link href="/results" className="back-link">
         <ArrowLeft size={16} style={{ marginRight: '8px', verticalAlign: 'middle' }} /> Back to recommendations
       </Link>
@@ -324,6 +330,19 @@ export default function CareerDetailClient() {
         </section>
       )}
 
+      {/* Editorial Transparency & Fact-Checking */}
+      <section className="glass-panel" style={{ marginBottom: '3rem', padding: '1.5rem', background: 'var(--bg-offset)', borderLeft: '4px solid var(--primary)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+          <ShieldCheck size={18} style={{ color: 'var(--primary)' }} />
+          <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--primary)', margin: 0 }}>
+            Editorial Policy & Data Sources
+          </h4>
+        </div>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.6', margin: 0 }}>
+          Maintained by the <strong>12kebaad Editorial &amp; Research Team</strong>. Career benchmarks, salary brackets, and educational requirements are compiled from official regulatory portals, UGC/AICTE notifications, and verified industry hiring reports. Last reviewed: 2026. Have an update or correction? Contact us at <a href="mailto:12kebaad.team@gmail.com" style={{ color: 'var(--primary)' }}>12kebaad.team@gmail.com</a>.
+        </p>
+      </section>
+
       {/* Feedback & Comments */}
       <section style={{ marginBottom: '3rem' }}>
         <FeedbackSection careerId={career.id} />
@@ -331,5 +350,6 @@ export default function CareerDetailClient() {
 
       <CommentSection careerId={career.id} />
     </div>
+    </>
   )
 }

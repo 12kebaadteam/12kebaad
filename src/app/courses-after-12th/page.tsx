@@ -2,9 +2,17 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Ultimate Guide: Best Career Options After 12th in India (2024-25)",
+  title: "Ultimate Guide: Best Career Options After 12th in India (2026)",
   description: "Comprehensive guide to career options after 12th science, commerce, and arts. Find high-salary courses, top colleges, and expert career advice.",
   keywords: ["what to do after 12th", "best career options after 12th", "career options after 12th", "high salary career options after 12th"],
+  alternates: {
+    canonical: 'https://12kebaad.in/courses-after-12th',
+  },
+  openGraph: {
+    title: "Best Career Options After 12th in India | 12kebaad",
+    description: "Comprehensive guide across Science, Commerce, and Arts after Class 12.",
+    url: 'https://12kebaad.in/courses-after-12th',
+  },
 }
 
 export default function CoursesAfter12thPage() {

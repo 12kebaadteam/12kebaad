@@ -4,6 +4,9 @@ import { ShieldCheck, HeartHandshake, Lightbulb, LineChart, Target, UserCheck } 
 export const metadata: Metadata = {
   title: "For Parents | Guiding Your Child's Future - 12kebaad",
   description: 'Learn how 12kebaad partners with parents to help children make data-driven, confident career decisions after Class 12.',
+  alternates: {
+    canonical: 'https://12kebaad.in/parents',
+  },
 }
 
 export default function ParentsPage() {

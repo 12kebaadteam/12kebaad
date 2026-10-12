@@ -1,6 +1,21 @@
+import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import ExpandableCourseCard from '../../components/ExpandableCourseCard'
+
+export const metadata: Metadata = {
+  title: 'Browse Courses After 12th | Degrees, Diplomas & Programs - 12kebaad',
+  description: 'Explore all undergraduate courses available after Class 12 in India — from BTech to BBA, MBBS to BA. Filter by stream, fees, and state.',
+  alternates: {
+    canonical: 'https://12kebaad.in/courses',
+  },
+  openGraph: {
+    title: 'Browse Courses After 12th | 12kebaad',
+    description: 'Complete directory of undergraduate courses available to Indian students after Class 12.',
+    url: 'https://12kebaad.in/courses',
+    type: 'website',
+  },
+}
 
 export default async function CoursesPage({
   searchParams,

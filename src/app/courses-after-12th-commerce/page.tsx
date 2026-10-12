@@ -2,9 +2,17 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Professional Career Options After 12th Commerce 2024-25 | CA, MBA, Fintech",
+  title: "Professional Career Options After 12th Commerce 2026 | CA, MBA, Fintech",
   description: "Master the markets with the best career options after 12th commerce in India. Detailed guide on CA, BBA, B.Com Hons, Actuarial Science, and Investment Banking.",
   keywords: ["career options after 12th commerce", "best commerce courses", "ca after 12th", "bba vs bcom"],
+  alternates: {
+    canonical: 'https://12kebaad.in/courses-after-12th-commerce',
+  },
+  openGraph: {
+    title: "Career Options After 12th Commerce | 12kebaad",
+    description: "Detailed guide on CA, BBA, B.Com Hons, Actuarial Science, and Investment Banking.",
+    url: 'https://12kebaad.in/courses-after-12th-commerce',
+  },
 }
 
 export default function CoursesCommercePage() {
@@ -70,7 +78,7 @@ export default function CoursesCommercePage() {
             </thead>
             <tbody>
               {[
-                { name: "Chartered Accountancy (CA)", duration: "4.5-5 Years", eligibility: "12th + Foundation", salary: "₹8 - ₹25" },
+                { name: "Chartered Accountancy (CA)", slug: "chartered-accountant-ca", duration: "4.5-5 Years", eligibility: "12th + Foundation", salary: "₹8 - ₹25" },
                 { name: "IPM (IIM Integrated)", duration: "5 Years", eligibility: "12th + IPMAT", salary: "₹12 - ₹28" },
                 { name: "B.Com (Hons)", duration: "3 Years", eligibility: "12th (High %)", salary: "₹4 - ₹10" },
                 { name: "Economics (Hons)", duration: "3 Years", eligibility: "12th (Maths pref)", salary: "₹6 - ₹15" },
@@ -78,7 +86,15 @@ export default function CoursesCommercePage() {
                 { name: "B.Com LLB", duration: "5 Years", eligibility: "12th + CLAT", salary: "₹6 - ₹14" },
               ].map((row, i) => (
                 <tr key={i} style={{ borderBottom: '1px solid var(--glass-border)', background: i % 2 === 0 ? 'rgba(16,185,129,0.03)' : 'transparent' }}>
-                  <td style={{ padding: '1rem', fontWeight: 600 }}>{row.name}</td>
+                  <td style={{ padding: '1rem', fontWeight: 600 }}>
+                    {row.slug ? (
+                      <Link href={`/career/${row.slug}`} style={{ color: '#10b981', textDecoration: 'underline' }}>
+                        {row.name}
+                      </Link>
+                    ) : (
+                      row.name
+                    )}
+                  </td>
                   <td style={{ padding: '1rem' }}>{row.duration}</td>
                   <td style={{ padding: '1rem' }}>{row.eligibility}</td>
                   <td style={{ padding: '1rem', color: '#10b981' }}>{row.salary}</td>

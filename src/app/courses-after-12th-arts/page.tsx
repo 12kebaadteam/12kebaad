@@ -2,9 +2,17 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Best Career Options After 12th Arts In India 2024-25 | Law, Design, BJMC",
+  title: "Best Career Options After 12th Arts In India 2026 | Law, Design, BJMC",
   description: "Creativity meets career in the arts stream. Explore BA LLB, Design, Journalism, Psychology, and Hotel Management. High-salary creative career pathways revealed.",
   keywords: ["career options after 12th arts", "best arts career paths", "career options after 12th humanities", "creative arts career"],
+  alternates: {
+    canonical: 'https://12kebaad.in/courses-after-12th-arts',
+  },
+  openGraph: {
+    title: "Career Options After 12th Arts | 12kebaad",
+    description: "Explore BA LLB, Design, Journalism, Psychology, and Hotel Management.",
+    url: 'https://12kebaad.in/courses-after-12th-arts',
+  },
 }
 
 export default function CoursesArtsPage() {
@@ -70,15 +78,23 @@ export default function CoursesArtsPage() {
             </thead>
             <tbody>
               {[
-                { name: "BA LLB / BBA LLB", duration: "5 Years", salary: "₹5 - ₹18", roles: "Corporate Lawyer, Legal Advisor" },
+                { name: "BA LLB / BBA LLB (Law)", slug: "criminal-lawyer", duration: "5 Years", salary: "₹5 - ₹18", roles: "Corporate Lawyer, Legal Advisor" },
                 { name: "B.Des (Design)", duration: "4 Years", salary: "₹4 - ₹15", roles: "Product/UI Designer" },
-                { name: "B.A. Economics (Hons)", duration: "3 Years", salary: "₹5 - ₹12", roles: "Data Analyst, Policy Expert" },
+                { name: "B.A. Economics (Hons)", slug: "data-analyst", duration: "3 Years", salary: "₹5 - ₹12", roles: "Data Analyst, Policy Expert" },
                 { name: "BJMC (Journalism)", duration: "3 Years", salary: "₹3.5 - ₹10", roles: "PR Manager, Editor" },
                 { name: "IPM (IIM Integrated)", duration: "5 Years", salary: "₹10 - ₹25", roles: "Business Consultant" },
-                { name: "Psychology (Hons)", duration: "3 Years", salary: "₹3.5 - ₹8", roles: "HR Specialist, Counselor" },
+                { name: "Psychology (Hons)", slug: "clinical-psychologist", duration: "3 Years", salary: "₹3.5 - ₹8", roles: "Counselor, Clinical Psychologist" },
               ].map((row, i) => (
                 <tr key={i} style={{ borderBottom: '1px solid var(--glass-border)', background: i % 2 === 0 ? 'rgba(245,158,11,0.03)' : 'transparent' }}>
-                  <td style={{ padding: '1rem', fontWeight: 600 }}>{row.name}</td>
+                  <td style={{ padding: '1rem', fontWeight: 600 }}>
+                    {row.slug ? (
+                      <Link href={`/career/${row.slug}`} style={{ color: '#f59e0b', textDecoration: 'underline' }}>
+                        {row.name}
+                      </Link>
+                    ) : (
+                      row.name
+                    )}
+                  </td>
                   <td style={{ padding: '1rem' }}>{row.duration}</td>
                   <td style={{ padding: '1rem', color: '#f59e0b' }}>{row.salary}</td>
                   <td style={{ padding: '1rem' }}>{row.roles}</td>

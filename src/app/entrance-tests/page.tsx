@@ -1,5 +1,20 @@
+import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import ExpandableTestCard from '../../components/ExpandableTestCard'
+
+export const metadata: Metadata = {
+  title: 'Entrance Exams After 12th in India | Complete Guide - 12kebaad',
+  description: 'Browse all major entrance exams after Class 12 — JEE, NEET, CUET, CLAT, and more. Eligibility, exam pattern, suitability, and preparation tips.',
+  alternates: {
+    canonical: 'https://12kebaad.in/entrance-tests',
+  },
+  openGraph: {
+    title: 'Entrance Exams After 12th | 12kebaad',
+    description: 'Comprehensive guide to entrance tests for Indian students after Class 12.',
+    url: 'https://12kebaad.in/entrance-tests',
+    type: 'website',
+  },
+}
 
 export default async function EntranceTestsPage({
   searchParams,

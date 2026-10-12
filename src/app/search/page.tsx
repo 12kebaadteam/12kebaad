@@ -1,4 +1,13 @@
 import { prisma } from '@/lib/prisma'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Search Careers & Colleges | 12kebaad",
+  robots: {
+    index: false,
+    follow: true,
+  },
+}
 
 export default async function SearchPage({
   searchParams,

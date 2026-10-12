@@ -1,6 +1,30 @@
+import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const course = await prisma.professionalCourse.findUnique({ where: { id } })
+
+  if (!course) return { title: 'Professional Course Not Found | 12kebaad' }
+
+  const canonicalUrl = `https://12kebaad.in/professional-course/${course.id}`
+
+  return {
+    title: `${course.name}${course.fullForm ? ` (${course.fullForm})` : ''} — Professional Course Guide | 12kebaad`,
+    description: `Complete guide to ${course.name}${course.fullForm ? ` — ${course.fullForm}` : ''}. Eligibility, duration, career paths, and salary prospects for Indian students.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${course.name} Professional Course | 12kebaad`,
+      description: `Everything about ${course.name} — eligibility, scope, and career prospects.`,
+      url: canonicalUrl,
+      type: 'article',
+    },
+  }
+}
 
 export default async function ProfessionalCourseDetailPage({
   params,

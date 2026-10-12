@@ -1,6 +1,20 @@
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import ExpandableCollegeCard from '../../components/ExpandableCollegeCard'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Top Colleges in India 2026 | Fees, Placements & Rankings - 12kebaad',
+  description: 'Explore top colleges in India across Science, Commerce, and Arts. Filter by state, compare fees, placement packages, and authentic reality scores.',
+  alternates: {
+    canonical: 'https://12kebaad.in/colleges',
+  },
+  openGraph: {
+    title: 'Top Colleges in India | 12kebaad',
+    description: 'Compare top colleges in India by fees, placements, and courses.',
+    url: 'https://12kebaad.in/colleges',
+  },
+}
 
 export default async function CollegesPage({
   searchParams,

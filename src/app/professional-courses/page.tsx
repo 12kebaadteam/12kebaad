@@ -1,5 +1,20 @@
+import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import ExpandableProfCourseCard from '../../components/ExpandableProfCourseCard'
+
+export const metadata: Metadata = {
+  title: 'Professional Courses & Certifications After 12th | 12kebaad',
+  description: 'Explore career-oriented professional certifications and specialized programs available after Class 12 in India — CA, CS, CMA, and more.',
+  alternates: {
+    canonical: 'https://12kebaad.in/professional-courses',
+  },
+  openGraph: {
+    title: 'Professional Courses After 12th | 12kebaad',
+    description: 'Career-focused professional certifications and programs for Indian students after Class 12.',
+    url: 'https://12kebaad.in/professional-courses',
+    type: 'website',
+  },
+}
 
 export default async function ProfessionalCoursesPage() {
   const courses = await prisma.professionalCourse.findMany({

@@ -2,9 +2,17 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Top Career Options After 12th Science In India 2024-25 | PCM & PCB Guide",
+  title: "Top Career Options After 12th Science In India 2026 | PCM & PCB Guide",
   description: "Comprehensive guide for science students after 12th. Explore engineering, medical, pure sciences, and high-salary niche careers like aviation.",
   keywords: ["career options after 12th science", "best career options after 12th pcm", "high salary career options after 12th pcb", "engineering vs medical"],
+  alternates: {
+    canonical: 'https://12kebaad.in/courses-after-12th-science',
+  },
+  openGraph: {
+    title: "Career Options After 12th Science | 12kebaad",
+    description: "Comprehensive guide for science students after 12th. PCM, PCB, and high-growth technology pathways.",
+    url: 'https://12kebaad.in/courses-after-12th-science',
+  },
 }
 
 export default function CoursesSciencePage() {
@@ -74,14 +82,21 @@ export default function CoursesSciencePage() {
             <tbody>
               {[
                 { name: "B.Tech (CS/AI)", duration: "4 Years", entrance: "JEE Main/BITSAT", salary: "₹8 - ₹25" },
-                { name: "MBBS", duration: "5.5 Years", entrance: "NEET-UG", salary: "₹9 - ₹18" },
-                { name: "Comm. Pilot", duration: "2-3 Years", entrance: "CPL Ground", salary: "₹15 - ₹30" },
-                { name: "B.Arch", duration: "5 Years", entrance: "NATA / JEE Paper 2", salary: "₹4 - ₹10" },
-                { name: "B.Sc Nursing", duration: "4 Years", entrance: "AIIMS / NEET", salary: "₹3 - ₹7" },
-                { name: "Merchant Navy", duration: "4 Years", entrance: "IMU CET", salary: "₹6 - ₹12" },
+                { name: "Commercial Pilot", slug: "commercial-pilot", duration: "2-3 Years", entrance: "CPL Ground", salary: "₹15 - ₹30" },
+                { name: "Architect (B.Arch)", slug: "architect", duration: "5 Years", entrance: "NATA / JEE Paper 2", salary: "₹4 - ₹10" },
+                { name: "Merchant Navy Officer", slug: "merchant-navy-officer", duration: "4 Years", entrance: "IMU CET", salary: "₹6 - ₹12" },
+                { name: "B.Sc Nursing", slug: "nursing-registered-nurse", duration: "4 Years", entrance: "AIIMS / State", salary: "₹3 - ₹7" },
               ].map((row, i) => (
                 <tr key={i} style={{ borderBottom: '1px solid var(--glass-border)', background: i % 2 === 0 ? 'rgba(59,130,246,0.03)' : 'transparent' }}>
-                  <td style={{ padding: '1rem', fontWeight: 600 }}>{row.name}</td>
+                  <td style={{ padding: '1rem', fontWeight: 600 }}>
+                    {row.slug ? (
+                      <Link href={`/career/${row.slug}`} style={{ color: '#3b82f6', textDecoration: 'underline' }}>
+                        {row.name}
+                      </Link>
+                    ) : (
+                      row.name
+                    )}
+                  </td>
                   <td style={{ padding: '1rem' }}>{row.duration}</td>
                   <td style={{ padding: '1rem' }}>{row.entrance}</td>
                   <td style={{ padding: '1rem', color: 'var(--primary)' }}>{row.salary}</td>

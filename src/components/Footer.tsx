@@ -48,7 +48,6 @@ export default function Footer() {
               <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.8rem" }}>
                 <li><Link href="/privacy" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Privacy Policy</Link></li>
                 <li><Link href="/terms" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.95rem" }}>Terms & Conditions</Link></li>
-                <li><Link href="/admin" style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "0.8rem", opacity: 0.5 }}>Admin Dashboard</Link></li>
               </ul>
             </div>
           </div>

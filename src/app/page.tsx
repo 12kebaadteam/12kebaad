@@ -54,34 +54,13 @@ export default function HomePage() {
             </p>
             
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href={session ? "/quiz-intro" : "/form"} className="btn-primary" style={{ padding: '0.9rem 2.5rem' }}>
+              <Link href="/quiz-intro" className="btn-primary" style={{ padding: '0.9rem 2.5rem' }}>
                 Start in 30 Seconds <ArrowRight size={20} />
               </Link>
-              <Link href={session ? "/careers" : "/form"} className="btn-secondary" style={{ padding: '0.9rem 2rem' }}>
+              <Link href="/careers" className="btn-secondary" style={{ padding: '0.9rem 2rem' }}>
                 Browse All Careers
               </Link>
             </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 1 }}
-            style={{ marginTop: '3rem' }}
-          >
-            <img 
-              src="/hero_illustration.png" 
-              alt="Student at crossroads of careers" 
-              style={{ 
-                maxWidth: '700px', 
-                width: '100%', 
-                height: 'auto', 
-                borderRadius: '24px',
-                boxShadow: '0 20px 40px rgba(30, 58, 95, 0.12)',
-                display: 'block',
-                margin: '0 auto'
-              }} 
-            />
           </motion.div>
         </div>
       </section>

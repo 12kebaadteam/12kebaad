@@ -1,3 +1,13 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy | 12kebaad',
+  description: 'Understand how 12kebaad collects, uses, and protects student data, preferences, and privacy.',
+  alternates: {
+    canonical: 'https://12kebaad.in/privacy',
+  },
+}
+
 export default function PrivacyPage() {
   return (
     <main className="main-content" style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>

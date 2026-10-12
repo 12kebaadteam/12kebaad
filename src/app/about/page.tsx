@@ -1,3 +1,13 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'About Us | 12kebaad - AI Career Decision Platform',
+  description: 'Learn about 12kebaad, our mission to guide Indian students after Class 12, our founders, and our data-driven decision methodology.',
+  alternates: {
+    canonical: 'https://12kebaad.in/about',
+  },
+}
+
 export default function AboutPage() {
   return (
     <div className="animate-fade-in" style={{ maxWidth: "800px", margin: "2rem auto" }}>

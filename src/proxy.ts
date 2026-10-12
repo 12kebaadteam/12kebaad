@@ -4,23 +4,18 @@ import type { NextRequest } from 'next/server'
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   
-  // Define protected routes
-  const protectedRoutes = [
-    '/courses',
-    '/colleges',
-    '/entrance-tests',
+  // Define strictly private user routes that require authentication
+  const protectedPrefixes = [
     '/recommendations',
-    '/professional-courses',
-    '/questions',
+    '/bookmarks',
     '/update-profile',
-    '/college',
-    '/course',
-    '/professional-course',
-    '/entrance-test'
+    '/onboarding',
   ]
 
-  // Check if the current path starts with any of the protected routes
-  const isProtected = protectedRoutes.some(route => pathname.startsWith(route))
+  // Check if current path matches any private route exactly or as a sub-path
+  const isProtected = protectedPrefixes.some(route => 
+    pathname === route || pathname.startsWith(`${route}/`)
+  )
 
   if (isProtected) {
     // Check for user identity (cookie set during form submission)

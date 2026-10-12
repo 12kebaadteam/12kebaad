@@ -2,9 +2,17 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Top 10 High Salary Career Options After 12th in India (2024) | High ROI Guide",
+  title: "Top 10 High Salary Career Options After 12th in India (2026) | High ROI Guide",
   description: "Identify the most lucrative career paths after 12th. From Aviation and IITs to IPM and Investment Banking. Find courses that offer the best Return on Investment.",
   keywords: ["high salary career options after 12th", "highest paying jobs in india after 12th", "roi career options after 12th", "commercial pilot salary india"],
+  alternates: {
+    canonical: 'https://12kebaad.in/high-salary-courses-after-12th',
+  },
+  openGraph: {
+    title: "High Salary Career Options After 12th | 12kebaad",
+    description: "Explore top high-ROI careers after Class 12.",
+    url: 'https://12kebaad.in/high-salary-courses-after-12th',
+  },
 }
 
 export default function HighSalaryCoursesPage() {
