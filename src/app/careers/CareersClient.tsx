@@ -121,7 +121,7 @@ export default function CareersClient({ initialCareers = [] }: { initialCareers?
           
           {/* Search */}
           <div className="career-search-box">
-            <Search style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={18} />
+            <Search className="career-search-icon" size={18} />
             <input 
               type="text" 
               placeholder="Search careers by name or keywords..."

@@ -33,7 +33,7 @@ export function proxy(request: NextRequest) {
       const url = request.nextUrl.clone()
       url.pathname = '/form'
       // Ensure starting the quiz always begins at Step 1 (qualification) after authentication
-      const returnUrl = (pathname === '/quiz' || pathname === '/quiz-intro')
+      const returnUrl = (pathname === '/quiz' || pathname === '/quiz-intro' || pathname === '/quiz-loading')
         ? '/onboarding/qualification'
         : pathname
       url.searchParams.set('callbackUrl', returnUrl)
