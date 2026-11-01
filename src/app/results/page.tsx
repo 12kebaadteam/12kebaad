@@ -213,7 +213,7 @@ export default function ResultsPage() {
                   <button 
                     onClick={toggleBookmark}
                     style={{ 
-                      background: isBookmarked ? 'rgba(30, 58, 95, 0.1)' : 'none', 
+                      background: isBookmarked ? 'var(--primary-badge-bg)' : 'transparent', 
                       border: '1px solid var(--border)', 
                       padding: '0.5rem', borderRadius: '10px', 
                       color: isBookmarked ? 'var(--primary)' : 'var(--text-muted)',

@@ -121,13 +121,14 @@ export default function CareersClient({ initialCareers = [] }: { initialCareers?
           
           {/* Search */}
           <div className="career-search-box">
-            <Search className="career-search-icon" size={18} />
+            <Search className="career-search-icon" size={18} aria-hidden="true" />
             <input 
               type="text" 
               placeholder="Search careers by name or keywords..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="career-search-input"
+              aria-label="Search careers"
             />
           </div>
 
@@ -207,7 +208,7 @@ export default function CareersClient({ initialCareers = [] }: { initialCareers?
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
                 <span style={{ 
-                  background: 'rgba(30, 58, 95, 0.08)', 
+                  background: 'var(--primary-badge-bg)', 
                   color: 'var(--primary)', 
                   padding: '0.4rem 0.8rem', 
                   borderRadius: '8px', 

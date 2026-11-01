@@ -64,7 +64,7 @@ export default async function CollegeDetailPage({
             )}
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ background: 'rgba(30, 58, 95, 0.05)', borderRadius: '12px', padding: '0.8rem 1.2rem', border: '1px solid var(--border)' }}>
+            <div style={{ background: 'var(--bg-offset)', borderRadius: '12px', padding: '0.8rem 1.2rem', border: '1px solid var(--border)' }}>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '0.1rem' }}>REALITY SCORE</div>
               <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--primary)' }}>{college.realityScore}/10</div>
             </div>
@@ -114,7 +114,7 @@ export default async function CollegeDetailPage({
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {college.courses.map(cc => (
-              <div key={cc.courseId} style={{ padding: '1rem', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', border: '1px solid var(--glass-border)' }}>
+              <div key={cc.courseId} style={{ padding: '1rem', background: 'var(--bg-card)', borderRadius: '10px', border: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
                   <div>
                     <h3 style={{ fontSize: '0.98rem', marginBottom: '0.3rem' }}>
@@ -124,10 +124,10 @@ export default async function CollegeDetailPage({
                   </div>
                   <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
                     {cc.fee && cc.fee !== 'Not Specified' && (
-                      <span style={{ fontSize: '0.82rem', color: 'var(--primary)', background: 'rgba(59,130,246,0.1)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>💰 {sanitizeFee(cc.fee)}</span>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--primary)', background: 'var(--primary-badge-bg)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>💰 {sanitizeFee(cc.fee)}</span>
                     )}
                     {cc.timeInvolved && cc.timeInvolved !== 'Not Specified' && (
-                      <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>⏱ {cc.timeInvolved}</span>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', background: 'var(--bg-offset)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>⏱ {cc.timeInvolved}</span>
                     )}
                   </div>
                 </div>

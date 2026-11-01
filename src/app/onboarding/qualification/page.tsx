@@ -89,32 +89,22 @@ export default function QualificationPage() {
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '4rem' }}>
-          {educationLevels.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setLevel(item.id)}
-              style={{
-                background: level === item.id ? 'var(--primary)' : '#fff',
-                color: level === item.id ? '#fff' : 'var(--text-main)',
-                border: '2px solid',
-                borderColor: level === item.id ? 'var(--primary)' : 'var(--border)',
-                borderRadius: '16px',
-                padding: '2rem 1rem',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '1rem',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: level === item.id ? '0 10px 20px rgba(30, 58, 95, 0.15)' : 'none'
-              }}
-            >
-              <div style={{ color: level === item.id ? '#fff' : 'var(--primary)' }}>
-                {item.icon}
-              </div>
-              <span style={{ fontWeight: '600' }}>{item.label}</span>
-            </button>
-          ))}
+          {educationLevels.map((item) => {
+            const isSelected = level === item.id
+            return (
+              <button
+                key={item.id}
+                onClick={() => setLevel(item.id)}
+                className={`selection-card ${isSelected ? 'selected' : ''}`}
+                aria-pressed={isSelected}
+              >
+                <div className="card-icon">
+                  {item.icon}
+                </div>
+                <span style={{ fontWeight: '600' }}>{item.label}</span>
+              </button>
+            )
+          })}
         </div>
 
         {showStream && (
@@ -127,25 +117,19 @@ export default function QualificationPage() {
               Select your stream:
             </h2>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-              {streams.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setStream(s.id)}
-                  style={{
-                    background: stream === s.id ? 'var(--accent)' : '#fff',
-                    color: stream === s.id ? '#fff' : 'var(--text-main)',
-                    border: '2px solid',
-                    borderColor: stream === s.id ? 'var(--accent)' : 'var(--border)',
-                    borderRadius: '99px',
-                    padding: '0.75rem 1.5rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  {s.label}
-                </button>
-              ))}
+              {streams.map((s) => {
+                const isSelected = stream === s.id
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setStream(s.id)}
+                    className={`selection-pill ${isSelected ? 'selected' : ''}`}
+                    aria-pressed={isSelected}
+                  >
+                    {s.label}
+                  </button>
+                )
+              })}
             </div>
           </motion.div>
         )}

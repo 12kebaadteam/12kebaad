@@ -38,9 +38,9 @@ export default function LoginButton({ callbackUrl, label }: LoginButtonProps) {
       onClick={() => signIn('google', { callbackUrl: destination })}
       className="btn-primary"
       style={{
-        background: '#fff',
-        color: '#1e3a5f',
-        border: '1px solid var(--border)',
+        background: 'var(--bg-card)',
+        color: 'var(--text-main)',
+        border: '1.5px solid var(--border)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -50,7 +50,8 @@ export default function LoginButton({ callbackUrl, label }: LoginButtonProps) {
         width: '100%',
         cursor: 'pointer',
         fontWeight: '700',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        boxShadow: 'var(--shadow-sm)',
+        transition: 'all 0.2s ease',
       }}
     >
       <img src="https://authjs.dev/img/providers/google.svg" width="22" height="22" alt="" aria-hidden="true" />

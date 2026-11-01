@@ -89,7 +89,7 @@ export default async function CourseDetailPage({
               const sanitizedFee = cc.fee?.replace(/\s*\(\s*Full Year\s*\)|\s*\(\s*Semester\s*\)|\/ Semester|\/ Year/gi, '').trim()
               
               return (
-                <div key={cc.collegeId} style={{ padding: '1rem', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', border: '1px solid var(--glass-border)' }}>
+                <div key={cc.collegeId} style={{ padding: '1rem', background: 'var(--bg-card)', borderRadius: '10px', border: '1px solid var(--card-border)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
                     <div>
                       <h3 style={{ fontSize: '0.98rem', marginBottom: '0.2rem' }}>
@@ -104,12 +104,12 @@ export default async function CourseDetailPage({
                         <span className="rank-badge">#{cc.college.ranking}</span>
                       )}
                       {sanitizedFee && sanitizedFee !== 'Not Specified' && (
-                        <span style={{ fontSize: '0.82rem', color: 'var(--primary)', background: 'rgba(59,130,246,0.1)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>
+                        <span style={{ fontSize: '0.82rem', color: 'var(--primary)', background: 'var(--primary-badge-bg)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>
                           💰 {sanitizedFee}
                         </span>
                       )}
                       {cc.timeInvolved && cc.timeInvolved !== 'Not Specified' && (
-                        <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>⏱ {cc.timeInvolved}</span>
+                        <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', background: 'var(--bg-offset)', padding: '0.2rem 0.6rem', borderRadius: '99px' }}>⏱ {cc.timeInvolved}</span>
                       )}
                     </div>
                   </div>
@@ -132,7 +132,7 @@ export default async function CourseDetailPage({
             </summary>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1.2rem' }}>
               {otherColleges.map(cc => (
-                <div key={cc.collegeId} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+                <div key={cc.collegeId} style={{ padding: '0.8rem', background: 'var(--bg-offset)', borderRadius: '8px', border: '1px solid var(--border)' }}>
                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h3 style={{ fontSize: '0.9rem', marginBottom: '0.1rem' }}>
                       <Link href={`/college/${cc.collegeId}`} style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>

@@ -28,7 +28,7 @@ export default function CommentBox({ targetId, type }: { targetId: string, type:
   };
 
   return (
-    <div className="glass-panel" style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(255,255,255,0.02)' }}>
+    <div className="glass-panel" style={{ marginTop: '2rem', padding: '1.5rem' }}>
       <h3 style={{ color: 'var(--primary)', marginBottom: '1rem', fontSize: '1.1rem' }}>Leave a Comment</h3>
       
       {status === 'success' ? (

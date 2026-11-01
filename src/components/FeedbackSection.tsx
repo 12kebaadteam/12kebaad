@@ -50,9 +50,10 @@ export default function FeedbackSection({ careerId }: { careerId?: string }) {
           style={{ 
             flex: 1, padding: '1rem', borderRadius: '12px', border: '2px solid',
             borderColor: isPositive === true ? 'var(--success)' : 'var(--border)',
-            background: isPositive === true ? 'rgba(45, 158, 107, 0.1)' : 'transparent',
+            background: isPositive === true ? 'var(--success-badge-bg)' : 'var(--bg-card)',
+            color: isPositive === true ? 'var(--success)' : 'var(--text-main)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-            cursor: 'pointer', transition: 'all 0.2s'
+            cursor: 'pointer', transition: 'all 0.2s', fontWeight: '600'
           }}
         >
           <ThumbsUp size={20} color={isPositive === true ? 'var(--success)' : 'var(--text-muted)'} />
@@ -63,9 +64,10 @@ export default function FeedbackSection({ careerId }: { careerId?: string }) {
           style={{ 
             flex: 1, padding: '1rem', borderRadius: '12px', border: '2px solid',
             borderColor: isPositive === false ? 'var(--accent)' : 'var(--border)',
-            background: isPositive === false ? 'rgba(232, 99, 10, 0.1)' : 'transparent',
+            background: isPositive === false ? 'var(--accent-badge-bg)' : 'var(--bg-card)',
+            color: isPositive === false ? 'var(--accent)' : 'var(--text-main)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-            cursor: 'pointer', transition: 'all 0.2s'
+            cursor: 'pointer', transition: 'all 0.2s', fontWeight: '600'
           }}
         >
           <ThumbsDown size={20} color={isPositive === false ? 'var(--accent)' : 'var(--text-muted)'} />
@@ -79,8 +81,8 @@ export default function FeedbackSection({ careerId }: { careerId?: string }) {
             placeholder="Tell us why... (optional)"
             value={reason}
             onChange={e => setReason(e.target.value)}
+            className="form-control"
             style={{ 
-              width: '100%', padding: '1rem', borderRadius: '12px', border: '1px solid var(--border)',
               minHeight: '100px', fontSize: '0.95rem', resize: 'vertical'
             }}
           />

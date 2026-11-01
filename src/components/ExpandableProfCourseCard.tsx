@@ -26,10 +26,10 @@ export default function ExpandableProfCourseCard({ course }: { course: Professio
       <p style={{ color: 'var(--accent)', fontSize: '0.88rem', fontWeight: 600, marginBottom: '0.8rem' }}>{course.fullForm}</p>
       
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
-        <span style={{ fontSize: '0.75rem', background: 'rgba(255,255,255,0.05)', padding: '0.2rem 0.6rem', borderRadius: '99px', color: 'var(--text-muted)' }}>
+        <span style={{ fontSize: '0.75rem', background: 'var(--bg-offset)', padding: '0.2rem 0.6rem', borderRadius: '99px', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>
           ⏱ {course.duration}
         </span>
-        <span style={{ fontSize: '0.75rem', background: 'rgba(59,130,246,0.1)', padding: '0.2rem 0.6rem', borderRadius: '99px', color: 'var(--primary)' }}>
+        <span style={{ fontSize: '0.75rem', background: 'var(--primary-badge-bg)', padding: '0.2rem 0.6rem', borderRadius: '99px', color: 'var(--primary)', border: '1px solid var(--border)' }}>
           💰 {course.fees}
         </span>
       </div>

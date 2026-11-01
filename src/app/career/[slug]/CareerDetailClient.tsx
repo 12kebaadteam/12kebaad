@@ -167,7 +167,7 @@ export default function CareerDetailClient({ initialCareer }: { initialCareer?: 
         </div>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
-          <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(30, 58, 95, 0.02)' }}>
+          <div className="glass-panel" style={{ padding: '1.5rem', background: 'var(--bg-offset)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
               <Users2 size={18} />
               <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>GENDER DIVERSITY</span>
@@ -176,7 +176,7 @@ export default function CareerDetailClient({ initialCareer }: { initialCareer?: 
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Inclusive work environment</p>
           </div>
 
-          <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(30, 58, 95, 0.02)' }}>
+          <div className="glass-panel" style={{ padding: '1.5rem', background: 'var(--bg-offset)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
               <Calendar size={18} />
               <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>YEARS TO JOB</span>
@@ -185,7 +185,7 @@ export default function CareerDetailClient({ initialCareer }: { initialCareer?: 
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Post-Class 12 preparation</p>
           </div>
 
-          <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(30, 58, 95, 0.02)' }}>
+          <div className="glass-panel" style={{ padding: '1.5rem', background: 'var(--bg-offset)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
               <ZapIcon size={18} />
               <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>SELF EMPLOYMENT</span>
@@ -194,7 +194,7 @@ export default function CareerDetailClient({ initialCareer }: { initialCareer?: 
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Entrepreneurial opportunities</p>
           </div>
 
-          <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(30, 58, 95, 0.02)' }}>
+          <div className="glass-panel" style={{ padding: '1.5rem', background: 'var(--bg-offset)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
               <ActivityIcon size={18} />
               <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>PHYSICAL DEMAND</span>
@@ -205,7 +205,7 @@ export default function CareerDetailClient({ initialCareer }: { initialCareer?: 
         </div>
 
         {career.state_specific_relevance && (
-          <div style={{ marginTop: '1.5rem', padding: '1.25rem', background: 'rgba(232, 99, 10, 0.05)', borderRadius: '16px', border: '1px solid rgba(232, 99, 10, 0.1)' }}>
+          <div style={{ marginTop: '1.5rem', padding: '1.25rem', background: 'var(--accent-badge-bg)', borderRadius: '16px', border: '1px solid rgba(232, 99, 10, 0.2)' }}>
              <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: '1.5' }}>
               <Globe size={16} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--accent)' }} />
               <strong>Regional Relevance:</strong> {career.state_specific_relevance}
@@ -220,7 +220,7 @@ export default function CareerDetailClient({ initialCareer }: { initialCareer?: 
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
               {career.certifications_recommended.map((cert: string, i: number) => (
-                <span key={i} style={{ background: 'var(--bg-main)', border: '1px solid var(--border)', padding: '0.5rem 1rem', borderRadius: '10px', fontSize: '0.85rem', color: 'var(--text-main)' }}>
+                <span key={i} style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', padding: '0.5rem 1rem', borderRadius: '10px', fontSize: '0.85rem', color: 'var(--text-main)' }}>
                   {cert}
                 </span>
               ))}
@@ -237,7 +237,7 @@ export default function CareerDetailClient({ initialCareer }: { initialCareer?: 
           </h3>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
             {(career.keySkills || ["Critical Thinking", "Problem Solving", "Communication", "Time Management"]).map((skill: string, i: number) => (
-              <span key={i} style={{ background: 'rgba(30, 58, 95, 0.05)', color: 'var(--primary)', padding: '0.6rem 1.2rem', borderRadius: '12px', fontSize: '0.9rem', fontWeight: '600' }}>
+              <span key={i} style={{ background: 'var(--primary-badge-bg)', color: 'var(--primary)', padding: '0.6rem 1.2rem', borderRadius: '12px', fontSize: '0.9rem', fontWeight: '600' }}>
                 {skill}
               </span>
             ))}

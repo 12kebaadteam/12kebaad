@@ -210,24 +210,11 @@ export default function InterestsPage() {
               <button
                 key={item.id}
                 onClick={() => toggleInterest(item.id)}
-                style={{
-                  background: isSelected ? 'var(--primary)' : '#fff',
-                  color: isSelected ? '#fff' : 'var(--text-main)',
-                  border: '2px solid',
-                  borderColor: isSelected ? 'var(--primary)' : 'var(--border)',
-                  borderRadius: '20px',
-                  padding: '1.5rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  textAlign: 'center',
-                  boxShadow: isSelected ? '0 8px 16px rgba(30, 58, 95, 0.15)' : 'none'
-                }}
+                className={`selection-card ${isSelected ? 'selected' : ''}`}
+                style={{ borderRadius: '20px', padding: '1.5rem', gap: '0.75rem' }}
+                aria-pressed={isSelected}
               >
-                <div style={{ color: isSelected ? '#fff' : 'var(--primary)' }}>
+                <div className="card-icon">
                   {item.icon}
                 </div>
                 <span style={{ fontWeight: '600', fontSize: '0.95rem' }}>{item.label}</span>

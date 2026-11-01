@@ -123,13 +123,14 @@ export default function PassionPage() {
                 onClick={() => setSelected(field.id)}
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
+                className={`selection-card ${isSelected ? 'selected' : ''}`}
                 style={{
                   background: isSelected 
                     ? 'linear-gradient(135deg, var(--primary), var(--accent))' 
-                    : 'rgba(255,255,255,0.05)',
-                  color: isSelected ? '#fff' : 'var(--text-main)',
+                    : 'var(--bg-card)',
+                  color: isSelected ? '#ffffff' : 'var(--text-main)',
                   border: '2px solid',
-                  borderColor: isSelected ? 'transparent' : 'var(--border)',
+                  borderColor: isSelected ? 'transparent' : 'var(--card-border)',
                   borderRadius: '20px',
                   padding: '1.5rem 1rem',
                   display: 'flex',
@@ -141,13 +142,14 @@ export default function PassionPage() {
                   textAlign: 'center',
                   boxShadow: isSelected ? '0 8px 24px rgba(232,99,10,0.25)' : 'none'
                 }}
+                aria-pressed={isSelected}
               >
-                <div style={{ color: isSelected ? 'rgba(255,255,255,0.9)' : 'var(--accent)' }}>
+                <div style={{ color: isSelected ? '#ffffff' : 'var(--accent)' }}>
                   {field.icon}
                 </div>
                 <div>
-                  <div style={{ fontWeight: '700', fontSize: '0.95rem', marginBottom: '0.3rem' }}>{field.label}</div>
-                  <div style={{ fontSize: '0.75rem', opacity: 0.75, lineHeight: '1.3' }}>{field.desc}</div>
+                  <div style={{ fontWeight: '700', fontSize: '0.95rem', marginBottom: '0.3rem', color: isSelected ? '#ffffff' : 'var(--text-main)' }}>{field.label}</div>
+                  <div style={{ fontSize: '0.75rem', opacity: isSelected ? 0.9 : 0.8, color: isSelected ? '#ffffff' : 'var(--text-muted)', lineHeight: '1.3' }}>{field.desc}</div>
                 </div>
               </motion.button>
             )

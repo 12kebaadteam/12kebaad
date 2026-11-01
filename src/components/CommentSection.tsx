@@ -64,8 +64,8 @@ export default function CommentSection({ careerId, courseId }: { careerId?: stri
               placeholder="Join the conversation..."
               value={text}
               onChange={e => setText(e.target.value)}
+              className="form-control"
               style={{ 
-                width: '100%', padding: '1rem', borderRadius: '12px', border: '1px solid var(--border)',
                 minHeight: '100px', fontSize: '0.95rem', resize: 'vertical'
               }}
             />
