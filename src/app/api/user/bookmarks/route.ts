@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { authOptions, getAuthenticatedUser } from "@/lib/auth"
 import prisma from "@/lib/prisma"
 
 export async function GET() {
   const session = await getServerSession(authOptions)
-  if (!session?.user?.id) {
+  const dbUser = await getAuthenticatedUser(session)
+  if (!dbUser) {
     return NextResponse.json({ bookmarks: [] })
   }
 
   const bookmarks = await prisma.bookmark.findMany({
-    where: { userId: (session.user as any).id },
+    where: { userId: dbUser.id },
     select: { careerId: true }
   })
 
@@ -19,7 +20,8 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
-  if (!session?.user?.id) {
+  const dbUser = await getAuthenticatedUser(session)
+  if (!dbUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
@@ -29,20 +31,20 @@ export async function POST(req: NextRequest) {
     await prisma.bookmark.upsert({
       where: {
         userId_careerId: {
-          userId: (session.user as any).id,
+          userId: dbUser.id,
           careerId
         }
       },
       update: {},
       create: {
-        userId: (session.user as any).id,
+        userId: dbUser.id,
         careerId
       }
     })
   } else if (action === 'remove') {
     await prisma.bookmark.deleteMany({
       where: {
-        userId: (session.user as any).id,
+        userId: dbUser.id,
         careerId
       }
     })

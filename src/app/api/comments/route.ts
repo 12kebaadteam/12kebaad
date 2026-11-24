@@ -1,31 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth'
+import { authOptions, getAuthenticatedUser } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    const body = await req.json()
+    const { text, careerId, courseId, targetId, type } = body
 
-    const { text, careerId, courseId } = await req.json()
+    const trimmedText = typeof text === 'string' ? text.trim() : ''
+    if (!trimmedText) {
+      return NextResponse.json({ error: "Comment text cannot be empty" }, { status: 400 })
+    }
+
+    // Support both direct IDs and CommentBox targetId/type parameters
+    const resolvedCareerId = careerId || (type === 'career' ? targetId : null) || null
+    const resolvedCourseId = courseId || (type === 'course' ? targetId : null) || null
+
+    const session = await getServerSession(authOptions)
+    const dbUser = await getAuthenticatedUser(session)
+    const userId = dbUser?.id || null
 
     const comment = await prisma.comment.create({
       data: {
-        text,
-        careerId,
-        courseId,
-        userId: (session.user as any).id,
+        text: trimmedText,
+        careerId: resolvedCareerId,
+        courseId: resolvedCourseId,
+        userId: userId,
         status: "APPROVED"
+      },
+      include: {
+        user: {
+          select: { name: true }
+        }
       }
     })
 
     revalidatePath('/admin/comments')
+    if (resolvedCareerId) revalidatePath(`/career/${resolvedCareerId}`)
+    if (resolvedCourseId) revalidatePath(`/course/${resolvedCourseId}`)
+
     return NextResponse.json(comment)
   } catch (error) {
-    console.error("Comment Error:", error)
-    return NextResponse.json({ error: "Failed to submit comment" }, { status: 500 })
+    console.error("Comment API Error:", error)
+    return NextResponse.json({ error: "Failed to submit comment. Please try again." }, { status: 500 })
   }
 }
 
@@ -35,13 +54,15 @@ export async function GET(req: NextRequest) {
     const careerId = searchParams.get('careerId')
     const courseId = searchParams.get('courseId')
 
+    const where: any = { status: 'APPROVED' }
+    if (careerId) {
+      where.careerId = careerId
+    } else if (courseId) {
+      where.courseId = courseId
+    }
+
     const comments = await prisma.comment.findMany({
-      where: {
-        OR: [
-          { careerId: careerId || undefined },
-          { courseId: courseId || undefined }
-        ]
-      },
+      where,
       include: {
         user: {
           select: { name: true }

@@ -3,53 +3,65 @@
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth'
+import { authOptions, getAuthenticatedUser } from '@/lib/auth'
 
 export async function submitFeedback(data: { isPositive: boolean, reason?: string, careerId?: string }) {
-  console.log("Submitting feedback:", data)
   try {
     const session = await getServerSession(authOptions)
-    const userId = (session?.user as any)?.id
+    const dbUser = await getAuthenticatedUser(session)
+    const userId = dbUser?.id || null
     
     const feedback = await prisma.feedback.create({
       data: {
-        isPositive: data.isPositive,
-        reason: data.reason || null,
+        isPositive: Boolean(data.isPositive),
+        reason: data.reason ? data.reason.trim() : null,
         careerId: data.careerId || null,
-        userId: userId || null
+        userId: userId
       }
     })
-    console.log("Feedback created:", feedback.id)
 
     revalidatePath('/admin/feedback')
-    return { success: true }
+    if (data.careerId) {
+      revalidatePath(`/career/${data.careerId}`)
+    }
+    return { success: true, feedbackId: feedback.id }
   } catch (error: any) {
-    console.error("Feedback Action Error:", error.message, error)
-    return { success: false, error: "Failed to submit: " + (error.message || "Unknown error") }
+    console.error("Feedback Action Error:", error)
+    return { success: false, error: "Failed to submit feedback. Please try again." }
   }
 }
 
 export async function submitComment(data: { text: string, careerId?: string, courseId?: string }) {
-  console.log("Submitting comment:", data)
   try {
+    const trimmedText = data.text ? data.text.trim() : ''
+    if (!trimmedText) {
+      return { success: false, error: "Comment text cannot be empty." }
+    }
+
     const session = await getServerSession(authOptions)
-    const userId = (session?.user as any)?.id
+    const dbUser = await getAuthenticatedUser(session)
+    const userId = dbUser?.id || null
     
     const comment = await prisma.comment.create({
       data: {
-        text: data.text,
+        text: trimmedText,
         careerId: data.careerId || null,
         courseId: data.courseId || null,
-        userId: userId || null,
+        userId: userId,
         status: "APPROVED"
       }
     })
-    console.log("Comment created:", comment.id)
 
     revalidatePath('/admin/comments')
+    if (data.careerId) {
+      revalidatePath(`/career/${data.careerId}`)
+    }
+    if (data.courseId) {
+      revalidatePath(`/course/${data.courseId}`)
+    }
     return { success: true, comment }
   } catch (error: any) {
-    console.error("Comment Action Error:", error.message, error)
-    return { success: false, error: "Failed to submit: " + (error.message || "Unknown error") }
+    console.error("Comment Action Error:", error)
+    return { success: false, error: "Failed to submit comment. Please try again." }
   }
 }

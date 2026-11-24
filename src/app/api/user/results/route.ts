@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { authOptions, getAuthenticatedUser } from "@/lib/auth"
 import prisma from "@/lib/prisma"
 
 export async function GET() {
   const session = await getServerSession(authOptions)
-  if (!session?.user?.id) {
+  const dbUser = await getAuthenticatedUser(session)
+  if (!dbUser) {
     return NextResponse.json({ results: null })
   }
 
   const latestSession = await prisma.quizSession.findFirst({
-    where: { userId: (session.user as any).id },
+    where: { userId: dbUser.id },
     orderBy: { createdAt: 'desc' },
     include: {
       results: {

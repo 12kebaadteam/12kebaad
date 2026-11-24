@@ -9,7 +9,7 @@ import Papa from 'papaparse'
 
 async function checkAdmin() {
   const session = await getServerSession(authOptions)
-  if (!session) {
+  if (!session || (session as any).user?.role !== 'admin') {
     redirect('/admin')
   }
   return session

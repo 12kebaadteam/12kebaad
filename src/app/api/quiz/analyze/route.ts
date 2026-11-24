@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { generateAIResponse } from "@/lib/ai"
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { authOptions, getAuthenticatedUser } from "@/lib/auth"
 import { sendRecommendations, sendWelcomeEmail } from "@/lib/resend";
 
 export async function POST(req: NextRequest) {
@@ -147,45 +147,48 @@ export async function POST(req: NextRequest) {
     // 6. Save to Database if user is logged in
     let quizSessionId = null
 
-    if (session?.user?.id && recommendations.length > 0) {
+    if (session && recommendations.length > 0) {
       try {
-        const validCareerIds = mergedCareers.map(c => c.id)
-        const validRecs = recommendations.filter((r: any) => validCareerIds.includes(r.careerId))
-        
-        const quizSession = await prisma.quizSession.create({
-          data: {
-            userId: (session.user as any).id,
-            stream: stream,
-            interests: interests,
-            results: {
-              create: validRecs.map((r: any, idx: number) => ({
-                careerId: r.careerId,
-                matchScore: r.matchScore || 0,
-                matchReason: r.whyItFits || "High interest match.",
-                rank: idx + 1
-              }))
-            }
-          }
-        })
-        quizSessionId = quizSession.id
-
-        // 7. Send automated email with top 5 recommendations
-        if (session.user?.email && validRecs.length > 0) {
-          const emailRecs = validRecs.slice(0, 5).map((r: any) => {
-            const career = mergedCareers.find(c => c.id === r.careerId)
-            return {
-              name: career?.name || "Career",
-              aiSummary: r.whyItFits || r.matchReason,
-              matchScore: r.matchScore || 0,
-              sector: career?.sector || "Other",
-              stream: career?.stream || "Any"
+        const dbUser = await getAuthenticatedUser(session)
+        if (dbUser) {
+          const validCareerIds = mergedCareers.map(c => c.id)
+          const validRecs = recommendations.filter((r: any) => validCareerIds.includes(r.careerId))
+          
+          const quizSession = await prisma.quizSession.create({
+            data: {
+              userId: dbUser.id,
+              stream: stream,
+              interests: interests,
+              results: {
+                create: validRecs.map((r: any, idx: number) => ({
+                  careerId: r.careerId,
+                  matchScore: r.matchScore || 0,
+                  matchReason: r.whyItFits || "High interest match.",
+                  rank: idx + 1
+                }))
+              }
             }
           })
-          
-          // Fire and forget email to not block response
-          sendRecommendations(session.user.email, emailRecs).catch(err => 
-            console.error("Delayed Recommendations Email Error:", err)
-          )
+          quizSessionId = quizSession.id
+
+          // 7. Send automated email with top 5 recommendations
+          if (session.user?.email && validRecs.length > 0) {
+            const emailRecs = validRecs.slice(0, 5).map((r: any) => {
+              const career = mergedCareers.find(c => c.id === r.careerId)
+              return {
+                name: career?.name || "Career",
+                aiSummary: r.whyItFits || r.matchReason,
+                matchScore: r.matchScore || 0,
+                sector: career?.sector || "Other",
+                stream: career?.stream || "Any"
+              }
+            })
+            
+            // Fire and forget email to not block response
+            sendRecommendations(session.user.email, emailRecs).catch(err => 
+              console.error("Delayed Recommendations Email Error:", err)
+            )
+          }
         }
       } catch (dbError) {
         console.error("Failed to save quiz session:", dbError)
