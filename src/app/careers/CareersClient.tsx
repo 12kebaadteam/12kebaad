@@ -43,6 +43,8 @@ export default function CareersClient({ initialCareers = [] }: { initialCareers?
         }
       }
       fetchCareers()
+    } else {
+      setCareers(initialCareers)
     }
     
     const fetchBookmarks = async () => {
@@ -229,7 +231,9 @@ export default function CareersClient({ initialCareers = [] }: { initialCareers?
                 {career.name}
               </h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '1.5rem', minHeight: '3rem' }}>
-                {career.description.substring(0, 110)}...
+                {(career.description || '').length > 110
+                  ? `${(career.description || '').substring(0, 110)}...`
+                  : (career.description || '')}
               </p>
               
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>

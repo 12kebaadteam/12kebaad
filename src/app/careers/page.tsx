@@ -2,6 +2,9 @@ import { Metadata } from 'next'
 import prisma from '@/lib/prisma'
 import CareersClient from './CareersClient'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata: Metadata = {
   title: 'Explore Career Options & Roadmaps After Class 12 | 12kebaad',
   description: 'Browse 360+ comprehensive career roadmaps across Science, Commerce, and Arts in India. Compare salaries, entrance exam requirements, required degrees, and top colleges.',
